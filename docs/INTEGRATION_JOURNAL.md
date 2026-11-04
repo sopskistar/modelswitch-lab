@@ -18,3 +18,11 @@ Local setup: sandbox DNS blocked documentation and npm downloads; approved
 network commands were required. npm 10's peer resolver crashed in Vitest's
 optional peer graph. Retried using legacy peer resolution and will preserve a
 lockfile for reproducibility. This is local tooling friction, not an Otari bug.
+
+2026-11-04 15:37 UTC: direct hosted code execution succeeded, exit 0, correct=4/5, accuracy=.8. The guardrail fixture failed closed with 502 because the service is unavailable. No guardrail evaluation was claimed.
+
+2026-11-04 16:00 UTC: unmocked browser inference began succeeding. Qwen3.8 returned the correct billing classification through DeepInfra, then the separate Llama analyst completed. No assumption is made about who changed account funding. The earlier $0 refusals remain in smoke.json as historical evidence.
+
+2026-11-04 16:10 UTC: fresh discovery lists 162 models. Web tools are still workspace_disabled; no guardrail service exists. The typed verifier completed all three evaluator scenarios (one case each), Llama analyst through Bedrock, routing policy, and Python. All three scored cases passed. Policy headers report one attempt, fallback false; actual failover remains unverified. Those five completion calls report $0.001480 combined. Sandbox cost is unreported. Management routes remain unauthorized. Reviewed official MCP and API-key docs: stored MCP setup requires workspace/admin context and per-user budgets require service-key setup. No management mutation was attempted.
+
+2026-11-04: the unmocked production check found the Origin comparison used Next's internal bind address. Fixed against public Host/protocol, added a regression, and repeated successfully. This was an application defect, not an Otari error. Final live browser run 365aae24-b64e-43ec-ba02-3c5e9a7d8739 completed ten evaluator cases plus one analyst call. Qwen 5/5; Llama 4/5. Llama was faster/cheaper and won the balance objective (89 vs about 85). Reported total including analyst: $0.001741. Browser errors: zero. Full evidence retains actual outputs and omits signing receipts.
