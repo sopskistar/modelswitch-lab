@@ -1,0 +1,8 @@
+node_modules
+.next
+.env*
+package-lock.json
+/evidence
+.hallmark
+docs
+next-env.d.ts

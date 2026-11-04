@@ -1,0 +1,151 @@
+# Hosted Otari integration
+
+The only inference gateway is hosted Otari. No local gateway or direct provider
+API is used. Reviewed on 2026-11-04:
+
+- [Repository](https://github.com/mozilla-ai/otari)
+- [API reference](https://github.com/mozilla-ai/otari/blob/main/docs/api-reference.md)
+- [Models](https://github.com/mozilla-ai/otari/blob/main/docs/models.md)
+- [Routing](https://github.com/mozilla-ai/otari/blob/main/docs/routing.md)
+- [Tools](https://github.com/mozilla-ai/otari/blob/main/docs/tools.md)
+- [Guardrails](https://github.com/mozilla-ai/otari/blob/main/docs/guardrails.md)
+- [Budgets](https://github.com/mozilla-ai/otari/blob/main/docs/budgets.md)
+- [End users](https://github.com/mozilla-ai/otari/blob/main/docs/end-users.md)
+- [Access control](https://github.com/mozilla-ai/otari/blob/main/docs/access-control.md)
+
+First genuine integration commit:
+[`2be9a17c37e7154a852ed9f01fb8e09c8971844c`](https://github.com/sopskistar/modelswitch-lab/commit/2be9a17c37e7154a852ed9f01fb8e09c8971844c).
+It connects the hosted gateway and records live discovery and inference
+refusals. Its title deliberately does not claim successful model inference.
+First successful role-inference/workbench commit:
+[`afdf63aa636c9df00aeb7455fe575f35bf3d7d8d`](https://github.com/sopskistar/modelswitch-lab/commit/afdf63aa636c9df00aeb7455fe575f35bf3d7d8d).
+This records three real Qwen tasks, a separate Llama analyst, policy resolution,
+Python execution, and the five-case live browser comparison. Both commit URLs
+are published with the hackathon branch.
+
+## Configuration and discovery
+
+Copy `.env.example` to `.env.local`; set `OTARI_API_KEY`, `OTARI_BASE_URL`,
+`OTARI_EVALUATOR_MODEL`, and `OTARI_ANALYST_MODEL`. `OTARI_FALLBACK_POLICY` is
+optional for core benchmarks. Use `https://api.otari.ai/api/v1` for the US or
+`https://eu.api.otari.ai/api/v1` for the EU. Keys are region-specific; 421 is
+reported as a region error. Never use `NEXT_PUBLIC_` for these variables.
+
+```sh
+npm run otari:inspect
+npm run otari:verify
+```
+
+Inspect is read-only. Verify is operator-only, at most seven bounded execution
+calls, with no management mutations or automatic retries. It stops evaluator
+calls on insufficient credit and still tests the advertised sandbox and the
+fail-closed guardrail independently. Attach a small hard gateway budget first.
+`-- --capabilities-only` runs just the sandbox and guardrail checks after discovery.
+Review generated JSON before publishing it. Scripts require `.env.local` and
+Node 22; `--conditions=react-server` enables the server-only import in these CLI
+programs. Do not use that condition for ordinary test or browser tooling.
+
+Observed hosted account: US; initially 163 catalog entries, 162 on the final refresh; both configured model IDs and
+`modelswitch-fallback` discoverable. Code execution advertised available; web
+fetch/search `workspace_disabled`; no configured guardrails service. Routing and
+budget management reads return 401 with the inference key. We did not request
+or expose a management token. Discovery does not prove a model can complete a
+paid request.
+
+## Open-weight roles and licensing
+
+| Role | Gateway catalog ID | Family | Primary license evidence | Live inference |
+| --- | --- | --- | --- | --- |
+| Evaluator | `alibaba/qwen3.8-27b` | Qwen | [Model card and weight files](https://huggingface.co/Qwen/Qwen3.8-27B), Apache 2.0 | **Completed live** |
+| Analyst | `meta/llama-3.3-70b-instruct` | Llama | [Meta model card](https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct), Llama 3.3 Community License | **Completed live** |
+
+Successful evaluator evidence: request `2070b955-78a2-4a8a-a02d-d72df5e5f1f9`
+served `Qwen/Qwen3.8-27B` through `deepinfra`, then scored exactly against the
+synthetic invoice. Classification and reasoning also passed. Analyst request
+`bd24f101-ff53-452a-97a6-27016e8e8600` served
+`meta.llama3-3-70b-instruct-v1:0` through `bedrock` and diagnosed those verified
+metrics. The five-case browser comparison and analyst are in
+`evidence/browser-smoke.json`; total reported cost $0.001741. Initial smoke
+refusals are historical; funded inference subsequently succeeded.
+
+These are distinct open-weight families. Llama's custom license includes
+conditions; it is not described here as OSI open source. License evidence
+establishes released weights, not successful inference. The evaluator handles
+the actual extraction/classification/reasoning task. The analyst receives signed,
+verified metrics in a separate request and diagnoses the result. Sending the
+same benchmark task to two models is comparison, not the distinct-role proof.
+
+## Routing and a safe fallback demonstration
+
+In the hosted dashboard, open Routing and inspect `modelswitch-fallback`. If
+creating a policy, choose Fallback, enter a unique policy name, select the exact
+accessible evaluator ID, and add the analyst ID as a backup. Keep configuration
+in Otari; the application sends the policy name as `model`. It does not simulate
+fallback with a second application call.
+
+The capabilities check records `Otari-Model`, `Otari-Provider`,
+`Otari-Attempt-Count`, `Otari-Fallback`, and `Otari-Request-ID` when returned.
+The real policy request `79c948e4-57bf-43d8-86eb-ef8eca8ec5f7` completed
+through DeepInfra with one attempt and `fallback:false`. This proves policy
+resolution, not that a fallback occurred. We require `fallback:true` to verify the full target.
+
+For a controlled failover, ask an authorized operator to create a dedicated test
+policy with a primary provider instance intentionally left **unconfigured** and
+an accessible funded backup. This is a documented retryable routing condition.
+Use no invalid credentials. Do not alter the production policy or intentionally
+overload a provider. If the hosted dashboard disallows this test configuration,
+request an operator-supported fault-injection method; until then fallback remains
+unverified. No such test policy was created in this session.
+
+## Web document check
+
+An authorized workspace admin must enable web fetch under Tools and restrict the
+workspace's allowed domains to `www.mozilla.org` and `raw.githubusercontent.com`.
+The UI exposes only two exact HTTPS document URLs; custom URLs, credentials,
+ports, queries, fragments, private destinations, and host lookalikes are rejected.
+Otari must also enforce redirect and DNS/network safety. A fetch declaration can
+authorize model-directed requests, so configure the workspace domain restriction
+before enabling this feature publicly. The request uses `otari_web_fetch`, one
+declared use and two tool-loop rounds. A completed `otari_tool_calls` web-fetch
+entry is required for verification; a model's claim it fetched is insufficient.
+The answer is a sourced document summary, not a deterministic benchmark score.
+Web search can substitute if enabled and genuinely executed; no app HTTP fetch
+is used as a rubric substitute.
+
+## Verified code execution
+
+`POST /code/execute` received fixed Python and a five-second execution limit.
+The actual response was `code_execution.result`, exit 0, stdout
+`{"correct":4,"total":5,"accuracy":0.8}`. Request ID:
+`732c1ded-aba4-4210-8cd7-1251027e367c`. See `evidence/verification.json`.
+This verifies the code target independently of model credit. The vectors are
+explicit control data, not fabricated model outputs. No user-authored Python
+is accepted. The endpoint returned no inline cost; cost stays unknown.
+
+## Real budget setup and boundary test
+
+In Otari, add a small USD budget, then attach it to this API key or create a
+workspace spend ceiling. A budget record alone enforces nothing until attached.
+For a safe boundary demonstration, use a separate operator-created test key
+with a request limit of 1 and a small dollar cap. Admit one tiny call, then send
+one more. Record the actual refusal code `budget_exceeded`, request ID,
+`Otari-Budget-Scope`, and `Retry-After` when returned; restore the normal demo
+configuration afterwards. Do this locally, never through a public management
+route. Do not attach a zero budget to the only working demonstration key.
+
+The observed 402 `insufficient_funds` balance refusal is **not** a budget-limit
+test. Management credentials are unavailable, so no budget was created or changed.
+No live budget value is displayed without an authorized gateway response.
+
+## Guardrails, MCP, and per-user budgets
+
+The safe prompt-injection fixture requests top-level `guardrails` with profile
+`prompt-injection`, mode `block`, `on_unavailable:block`. Hosted Otari returned
+502, request ID `ef371ed6-bad2-4631-9e63-26f4c452509f`. No successful guardrail
+evaluation is claimed. A safety model listed in the catalog is not an inference
+guardrail service. `OTARI_SAFETY_MODEL` in a pre-existing local file is unused.
+
+MCP and per-user budgets are not implemented: no supported account integration
+or service-key end-user setup was available. Do not put arbitrary browser user
+labels in Otari's `user` field; ordinary keys bill their own user, and real
+per-user budgets require a service key and configured end-user budgets.

@@ -1,0 +1,47 @@
+[
+  {
+    "at": "2026-11-04T14:57:46.346186+00:00",
+    "role": "evaluator",
+    "requestedModel": "alibaba/qwen3.8-27b",
+    "status": 402,
+    "latencyMs": 1213,
+    "headers": {
+      "otari-error-code": "insufficient_funds",
+      "otari-request-id": "2b60be8c-dea1-410f-8c4a-9650229c7a16"
+    },
+    "response": {
+      "detail": "Insufficient funds ($0.00) to serve this request.",
+      "code": "insufficient_funds"
+    }
+  },
+  {
+    "at": "2026-11-04T14:57:47.382769+00:00",
+    "role": "analyst",
+    "requestedModel": "meta/llama-3.3-70b-instruct",
+    "status": 402,
+    "latencyMs": 1036,
+    "headers": {
+      "otari-error-code": "insufficient_funds",
+      "otari-request-id": "6ae4ea1c-bc9b-4883-8d4d-95b44db956f6"
+    },
+    "response": {
+      "detail": "Insufficient funds ($0.00) to serve this request.",
+      "code": "insufficient_funds"
+    }
+  },
+  {
+    "at": "2026-11-04T14:57:48.422879+00:00",
+    "role": "routing",
+    "requestedModel": "modelswitch-fallback",
+    "status": 402,
+    "latencyMs": 1040,
+    "headers": {
+      "otari-error-code": "insufficient_funds",
+      "otari-request-id": "a7457e0c-7bca-4b21-9e9f-004ed8f4a3fe"
+    },
+    "response": {
+      "detail": "Insufficient funds ($0.00) to serve this request.",
+      "code": "insufficient_funds"
+    }
+  }
+]
