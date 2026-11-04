@@ -4,21 +4,23 @@
   "private": true,
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start --hostname 0.0.0.0",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:browser": "playwright test",
-    "otari:verify": "node --env-file=.env.local --import tsx scripts/verify-otari.ts",
-    "otari:inspect": "node --env-file=.env.local --import tsx scripts/inspect-otari.ts"
+    "otari:verify": "node --conditions=react-server --env-file=.env.local --import tsx scripts/verify-otari.ts",
+    "otari:inspect": "node --conditions=react-server --env-file=.env.local --import tsx scripts/inspect-otari.ts",
+    "format": "prettier --write src tests e2e scripts/*.ts scripts/*.mjs *.ts *.mjs *.json .env.example",
+    "format:check": "prettier --check src tests e2e scripts/*.ts scripts/*.mjs *.ts *.mjs *.json"
   },
   "dependencies": {
     "next": "^16.0.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "server-only": "^0.0.1",
-    "zod": "^4.1.12"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",
@@ -27,12 +29,14 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
-    "eslint": "^9.0.0",
+    "eslint": "^10.14.0",
     "eslint-config-next": "^16.0.1",
-    "puppeteer-core": "^24.0.0",
+    "prettier": "^3.9.10",
+    "puppeteer-core": "^25.16.0",
     "tailwindcss": "^4.1.16",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "vitest": "^4.0.6"
-  }
+  },
+  "type": "module"
 }

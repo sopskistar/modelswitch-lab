@@ -1,0 +1,351 @@
+{
+  "version": 1,
+  "base": "https://api.otari.ai/api/v1",
+  "at": "2026-11-04T16:10:07.828Z",
+  "runId": "d8726258-3f68-493c-9457-53eec8d0df78",
+  "roles": {
+    "evaluator": "alibaba/qwen3.8-27b",
+    "analyst": "meta/llama-3.3-70b-instruct",
+    "policy": "modelswitch-fallback"
+  },
+  "records": [
+    {
+      "at": "2026-11-04T16:09:59.975Z",
+      "runId": "d8726258-3f68-493c-9457-53eec8d0df78",
+      "role": "evaluator",
+      "status": "completed",
+      "result": {
+        "model": "alibaba/qwen3.8-27b",
+        "caseId": "inv-01",
+        "output": "\n\n{\n  \"supplier\": \"Alder Studio\",\n  \"invoiceNumber\": \"AS-1042\",\n  \"date\": \"2026-10-02\",\n  \"amount\": 1250.00,\n  \"currency\": \"USD\",\n  \"paymentReference\": \"ALDER1042\"\n}",
+        "metadata": {
+          "requestId": "2070b955-78a2-4a8a-a02d-d72df5e5f1f9",
+          "responseId": "chatcmpl-Ra9y3vonXyU9S8naZy2LbROc",
+          "requestedModel": "alibaba/qwen3.8-27b",
+          "responseModel": "alibaba/qwen3.8-27b",
+          "effectiveModel": "Qwen/Qwen3.8-27B",
+          "provider": "deepinfra",
+          "attempts": 1,
+          "fallback": false,
+          "gatewayDurationMs": 12472,
+          "latencyMs": 12366,
+          "promptTokens": 191,
+          "completionTokens": 324,
+          "totalTokens": 515,
+          "costUsd": 0.000848,
+          "pricingSource": "deployment",
+          "toolCalls": [],
+          "guardrails": null,
+          "headers": {
+            "otari-request-id": "2070b955-78a2-4a8a-a02d-d72df5e5f1f9",
+            "otari-provider": "deepinfra",
+            "otari-model": "Qwen/Qwen3.8-27B",
+            "otari-attempt-count": "1",
+            "otari-fallback": "false",
+            "otari-response-duration-ms": "12472",
+            "server-timing": "otari;dur=49.5;desc=\"Otari before the provider\", upstream;dur=12422.2;desc=\"Provider until its answer or first chunk\", total;dur=12471.7;desc=\"Otari and the provider\""
+          }
+        },
+        "evaluation": {
+          "valid": true,
+          "accuracy": 1,
+          "passed": true,
+          "missing": 0,
+          "fields": [
+            {
+              "field": "supplier",
+              "expected": "Alder Studio",
+              "actual": "Alder Studio",
+              "match": true
+            },
+            {
+              "field": "invoiceNumber",
+              "expected": "AS-1042",
+              "actual": "AS-1042",
+              "match": true
+            },
+            {
+              "field": "date",
+              "expected": "2026-10-02",
+              "actual": "2026-10-02",
+              "match": true
+            },
+            {
+              "field": "amount",
+              "expected": 1250,
+              "actual": 1250,
+              "match": true
+            },
+            {
+              "field": "currency",
+              "expected": "USD",
+              "actual": "USD",
+              "match": true
+            },
+            {
+              "field": "paymentReference",
+              "expected": "ALDER1042",
+              "actual": "ALDER1042",
+              "match": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "at": "2026-11-04T16:10:02.497Z",
+      "runId": "d8726258-3f68-493c-9457-53eec8d0df78",
+      "role": "evaluator",
+      "status": "completed",
+      "result": {
+        "model": "alibaba/qwen3.8-27b",
+        "caseId": "sup-01",
+        "output": "\n\n{\"category\":\"billing\"}",
+        "metadata": {
+          "requestId": "7b721a30-2319-4edb-aefb-759536262e3b",
+          "responseId": "chatcmpl-R4Cf4f4lRDYDBDpovKyQIGJF",
+          "requestedModel": "alibaba/qwen3.8-27b",
+          "responseModel": "alibaba/qwen3.8-27b",
+          "effectiveModel": "Qwen/Qwen3.8-27B",
+          "provider": "deepinfra",
+          "attempts": 1,
+          "fallback": false,
+          "gatewayDurationMs": 1901,
+          "latencyMs": 2520,
+          "promptTokens": 135,
+          "completionTokens": 71,
+          "totalTokens": 206,
+          "costUsd": 0.000205,
+          "pricingSource": "deployment",
+          "toolCalls": [],
+          "guardrails": null,
+          "headers": {
+            "otari-request-id": "7b721a30-2319-4edb-aefb-759536262e3b",
+            "otari-provider": "deepinfra",
+            "otari-model": "Qwen/Qwen3.8-27B",
+            "otari-attempt-count": "1",
+            "otari-fallback": "false",
+            "otari-response-duration-ms": "1901",
+            "server-timing": "otari;dur=53.5;desc=\"Otari before the provider\", upstream;dur=1847.4;desc=\"Provider until its answer or first chunk\", total;dur=1900.9;desc=\"Otari and the provider\""
+          }
+        },
+        "evaluation": {
+          "valid": true,
+          "accuracy": 1,
+          "passed": true,
+          "missing": 0,
+          "fields": [
+            {
+              "field": "category",
+              "expected": "billing",
+              "actual": "billing",
+              "match": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "at": "2026-11-04T16:10:04.001Z",
+      "runId": "d8726258-3f68-493c-9457-53eec8d0df78",
+      "role": "evaluator",
+      "status": "completed",
+      "result": {
+        "model": "alibaba/qwen3.8-27b",
+        "caseId": "rea-01",
+        "output": "\n\n{\"answer\": 16}",
+        "metadata": {
+          "requestId": "bdbd84fa-9e0f-4431-bc44-e222ad2f6844",
+          "responseId": "chatcmpl-R0cMUVTMWYpOkCmzdh94U1dl",
+          "requestedModel": "alibaba/qwen3.8-27b",
+          "responseModel": "alibaba/qwen3.8-27b",
+          "effectiveModel": "Qwen/Qwen3.8-27B",
+          "provider": "deepinfra",
+          "attempts": 1,
+          "fallback": false,
+          "gatewayDurationMs": 1282,
+          "latencyMs": 1502,
+          "promptTokens": 132,
+          "completionTokens": 51,
+          "totalTokens": 183,
+          "costUsd": 0.000154,
+          "pricingSource": "deployment",
+          "toolCalls": [],
+          "guardrails": null,
+          "headers": {
+            "otari-request-id": "bdbd84fa-9e0f-4431-bc44-e222ad2f6844",
+            "otari-provider": "deepinfra",
+            "otari-model": "Qwen/Qwen3.8-27B",
+            "otari-attempt-count": "1",
+            "otari-fallback": "false",
+            "otari-response-duration-ms": "1282",
+            "server-timing": "otari;dur=35.0;desc=\"Otari before the provider\", upstream;dur=1247.1;desc=\"Provider until its answer or first chunk\", total;dur=1282.1;desc=\"Otari and the provider\""
+          }
+        },
+        "evaluation": {
+          "valid": true,
+          "accuracy": 1,
+          "passed": true,
+          "missing": 0,
+          "fields": [
+            {
+              "field": "answer",
+              "expected": 16,
+              "actual": 16,
+              "match": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "at": "2026-11-04T16:10:05.093Z",
+      "runId": "d8726258-3f68-493c-9457-53eec8d0df78",
+      "role": "analyst",
+      "status": "completed",
+      "result": {
+        "content": "This model, alibaba/qwen3.8-27b, achieved perfect scores with 100% accuracy, pass rate, and schema rate. However, the sample size is extremely small, which limits the reliability and generalizability of these results.",
+        "metadata": {
+          "requestId": "bd24f101-ff53-452a-97a6-27016e8e8600",
+          "responseId": "",
+          "requestedModel": "meta/llama-3.3-70b-instruct",
+          "responseModel": "meta/llama-3.3-70b-instruct",
+          "effectiveModel": "meta.llama3-3-70b-instruct-v1:0",
+          "provider": "bedrock",
+          "attempts": 1,
+          "fallback": false,
+          "gatewayDurationMs": 864,
+          "latencyMs": 1087,
+          "promptTokens": 186,
+          "completionTokens": 52,
+          "totalTokens": 238,
+          "costUsd": 0.000171,
+          "pricingSource": "deployment",
+          "toolCalls": [],
+          "guardrails": null,
+          "headers": {
+            "otari-request-id": "bd24f101-ff53-452a-97a6-27016e8e8600",
+            "otari-provider": "bedrock",
+            "otari-model": "meta.llama3-3-70b-instruct-v1:0",
+            "otari-attempt-count": "1",
+            "otari-fallback": "false",
+            "otari-response-duration-ms": "864",
+            "server-timing": "otari;dur=57.7;desc=\"Otari before the provider\", upstream;dur=806.1;desc=\"Provider until its answer or first chunk\", total;dur=863.8;desc=\"Otari and the provider\""
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-04T16:10:06.324Z",
+      "runId": "d8726258-3f68-493c-9457-53eec8d0df78",
+      "role": "routing",
+      "status": "completed",
+      "result": {
+        "content": "\n\n{\"connected\":true}",
+        "metadata": {
+          "requestId": "79c948e4-57bf-43d8-86eb-ef8eca8ec5f7",
+          "responseId": "chatcmpl-RWRzVyomEQdvEUOGWGW19nMU",
+          "requestedModel": "modelswitch-fallback",
+          "responseModel": "modelswitch-fallback",
+          "effectiveModel": "Qwen/Qwen3.8-27B",
+          "provider": "deepinfra",
+          "attempts": 1,
+          "fallback": false,
+          "gatewayDurationMs": 1001,
+          "latencyMs": 1231,
+          "promptTokens": 60,
+          "completionTokens": 36,
+          "totalTokens": 96,
+          "costUsd": 0.000102,
+          "pricingSource": "deployment",
+          "toolCalls": [],
+          "guardrails": null,
+          "headers": {
+            "otari-request-id": "79c948e4-57bf-43d8-86eb-ef8eca8ec5f7",
+            "otari-provider": "deepinfra",
+            "otari-model": "Qwen/Qwen3.8-27B",
+            "otari-attempt-count": "1",
+            "otari-fallback": "false",
+            "otari-response-duration-ms": "1001",
+            "server-timing": "otari;dur=48.5;desc=\"Otari before the provider\", upstream;dur=952.7;desc=\"Provider until its answer or first chunk\", total;dur=1001.3;desc=\"Otari and the provider\""
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-04T16:10:07.547Z",
+      "runId": "d8726258-3f68-493c-9457-53eec8d0df78",
+      "role": "code",
+      "status": "completed",
+      "result": {
+        "code": "import json\nexpected=[1,0,1,1,0]\nactual=[1,0,0,1,0]\ncorrect=sum(a==b for a,b in zip(expected,actual))\nprint(json.dumps({\"correct\":correct,\"total\":5,\"accuracy\":correct/5}))",
+        "response": {
+          "object": "code_execution.result",
+          "stdout": "{\"correct\": 4, \"total\": 5, \"accuracy\": 0.8}\n",
+          "stderr": "",
+          "return_code": 0,
+          "files": []
+        },
+        "metadata": {
+          "requestId": "732c1ded-aba4-4210-8cd7-1251027e367c",
+          "responseId": null,
+          "requestedModel": "otari:code_execution",
+          "responseModel": null,
+          "effectiveModel": null,
+          "provider": null,
+          "attempts": null,
+          "fallback": null,
+          "gatewayDurationMs": null,
+          "latencyMs": 1222,
+          "promptTokens": null,
+          "completionTokens": null,
+          "totalTokens": null,
+          "costUsd": null,
+          "pricingSource": null,
+          "toolCalls": [],
+          "guardrails": null,
+          "headers": {
+            "otari-request-id": "732c1ded-aba4-4210-8cd7-1251027e367c"
+          }
+        },
+        "verified": true
+      }
+    },
+    {
+      "at": "2026-11-04T16:10:07.827Z",
+      "runId": "d8726258-3f68-493c-9457-53eec8d0df78",
+      "role": "guardrail",
+      "status": "refused",
+      "error": {
+        "code": "guardrail_unavailable",
+        "message": "Otari could not evaluate the guardrail and failed closed.",
+        "status": 502,
+        "retryAfter": null,
+        "requestId": "ef371ed6-bad2-4631-9e63-26f4c452509f"
+      },
+      "metadata": {
+        "requestId": "ef371ed6-bad2-4631-9e63-26f4c452509f",
+        "responseId": null,
+        "requestedModel": "alibaba/qwen3.8-27b",
+        "responseModel": null,
+        "effectiveModel": null,
+        "provider": null,
+        "attempts": null,
+        "fallback": null,
+        "gatewayDurationMs": null,
+        "latencyMs": 279,
+        "promptTokens": null,
+        "completionTokens": null,
+        "totalTokens": null,
+        "costUsd": null,
+        "pricingSource": null,
+        "toolCalls": [],
+        "guardrails": null,
+        "headers": {
+          "otari-request-id": "ef371ed6-bad2-4631-9e63-26f4c452509f"
+        }
+      }
+    }
+  ],
+  "notes": "Only completed responses with actual metadata count. Refusals and advertised availability do not verify a rubric feature."
+}

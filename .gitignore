@@ -8,4 +8,6 @@ playwright-report/
 *.tsbuildinfo
 .vercel/
 .hallmark/*-screenshots/
+docs/screenshots/desktop-dark-workspace.png
+docs/screenshots/mobile-dark-workspace.png
 

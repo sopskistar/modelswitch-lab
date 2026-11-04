@@ -1,10 +1,8 @@
 [
   {
-    "at": "2026-11-04T14:53:49.615693+00:00",
-    "method": "GET",
+    "at": "2026-11-04T16:09:43.429Z",
     "path": "/models",
     "status": 200,
-    "headers": {},
     "data": {
       "object": "list",
       "data": [
@@ -15,7 +13,7 @@
           "owned_by": "alibaba",
           "pricing": {
             "input_price_per_million": 0.14,
-            "output_price_per_million": 1.0,
+            "output_price_per_million": 1,
             "cache_read_price_per_million": 0.05,
             "pricing_tiers": [],
             "unit": "tokens"
@@ -50,7 +48,7 @@
           "owned_by": "alibaba",
           "pricing": {
             "input_price_per_million": 0.45,
-            "output_price_per_million": 3.0,
+            "output_price_per_million": 3,
             "cache_read_price_per_million": 0.22,
             "pricing_tiers": [],
             "unit": "tokens"
@@ -84,8 +82,8 @@
           "created": 1792162734,
           "owned_by": "alibaba",
           "pricing": {
-            "input_price_per_million": 0.0,
-            "output_price_per_million": 0.0,
+            "input_price_per_million": 0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -302,7 +300,7 @@
           "owned_by": "alibaba",
           "pricing": {
             "input_price_per_million": 0.3,
-            "output_price_per_million": 1.0,
+            "output_price_per_million": 1,
             "cache_read_price_per_million": 0.1,
             "pricing_tiers": [],
             "unit": "tokens"
@@ -350,7 +348,7 @@
           "owned_by": "alibaba",
           "pricing": {
             "input_price_per_million": 0.01,
-            "output_price_per_million": 0.0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -365,7 +363,7 @@
           "owned_by": "alibaba",
           "pricing": {
             "input_price_per_million": 0.01,
-            "output_price_per_million": 0.0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -422,7 +420,7 @@
           "owned_by": "alibaba",
           "pricing": {
             "input_price_per_million": 0.2,
-            "output_price_per_million": 0.0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -643,9 +641,9 @@
             "pricing_tiers": [
               {
                 "min_input_tokens": 32000,
-                "input_price_per_million": 5.0,
-                "output_price_per_million": 15.0,
-                "cache_read_price_per_million": 1.0
+                "input_price_per_million": 5,
+                "output_price_per_million": 15,
+                "cache_read_price_per_million": 1
               },
               {
                 "min_input_tokens": 128000,
@@ -682,8 +680,8 @@
           "created": 1792162734,
           "owned_by": "alibaba",
           "pricing": {
-            "input_price_per_million": 2.0,
-            "output_price_per_million": 6.0,
+            "input_price_per_million": 2,
+            "output_price_per_million": 6,
             "cache_read_price_per_million": 0.25,
             "pricing_tiers": [],
             "unit": "tokens"
@@ -819,8 +817,8 @@
           "created": 1792162734,
           "owned_by": "alibaba",
           "pricing": {
-            "input_price_per_million": 0.0,
-            "output_price_per_million": 0.0,
+            "input_price_per_million": 0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -834,8 +832,8 @@
           "created": 1792162734,
           "owned_by": "alibaba",
           "pricing": {
-            "input_price_per_million": 0.0,
-            "output_price_per_million": 0.0,
+            "input_price_per_million": 0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -849,8 +847,8 @@
           "created": 1793283428,
           "owned_by": "deepinfra",
           "pricing": {
-            "input_price_per_million": 0.0,
-            "output_price_per_million": 0.0,
+            "input_price_per_million": 0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -865,7 +863,7 @@
           "owned_by": "deepinfra",
           "pricing": {
             "input_price_per_million": 0.009,
-            "output_price_per_million": 0.0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -1018,7 +1016,7 @@
           "owned_by": "amazon",
           "pricing": {
             "input_price_per_million": 0.1,
-            "output_price_per_million": 0.0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -1031,8 +1029,8 @@
           "created": 1793283428,
           "owned_by": "anthropic",
           "pricing": {
-            "input_price_per_million": 10.0,
-            "output_price_per_million": 50.0,
+            "input_price_per_million": 10,
+            "output_price_per_million": 50,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -1065,8 +1063,8 @@
           "created": 1792138083,
           "owned_by": "deepinfra",
           "pricing": {
-            "input_price_per_million": 0.0,
-            "output_price_per_million": 0.0,
+            "input_price_per_million": 0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -1081,7 +1079,7 @@
           "owned_by": "ovhcloud",
           "pricing": {
             "input_price_per_million": 0.11215,
-            "output_price_per_million": 0.0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -1097,13 +1095,13 @@
           "owned_by": "bytedance",
           "pricing": {
             "input_price_per_million": 0.25,
-            "output_price_per_million": 2.0,
+            "output_price_per_million": 2,
             "cache_read_price_per_million": 0.05,
             "pricing_tiers": [
               {
                 "min_input_tokens": 128001,
                 "input_price_per_million": 0.5,
-                "output_price_per_million": 4.0,
+                "output_price_per_million": 4,
                 "cache_read_price_per_million": 0.05
               }
             ],
@@ -1121,13 +1119,13 @@
           "owned_by": "bytedance",
           "pricing": {
             "input_price_per_million": 0.5,
-            "output_price_per_million": 3.0,
+            "output_price_per_million": 3,
             "cache_read_price_per_million": 0.1,
             "pricing_tiers": [
               {
                 "min_input_tokens": 128000,
-                "input_price_per_million": 1.0,
-                "output_price_per_million": 6.0,
+                "input_price_per_million": 1,
+                "output_price_per_million": 6,
                 "cache_read_price_per_million": 0.2
               }
             ],
@@ -1203,13 +1201,13 @@
           "owned_by": "bytedance",
           "pricing": {
             "input_price_per_million": 0.5,
-            "output_price_per_million": 3.0,
+            "output_price_per_million": 3,
             "cache_read_price_per_million": 0.1,
             "pricing_tiers": [
               {
                 "min_input_tokens": 128000,
-                "input_price_per_million": 1.0,
-                "output_price_per_million": 6.0,
+                "input_price_per_million": 1,
+                "output_price_per_million": 6,
                 "cache_read_price_per_million": 0.2
               }
             ],
@@ -1705,7 +1703,7 @@
           "owned_by": "deepinfra",
           "pricing": {
             "input_price_per_million": 0.02,
-            "output_price_per_million": 0.0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -1719,8 +1717,8 @@
           "created": 1792162734,
           "owned_by": "fireworks",
           "pricing": {
-            "input_price_per_million": 3.0,
-            "output_price_per_million": 15.0,
+            "input_price_per_million": 3,
+            "output_price_per_million": 15,
             "cache_read_price_per_million": 0.3,
             "pricing_tiers": [],
             "unit": "tokens"
@@ -1753,8 +1751,8 @@
           "created": 1793283428,
           "owned_by": "deepinfra",
           "pricing": {
-            "input_price_per_million": 0.0,
-            "output_price_per_million": 0.0,
+            "input_price_per_million": 0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -1768,8 +1766,8 @@
           "created": 1793283428,
           "owned_by": "deepinfra",
           "pricing": {
-            "input_price_per_million": 0.0,
-            "output_price_per_million": 0.0,
+            "input_price_per_million": 0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -2383,7 +2381,7 @@
           "owned_by": "mistralai",
           "pricing": {
             "input_price_per_million": 0.15,
-            "output_price_per_million": 0.0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -2443,7 +2441,7 @@
           "owned_by": "mistralai",
           "pricing": {
             "input_price_per_million": 0.4,
-            "output_price_per_million": 2.0,
+            "output_price_per_million": 2,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -2473,8 +2471,8 @@
           "created": 1790110278,
           "owned_by": "mistralai",
           "pricing": {
-            "input_price_per_million": 2.0,
-            "output_price_per_million": 5.0,
+            "input_price_per_million": 2,
+            "output_price_per_million": 5,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -2749,22 +2747,6 @@
           "deployment_managed": false
         },
         {
-          "id": "mistralai/mistral-7b-instruct-v0.3",
-          "object": "model",
-          "created": 1793283428,
-          "owned_by": "mistralai",
-          "pricing": {
-            "input_price_per_million": 0.0,
-            "output_price_per_million": 0.0,
-            "pricing_tiers": [],
-            "unit": "tokens"
-          },
-          "pricing_source": "configured",
-          "context_window": 65536,
-          "type": "chat",
-          "deployment_managed": false
-        },
-        {
           "id": "mistralai/mistral-code-latest",
           "object": "model",
           "created": 1792162734,
@@ -2787,7 +2769,7 @@
           "owned_by": "mistralai",
           "pricing": {
             "input_price_per_million": 0.1,
-            "output_price_per_million": 0.0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -2933,7 +2915,7 @@
           "owned_by": "mistralai",
           "pricing": {
             "input_price_per_million": 0.4,
-            "output_price_per_million": 2.0,
+            "output_price_per_million": 2,
             "cache_read_price_per_million": 0.4,
             "cache_write_price_per_million": 0.4,
             "pricing_tiers": [],
@@ -3033,8 +3015,8 @@
           "created": 1793780661,
           "owned_by": "mistralai",
           "pricing": {
-            "input_price_per_million": 0.0,
-            "output_price_per_million": 0.0,
+            "input_price_per_million": 0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -3186,8 +3168,8 @@
           "created": 1791475323,
           "owned_by": "mistralai",
           "pricing": {
-            "input_price_per_million": 2.0,
-            "output_price_per_million": 6.0,
+            "input_price_per_million": 2,
+            "output_price_per_million": 6,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -3414,7 +3396,7 @@
           "owned_by": "moonshotai",
           "pricing": {
             "input_price_per_million": 0.6,
-            "output_price_per_million": 3.0,
+            "output_price_per_million": 3,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -3482,7 +3464,7 @@
           "owned_by": "moonshotai",
           "pricing": {
             "input_price_per_million": 0.95,
-            "output_price_per_million": 4.0,
+            "output_price_per_million": 4,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -3583,7 +3565,7 @@
           "owned_by": "deepinfra",
           "pricing": {
             "input_price_per_million": 0.009,
-            "output_price_per_million": 0.0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -3597,8 +3579,8 @@
           "created": 1792138083,
           "owned_by": "nousresearch",
           "pricing": {
-            "input_price_per_million": 1.0,
-            "output_price_per_million": 1.0,
+            "input_price_per_million": 1,
+            "output_price_per_million": 1,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -3611,8 +3593,8 @@
           "created": 1789575775,
           "owned_by": "nousresearch",
           "pricing": {
-            "input_price_per_million": 1.0,
-            "output_price_per_million": 3.0,
+            "input_price_per_million": 1,
+            "output_price_per_million": 3,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -3643,8 +3625,8 @@
           "created": 1792138083,
           "owned_by": "nvidia",
           "pricing": {
-            "input_price_per_million": 0.0,
-            "output_price_per_million": 0.0,
+            "input_price_per_million": 0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -4029,7 +4011,7 @@
           "owned_by": "reflection",
           "pricing": {
             "input_price_per_million": 0.25,
-            "output_price_per_million": 1.0,
+            "output_price_per_million": 1,
             "cache_read_price_per_million": 0.05,
             "pricing_tiers": [],
             "unit": "tokens"
@@ -4061,7 +4043,7 @@
           "created": 1793283428,
           "owned_by": "stepfun",
           "pricing": {
-            "input_price_per_million": 1.0,
+            "input_price_per_million": 1,
             "output_price_per_million": 2.7,
             "cache_read_price_per_million": 0.1,
             "pricing_tiers": [],
@@ -4097,7 +4079,7 @@
           "owned_by": "surogate",
           "pricing": {
             "input_price_per_million": 0.042,
-            "output_price_per_million": 0.0,
+            "output_price_per_million": 0,
             "cache_read_price_per_million": 0.0084,
             "pricing_tiers": [],
             "unit": "tokens"
@@ -4157,7 +4139,7 @@
           "owned_by": "together",
           "pricing": {
             "input_price_per_million": 0.04,
-            "output_price_per_million": 0.0,
+            "output_price_per_million": 0,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -4171,7 +4153,7 @@
           "created": 1790240950,
           "owned_by": "thinkingmachines",
           "pricing": {
-            "input_price_per_million": 1.0,
+            "input_price_per_million": 1,
             "output_price_per_million": 4.05,
             "cache_read_price_per_million": 0.17,
             "pricing_tiers": [],
@@ -4241,7 +4223,7 @@
           "owned_by": "writer",
           "pricing": {
             "input_price_per_million": 2.5,
-            "output_price_per_million": 10.0,
+            "output_price_per_million": 10,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -4272,7 +4254,7 @@
           "owned_by": "writer",
           "pricing": {
             "input_price_per_million": 0.6,
-            "output_price_per_million": 6.0,
+            "output_price_per_million": 6,
             "pricing_tiers": [],
             "unit": "tokens"
           },
@@ -4302,8 +4284,8 @@
           "created": 1792072425,
           "owned_by": "xai",
           "pricing": {
-            "input_price_per_million": 2.0,
-            "output_price_per_million": 6.0,
+            "input_price_per_million": 2,
+            "output_price_per_million": 6,
             "cache_read_price_per_million": 0.5,
             "pricing_tiers": [],
             "unit": "tokens"
@@ -4335,8 +4317,8 @@
           "created": 1792162734,
           "owned_by": "xai",
           "pricing": {
-            "input_price_per_million": 2.0,
-            "output_price_per_million": 6.0,
+            "input_price_per_million": 2,
+            "output_price_per_million": 6,
             "cache_read_price_per_million": 0.5,
             "pricing_tiers": [],
             "unit": "tokens"
@@ -4443,7 +4425,7 @@
           "owned_by": "z-ai",
           "pricing": {
             "input_price_per_million": 0.5,
-            "output_price_per_million": 2.0,
+            "output_price_per_million": 2,
             "cache_read_price_per_million": 0.1,
             "pricing_tiers": [],
             "unit": "tokens"
@@ -4540,7 +4522,7 @@
           "created": 1792162734,
           "owned_by": "z-ai",
           "pricing": {
-            "input_price_per_million": 1.0,
+            "input_price_per_million": 1,
             "output_price_per_million": 3.2,
             "pricing_tiers": [],
             "unit": "tokens"
@@ -4753,11 +4735,9 @@
     }
   },
   {
-    "at": "2026-11-04T14:53:50.545287+00:00",
-    "method": "GET",
+    "at": "2026-11-04T16:09:44.123Z",
     "path": "/tools",
     "status": 200,
-    "headers": {},
     "data": {
       "object": "list",
       "data": [
@@ -4844,15 +4824,35 @@
     }
   },
   {
-    "at": "2026-11-04T14:53:52.382786+00:00",
-    "method": "GET",
+    "at": "2026-11-04T16:09:44.355Z",
     "path": "/tool-settings/guardrails/profiles",
     "status": 200,
-    "headers": {},
     "data": {
       "available": false,
       "reason": "No guardrails service is configured, so its profiles cannot be listed.",
       "profiles": []
+    }
+  },
+  {
+    "at": "2026-11-04T16:09:44.592Z",
+    "path": "/routing/policies",
+    "error": {
+      "code": "authentication",
+      "message": "Otari authentication failed. Check the server-side key and account permissions.",
+      "status": 401,
+      "retryAfter": null,
+      "requestId": null
+    }
+  },
+  {
+    "at": "2026-11-04T16:09:44.823Z",
+    "path": "/budgets",
+    "error": {
+      "code": "authentication",
+      "message": "Otari authentication failed. Check the server-side key and account permissions.",
+      "status": 401,
+      "retryAfter": null,
+      "requestId": null
     }
   }
 ]

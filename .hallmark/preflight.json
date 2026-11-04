@@ -1,0 +1,20 @@
+{
+  "scanned": "2026-11-04",
+  "findings": {
+    "framework": "Empty repository; Next.js App Router introduced",
+    "fonts": "Host Grotesk and Atkinson Hyperlegible Mono",
+    "palette": "Console graphite and paper",
+    "material": "15 synthetic fixtures, real Otari responses only",
+    "branch": "hackathon/mozfest-otari-2026"
+  },
+  "preserve": [
+    "README product purpose",
+    "existing branch",
+    "private .env.local"
+  ],
+  "introduce": [
+    "Console app screen tokens",
+    "case ledger",
+    "execution timeline"
+  ]
+}

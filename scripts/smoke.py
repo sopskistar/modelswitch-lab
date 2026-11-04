@@ -5,6 +5,7 @@ for line in pathlib.Path('.env.local').read_text().splitlines():
     if '=' in line and not line.startswith('#'):
         k,v=line.split('=',1);env[k.strip()]=v.strip().strip('"').strip("'")
 base=env.get('OTARI_BASE_URL','https://api.otari.ai/api/v1').rstrip('/')
+if base not in ['https://api.otari.ai/api/v1', 'https://eu.api.otari.ai/api/v1']: raise ValueError('Only hosted Otari bases are permitted')
 records=[]
 metrics={}
 for role in ['evaluator','analyst','routing']:
