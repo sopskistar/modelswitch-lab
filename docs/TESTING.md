@@ -115,11 +115,12 @@ DeepWiki tool result respectively. Details and request IDs are in
 [`production-observation.json`](../evidence/production-observation.json). No
 additional inference calls were sent to recreate evidence.
 
-The selected production evidence route now returns HTTP 200, but its response
-was the previous `implemented_unverified` MCP record. Thus the route from
-`67a4624e83dde54b3f19067a0182d85e1bbf5551` is deployed, while the corrected
-parser/evidence and routing-status commit is not yet confirmed deployed. Exact
-Vercel source SHA remains unavailable.
+The production MCP evidence route returned HTTP 200 but served the old
+`implemented_unverified` record. After commit `b3449f0` was pushed to both
+branches, `/api/evidence?file=routing-production.json` returned HTTP 404
+`Unknown evidence file.` at `2026-11-05T12:05:51Z` (Vercel request
+`fra1::iad1::mjbz6-1793880350804-aa7d66f909de`). The updated evidence bundle is
+not deployed, and exact Vercel source SHA remains unavailable.
 
 A fresh read-only catalog request on 2026-11-05 returned HTTP 200 and Vercel request ID
 `fra1::iad1::2jdth-1793875276299-dde473d35888`; the homepage also returned HTTP

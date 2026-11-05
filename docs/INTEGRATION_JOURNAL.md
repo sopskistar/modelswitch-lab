@@ -77,3 +77,11 @@ policy resolution; updated its meaning to verify reported policy selection and
 effective identity, while preserving `fallback=false` as a separate fact.
 Added `routing-production.json` and an explicit regression test. This counts
 the rubric's routing use, not a demonstrated failover.
+
+2026-11-05 12:05:51Z: after `b3449f0fd8331417014af48d8b864fb0fd598f57` was
+pushed to both branches, a read-only production request for
+`/api/evidence?file=routing-production.json` returned HTTP 404 `Unknown
+evidence file.` (Vercel request
+`fra1::iad1::mjbz6-1793880350804-aa7d66f909de`). The new evidence bundle is
+not deployed. Exact project source SHA/redeploy controls are unavailable from
+this environment; no other Vercel project was touched.

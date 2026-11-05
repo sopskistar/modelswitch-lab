@@ -117,6 +117,15 @@
       "servedRequestId": null,
       "observation": "After commits accb1b2 and 6ae88ef were pushed to main and hackathon branches, the official host continued serving the previous evidence record. Deployment source SHA cannot be confirmed without access to the selected Vercel project metadata."
     },
+    "latestEvidenceBundleCheck": {
+      "checkedAt": "2026-11-05T12:05:51Z",
+      "sourceCommitPushedToBothBranches": "b3449f0fd8331417014af48d8b864fb0fd598f57",
+      "path": "/api/evidence?file=routing-production.json",
+      "httpStatus": 404,
+      "response": "Unknown evidence file.",
+      "vercelRequestId": "fra1::iad1::mjbz6-1793880350804-aa7d66f909de",
+      "interpretation": "The official production host does not include the routing-production evidence route from b3449f0. The final submitted commit is not confirmed deployed; inspect the selected Vercel project's deployment source/branch and redeploy main if appropriate. Exact deployed SHA remains unknown."
+    },
     "limitations": [
       "The route returned a genuine completed tool result, but its then-current application-level verified flag was false due to a parser mismatch.",
       "The gateway reported no cost; this value is unknown, not zero.",

@@ -71,15 +71,18 @@ requires one allowed use, one successful result after it, a completed stream,
 and the Otari request ID. This production request satisfies that evidence rule.
 The fixed evidence record is in [`mcp-status.json`](../evidence/mcp-status.json).
 
-The production `/api/evidence?file=mcp-status.json` route is present (HTTP 200),
-but a read at `2026-11-05T11:11:45Z` still served the prior
-`implemented_unverified` record, after commits `accb1b2` and `6ae88ef` were
-pushed to both branches. The updated evidence record and corrected verifier
-have therefore **not** been confirmed on production. No Vercel connector, CLI,
-or project deployment metadata is available here to identify the production
-SHA or trigger/inspect the selected project's deployment. The live MCP run
-itself is corroborated by the production `/api/execute` response and Otari
-headers captured during this work; cost remains unknown rather than zero.
+The production `/api/evidence?file=mcp-status.json` route returned HTTP 200 at
+`2026-11-05T11:11:45Z`, but served the prior `implemented_unverified` record.
+After commit `b3449f0fd8331417014af48d8b864fb0fd598f57` was pushed to both
+branches, a read at `2026-11-05T12:05:51Z` to
+`/api/evidence?file=routing-production.json` returned HTTP 404 `Unknown
+evidence file.` Vercel request ID:
+`fra1::iad1::mjbz6-1793880350804-aa7d66f909de`. The final evidence bundle is
+therefore **not deployed**. No Vercel connector, CLI, or project deployment
+metadata is available here to inspect the selected project's source SHA or
+trigger a deployment. The live MCP and routing executions themselves are
+corroborated by captured production responses and Otari headers; see their
+individual evidence records.
 
 ## Spending ceilings — operator-reported, no enforcement proof
 
