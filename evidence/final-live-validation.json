@@ -1,0 +1,117 @@
+{
+  "recordVersion": 1,
+  "capturedAt": "2026-11-05T23:35:10Z",
+  "productionUrl": "https://modelswitch-lab.vercel.app",
+  "productionReadOnlyChecks": {
+    "catalog": {
+      "httpStatus": 200,
+      "vercelRequestId": "fra1::iad1::rlcnk-1793920796770-7ea9de6dd749",
+      "checkedAt": "2026-11-05T23:19:57.938Z",
+      "configured": true,
+      "demoEnabled": true,
+      "region": "US",
+      "roles": {
+        "evaluator": "alibaba/qwen3.8-27b",
+        "analyst": "meta/llama-3.3-70b-instruct",
+        "routingPolicy": "modelswitch-fallback"
+      },
+      "models": [
+        {
+          "id": "alibaba/qwen3.8-27b",
+          "supportsTools": true,
+          "inputPricePerMillion": 0.2,
+          "outputPricePerMillion": 2.5
+        },
+        {
+          "id": "meta/llama-3.3-70b-instruct",
+          "supportsTools": true,
+          "inputPricePerMillion": 0.72,
+          "outputPricePerMillion": 0.72
+        },
+        {
+          "id": "modelswitch-fallback",
+          "supportsTools": true,
+          "inputPricePerMillion": 0.2,
+          "outputPricePerMillion": 2.5
+        }
+      ],
+      "tools": {
+        "otari_web_fetch": true,
+        "otari_web_search": true,
+        "otari_code_execution": true
+      }
+    },
+    "timeoutEvidenceEndpoint": {
+      "httpStatus": 200,
+      "record": "qwen-timeout-diagnosis.json",
+      "vercelRequestId": "fra1::iad1::7vjk9-1793916731831-2b7b41d06f21"
+    }
+  },
+  "readOnlyOtariChecks": {
+    "productionKeyUsageByRunTag": {
+      "endpoint": "GET /api/v1/organizations/me/usage?tag=run:<saved-run-id>",
+      "httpStatus": 401,
+      "errorCode": "authentication",
+      "requestId": null
+    },
+    "budgetTestKeyUsage": {
+      "keyVariablePresent": true,
+      "endpoint": "GET /api/v1/organizations/me/usage?limit=1",
+      "httpStatus": 401,
+      "errorCode": "authentication"
+    },
+    "guardrailProfiles": {
+      "httpStatus": 200,
+      "available": false,
+      "reason": "No guardrails service is configured, so its profiles cannot be listed.",
+      "profiles": []
+    },
+    "routingPolicyList": {
+      "httpStatus": 401,
+      "errorCode": "authentication",
+      "requestId": null
+    }
+  },
+  "qwenPriorRunBilling": {
+    "applicationRunId": "2f74ef5f-d550-4c4f-b607-5495f8c497cc",
+    "OtariRequestId": null,
+    "usageConclusion": "unknown",
+    "note": "A lookup by application run ID at the Otari request-usage endpoint returned 404 because that endpoint requires an Otari request ID. The tenant usage filter was separately attempted and returned 401. No billing or completion conclusion can be drawn."
+  },
+  "webFetch": {
+    "availability": "available in production catalog; Qwen catalog metadata supports tools",
+    "previousFailedRequests": [
+      "9bd36cf5-6ddf-433a-9d1a-95295a50fae5",
+      "32697174-cde5-4bbd-9cf3-df3f02f01542"
+    ],
+    "lastKnownStatus": 400,
+    "successfulToolEvent": false,
+    "rawFailureDetail": "unavailable to this client; prior app response normalized the gateway body, and no Otari request-activity/Vercel log access is configured",
+    "requestSchemaReview": "Current Otari docs support the app's otari_web_fetch declaration with max_uses=1 and allowed_domains; model metadata advertises tools support. No specific request-construction cause is verified."
+  },
+  "spendSafety": {
+    "operatorReportedPromotionalCredit": "approximately $20 promotional credits reported by the operator; current account balance was not accessible",
+    "productionBudgetIncreaseTo5Usd": "planned, not independently verified as configured",
+    "remainingBalanceOrSpend": "unavailable; usage read returned 401",
+    "paidRequestsDuringThisValidation": 0,
+    "reasonNoInferenceWasSent": "The $5 boundary and actual remaining spend were not confirmed, and the prior Qwen request has unknown billing status."
+  },
+  "existingLiveEvidenceRetained": {
+    "llamaRequestId": "77cf5458-46f6-40c9-98ab-80468ba890ec",
+    "llamaRequestedModel": "meta/llama-3.3-70b-instruct",
+    "llamaEffectiveModel": "meta.llama3-3-70b-instruct-v1:0",
+    "llamaProvider": "bedrock",
+    "llamaCorrectFields": 6,
+    "llamaTotalFields": 6,
+    "llamaReportedCostUsd": 0.00017,
+    "routingRequestId": "5f2cc001-a521-435e-8b51-df0f91452dc5",
+    "routingFallback": false,
+    "mcpRequestId": "d9283ac4-3aec-4ee3-8151-08937bb08554",
+    "codeExecutionRequestId": "732c1ded-aba4-4210-8cd7-1251027e367c"
+  },
+  "limitations": [
+    "This file records read-only production/account checks and references prior execution receipts; it records no new inference.",
+    "No exact Vercel deployment SHA is exposed by the public endpoints. The operator confirmed ff915c5 as Ready; the receipt endpoint confirms that revision's evidence routing is present.",
+    "The Vercel CLI/project link is absent, so runtime logs are inaccessible from this environment."
+  ]
+}

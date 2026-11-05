@@ -47,3 +47,17 @@
 ## Final repository state
 
 `main` and `hackathon/mozfest-otari-2026` were synchronized with fast-forward-only updates after this work. Preserve the first-integration commit and merge history; do not force-push or delete the submission branch.
+
+## Final live validation — 2026-11-05
+
+- [x] Official production catalog returned HTTP 200 with Qwen/Llama roles, `demoEnabled: true`, and web tools available; this is discovery, not inference proof.
+- [x] The production timeout diagnosis receipt returned HTTP 200. The operator confirmed deployment `ff915c5` Ready; the endpoint does not reveal a source SHA.
+- [x] No paid inference was sent in this validation. The $5 production cap was planned but not confirmed, and current balance/usage reads returned 401 for both local inference keys.
+- [x] Preserved prior Llama, MCP, code execution and routing receipts; routing still reports `fallback=false`.
+- [x] Guardrail profile discovery explicitly reports no configured service. Per-user and budget enforcement remain unverified.
+- [x] Added server-only redacted diagnostics for future gateway errors. Existing web-fetch 400 root cause remains unavailable; no retry was made.
+- [x] Full local checks passed: typecheck, lint, formatting, 117 unit tests, production build, and 20 desktop/mobile Playwright tests with axe.
+- [ ] Participant confirms the current $5 Otari cap and spend/headroom, then personally performs bounded Qwen/Llama and web-tool live acceptance if still desired.
+- [ ] Check Vercel source revision for commits after `ff915c5`; this environment has no linked project or CLI. Do not claim the new diagnostic/evidence commits deployed until their production revision is confirmed.
+
+Redacted check: [`final-live-validation.json`](../evidence/final-live-validation.json).

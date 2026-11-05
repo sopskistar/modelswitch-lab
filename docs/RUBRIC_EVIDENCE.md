@@ -132,6 +132,28 @@ guardrail service, so no further guardrail probe was made. No safe fallback
 test was available without changing policy configuration; the existing policy
 receipt correctly records one attempt and `fallback=false`.
 
+### 2026-11-05 final read-only validation
+
+Production now reports the evaluator/analyst models and web tools available,
+and Qwen catalog metadata includes tool support. This confirms availability,
+not web execution. Two historical Otari fetch requests returned HTTP 400 with
+no completed tool call; no new fetch was sent because current spending limits
+and balance could not be verified. The supported tenant usage query returned
+401 for both local inference keys. The operator's planned $5 key cap is not
+treated as configured. Guardrail profile discovery now explicitly reports no
+service configured. No routing change was made, and `fallback=false` remains
+the only live routing outcome. The verified rubric coverage therefore remains
+**75/100 potential**, conditional on the existing policy-routing category
+being accepted without observed failover; the participant's demo video remains
+unrecorded. The detailed redacted snapshot is
+[`final-live-validation.json`](../evidence/final-live-validation.json).
+
+The Otari adapter now writes a bounded `[otari_request_failed]` server log for
+future gateway HTTP failures. It includes the safe error headers, request ID,
+and clipped diagnostic detail after redacting credentials and URLs. This makes
+a single future web-fetch diagnosis inspectable; it is not evidence that a
+web-tool call succeeded and does not change the current score.
+
 ## MCP tool execution (verified live)
 
 One bounded production request used the fixed inline DeepWiki server and

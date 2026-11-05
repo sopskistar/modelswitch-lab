@@ -6,9 +6,57 @@ export class OtariError extends Error {
   constructor(
     public safe: SafeError,
     public metadata?: Partial<GatewayMetadata>,
+    public diagnostic?: OtariFailureDiagnostic,
   ) {
     super(safe.message);
   }
+}
+export interface OtariFailureDiagnostic {
+  endpoint: string;
+  httpStatus: number;
+  requestId: string | null;
+  errorCode: string | null;
+  provider: string | null;
+  providerStatus: string | null;
+  providerTag: string | null;
+  retryable: string | null;
+  detail: string | null;
+}
+function safeFailureDetail(body: unknown): string | null {
+  if (!body || typeof body !== 'object') return null;
+  const record = body as JsonRecord;
+  const nested =
+    record.error && typeof record.error === 'object' ? (record.error as JsonRecord) : {};
+  const value = [record.detail, nested.detail, nested.message, record.message].find(
+    (entry) => typeof entry === 'string',
+  );
+  if (typeof value !== 'string') return null;
+  return value
+    .replace(/\bBearer\s+\S+/gi, 'Bearer [redacted]')
+    .replace(/\b(?:sk|otari)_[A-Za-z0-9_-]{8,}\b/gi, '[redacted]')
+    .replace(/\b(api[_-]?key|token|authorization|secret)\s*[:=]\s*[^,\s"'}]+/gi, '$1=[redacted]')
+    .replace(/https?:\/\/[^\s"'<>]+/gi, '[url]')
+    .slice(0, 400);
+}
+function logOtariFailure(
+  endpoint: string,
+  status: number,
+  headers: Headers,
+  body: unknown,
+): OtariFailureDiagnostic {
+  const diagnostic: OtariFailureDiagnostic = {
+    endpoint,
+    httpStatus: status,
+    requestId: headers.get('otari-request-id'),
+    errorCode: headers.get('otari-error-code'),
+    provider: headers.get('otari-error-provider'),
+    providerStatus: headers.get('otari-error-status'),
+    providerTag: headers.get('otari-error-tag'),
+    retryable: headers.get('otari-error-retryable'),
+    detail: safeFailureDetail(body),
+  };
+  console.error('[otari_request_failed]', JSON.stringify(diagnostic));
+  return diagnostic;
 }
 export function normalizeError(
   status: number,
@@ -249,7 +297,8 @@ export class OtariClient {
             requestId: response.headers.get('otari-request-id'),
           });
       }
-      if (!response.ok)
+      if (!response.ok) {
+        const diagnostic = logOtariFailure(path, response.status, response.headers, parsed);
         throw new OtariError(
           normalizeError(response.status, response.headers, parsed),
           metadataFrom(
@@ -260,7 +309,9 @@ export class OtariClient {
               : path,
             performance.now() - start,
           ),
+          diagnostic,
         );
+      }
       return { body: parsed, headers: response.headers, latencyMs: performance.now() - start };
     } catch (err) {
       if (err instanceof OtariError) throw err;
@@ -380,9 +431,11 @@ export class OtariClient {
         } catch {
           body = { detail: 'The Otari Messages endpoint refused the request.' };
         }
+        const diagnostic = logOtariFailure('/messages', response.status, response.headers, body);
         throw new OtariError(
           normalizeError(response.status, response.headers, body),
           metadataFrom(body, response.headers, input.model, performance.now() - start),
+          diagnostic,
         );
       }
       if (!response.body) throw new Error('Otari returned no Messages stream.');

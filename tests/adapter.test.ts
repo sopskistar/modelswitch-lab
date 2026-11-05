@@ -350,6 +350,41 @@ describe('hosted adapter', () => {
       metadata: { requestId: 'gateway-timeout-id', provider: 'deepinfra' },
     });
   });
+  it('logs bounded gateway failure diagnostics without secrets or URLs', async () => {
+    const logger = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const fetcher = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          detail: 'invalid tool parameter token=secret-value at https://host/path',
+        }),
+        {
+          status: 400,
+          headers: {
+            'Otari-Request-ID': 'web-400-id',
+            'Otari-Error-Code': 'invalid_tool',
+            'Otari-Error-Provider': 'gateway',
+          },
+        },
+      ),
+    );
+    const client = new OtariClient('key', undefined, 100, fetcher);
+    await expect(
+      client.complete({ model: 'qwen', messages: [{ role: 'user', content: 'fixed task' }] }),
+    ).rejects.toMatchObject({
+      safe: { code: 'gateway_error', status: 400, requestId: 'web-400-id' },
+      diagnostic: {
+        endpoint: '/chat/completions',
+        httpStatus: 400,
+        requestId: 'web-400-id',
+        errorCode: 'invalid_tool',
+        detail: 'invalid tool parameter token=[redacted] at [url]',
+      },
+    });
+    expect(logger).toHaveBeenCalledTimes(1);
+    expect(JSON.stringify(logger.mock.calls)).not.toContain('secret-value');
+    expect(JSON.stringify(logger.mock.calls)).not.toContain('https://host');
+    logger.mockRestore();
+  });
 });
 describe('safe error normalization', () => {
   it.each([

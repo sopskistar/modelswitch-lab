@@ -220,3 +220,24 @@ Successful two-model execution is recorded. Web tools, actual fallback,
 gateway budget boundaries and per-user budgets require additional hosted-account
 setup; they are not implied by mocked tests. One successful MCP execution is
 recorded separately in `evidence/mcp-status.json`.
+
+## Final live validation — 2026-11-05
+
+The official production catalog GET returned HTTP 200 with inference enabled,
+Qwen/Llama roles, and web search/fetch available. The public timeout evidence
+receipt also returned HTTP 200. These are read-only checks; no inference was
+sent. Current documented tenant-usage reads returned HTTP 401 for both the
+production inference key and isolated budget-test key. Guardrail profile
+discovery returned `available: false` because the hosted service is not
+configured; the inference key's routing-policy list returned 401. See the
+redacted [`final-live-validation.json`](../evidence/final-live-validation.json).
+
+Timeout regressions now cover local adapter abort versus actual gateway 504,
+request identity retention, and diagnostic secret/URL redaction. The route
+test checks the fixed single-use `otari_web_fetch` declaration and only marks
+it verified when a gateway fetch event is present. These are mocked tests, not
+hosted web or inference evidence. Full local verification after the final
+code changes: typecheck, lint, format check, unit tests (117), production
+build, and desktop/mobile Playwright (20) pass. The live Otari Qwen/Llama pair
+and web tool remain untested in this pass because the spend ceiling/current
+balance were not confirmed and the prior Qwen billing outcome is unresolved.

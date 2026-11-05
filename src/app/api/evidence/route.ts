@@ -8,6 +8,7 @@ import routingProduction from '../../../../evidence/routing-production.json';
 import webFetchDiagnosis from '../../../../evidence/web-fetch-diagnosis.json';
 import modelSwitchProduction from '../../../../evidence/model-switch-production.json';
 import qwenTimeoutDiagnosis from '../../../../evidence/qwen-timeout-diagnosis.json';
+import finalLiveValidation from '../../../../evidence/final-live-validation.json';
 import productionDeploymentCheck from '../../../../evidence/production-deployment-check.json';
 export function GET(request: Request) {
   const file = new URL(request.url).searchParams.get('file');
@@ -29,7 +30,9 @@ export function GET(request: Request) {
                   ? NextResponse.json(productionDeploymentCheck)
                   : file === 'qwen-timeout-diagnosis.json'
                     ? NextResponse.json(qwenTimeoutDiagnosis)
-                    : file === 'budget-operator-report.json'
-                      ? NextResponse.json(budgetReport)
-                      : NextResponse.json({ error: 'Unknown evidence file.' }, { status: 404 });
+                    : file === 'final-live-validation.json'
+                      ? NextResponse.json(finalLiveValidation)
+                      : file === 'budget-operator-report.json'
+                        ? NextResponse.json(budgetReport)
+                        : NextResponse.json({ error: 'Unknown evidence file.' }, { status: 404 });
 }

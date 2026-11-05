@@ -435,3 +435,49 @@ These JSON documents are application evidence exports, not signed gateway
 attestations. ModelSwitch Lab never promotes an availability check, application
 rate limit, insufficient-credit refusal, or model-generated claim into proof of
 a hosted capability.
+
+## Final read-only live validation — 2026-11-05
+
+The official production catalog returned HTTP 200 at 23:19:57Z with
+`configured=true`, `demoEnabled=true`, US region, the Qwen evaluator, Llama
+analyst, and `modelswitch-fallback`. Both `otari_web_fetch` and
+`otari_web_search` reported available; the catalog also advertised tool support
+for Qwen. The production timeout receipt endpoint returned HTTP 200. The
+operator confirmed deployment `ff915c5` Ready; public endpoints confirm that
+revision's content is present but do not reveal an exact Vercel SHA. Redacted
+check: [`final-live-validation.json`](../evidence/final-live-validation.json).
+
+The prior Qwen call still cannot be correlated to a billed gateway request. The
+saved application run UUID is not an Otari request ID. The request lookup by
+that UUID returned 404; a current documented tenant usage query filtered by
+the run tag returned 401 for the production inference key. The separate test
+key was present locally but its tenant usage query also returned 401. No Vercel
+CLI or linked project is available to inspect logs. Thus Qwen completion and
+billing remain unknown.
+
+No new inference was sent. The operator reported approximately $20 in promo
+credits and intends to raise the production key limit from $1 to $5, but the
+updated cap and current spend were not confirmed through an authorized source.
+This is not a safe basis for additional paid requests. Existing Llama, routing,
+MCP, and code execution receipts remain unchanged; the Llama case is not paired
+with the failed Qwen case as a benchmark comparison.
+
+The official current tools guide confirms the app's request shape is supported:
+`otari_web_fetch` with `max_uses: 1` and `allowed_domains` is valid, and the
+production model catalog says Qwen supports `tools`. The allowlisted source is
+the Mozilla Manifesto URL. That rules out neither an account-specific policy
+nor a gateway validation issue; the cause of the prior 400 is still unknown
+because the application response did not retain raw detail and no activity or
+Vercel logs were accessible. A bounded server-side `[otari_request_failed]`
+log record now captures the gateway status, safe error headers, request ID,
+and clipped detail with credentials and URLs redacted. It does not reveal the
+old failure retroactively. Do not retry until an authorized operator inspects
+one of the existing request IDs or the next single attempt's server log.
+
+The hosted guardrail profile endpoint returned HTTP 200 with
+`available=false`, “No guardrails service is configured,” and no profiles.
+Reading `/routing/policies` returned HTTP 401 for the inference key; the
+existing production inference receipt continues to verify successful policy
+resolution with `fallback=false`. No fallback event is claimed. Budget
+enforcement, actual fallback, web retrieval, guardrails, and per-user budgets
+remain unverified. These checks add no rubric points.

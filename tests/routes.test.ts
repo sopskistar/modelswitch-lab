@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   completeWithMcpActivity: vi.fn(),
   rate: vi.fn(),
   demo: vi.fn(),
+  webAvailable: false,
   models: [{ id: 'evaluator' }, { id: 'analyst' }, { id: 'policy' }],
 }));
 vi.mock('@/lib/server', () => ({
@@ -15,7 +16,11 @@ vi.mock('@/lib/server', () => ({
     models: mocks.models,
     tools: [
       { id: 'otari_code_execution', available: true },
-      { id: 'otari_web_fetch', available: false, reason: 'workspace_disabled' },
+      {
+        id: 'otari_web_fetch',
+        available: mocks.webAvailable,
+        reason: mocks.webAvailable ? null : 'workspace_disabled',
+      },
     ],
     at: Date.now(),
   }),
@@ -52,6 +57,7 @@ const send = (body: unknown, origin = 'http://localhost') =>
   );
 beforeEach(() => {
   mocks.demo.mockReturnValue(true);
+  mocks.webAvailable = false;
   mocks.rate.mockResolvedValue(undefined);
   mocks.complete.mockReset();
   mocks.completeWithMcpActivity.mockReset();
@@ -202,6 +208,44 @@ describe('bounded execution route', () => {
     expect(response.status).toBe(409);
     expect((await response.json()).error.code).toBe('tool_unavailable');
     expect(mocks.complete).not.toHaveBeenCalled();
+  });
+  it('declares one allowlisted Otari fetch and verifies only a gateway tool result', async () => {
+    mocks.webAvailable = true;
+    mocks.complete.mockResolvedValue({
+      content: 'The Mozilla Manifesto describes an open and accessible internet.',
+      metadata: {
+        requestId: 'gateway-web-test',
+        requestedModel: 'evaluator',
+        effectiveModel: 'qwen-served',
+        provider: 'deepinfra',
+        toolCalls: [
+          {
+            type: 'web_fetch',
+            status: 'completed',
+            url: 'https://www.mozilla.org/en-US/about/manifesto/',
+            content: 'An open and accessible internet.',
+          },
+        ],
+      },
+    });
+    const response = await send({ action: 'web', runId, source: 'manifesto' });
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ experiment: 'web', verified: true });
+    expect(mocks.complete).toHaveBeenCalledWith(
+      expect.objectContaining({
+        model: 'evaluator',
+        max_tool_iterations: 2,
+        tools: [
+          {
+            type: 'otari_web_fetch',
+            max_uses: 1,
+            allowed_domains: ['www.mozilla.org'],
+          },
+        ],
+        messages: [expect.objectContaining({ content: expect.stringContaining('exactly once') })],
+      }),
+      expect.stringContaining(runId),
+    );
   });
   it('uses only the fixed public MCP source and requires gateway activity to verify', async () => {
     mocks.completeWithMcpActivity.mockResolvedValue({
