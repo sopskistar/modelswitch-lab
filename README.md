@@ -4,12 +4,12 @@
 
 Run reproducible model evaluations through Mozilla's hosted Otari gateway and inspect the answers, usage, and routing evidence.
 
-**Live demo:** [modelswitchlab.vercel.app](https://modelswitchlab.vercel.app) · public inference is currently disabled.<br />
+**Live demo:** [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app)<br />
 **Judge? Start here:** [Seven checkpoint walkthrough](docs/JUDGE_WALKTHROUGH.md) · [three minute demo outline](docs/DEMO_SCRIPT.md)
 
-![Production workspace showing the intentionally disabled inference state](docs/screenshots/production-desktop-workspace.png)
+![ModelSwitch Lab benchmark results view](docs/screenshots/desktop-results-live.png)
 
-[Production desktop capture](docs/screenshots/production-desktop-workspace.png) · [mobile capture](docs/screenshots/production-mobile-workspace.png)
+[Desktop workspace](docs/screenshots/desktop-light-workspace-live.png) · [mobile results](docs/screenshots/mobile-results-live.png)
 
 ## Why this is useful
 
@@ -23,11 +23,11 @@ The server sends all evaluator, analyst, routing, and sandbox requests through *
 
 ## Start judging
 
-1. Read the [Judge walkthrough](docs/JUDGE_WALKTHROUGH.md) for the full click-by-click route.
-2. See the [actual live comparison capture](docs/screenshots/desktop-results-live.png) and the redacted [run evidence](evidence/browser-smoke.json).
+1. Open the [live demo](https://modelswitch-lab.vercel.app) and follow the [judge walkthrough](docs/JUDGE_WALKTHROUGH.md).
+2. Review real prior run records in [`evidence/browser-smoke.json`](evidence/browser-smoke.json).
 3. Check the [rubric evidence matrix](docs/RUBRIC_EVIDENCE.md) and [hosted Otari proof](docs/OTARI_PROOF.md).
 
-The app runs three versioned synthetic benchmarks: invoice extraction, support classification, and bounded passage reasoning. Each has five cases. A browser can retain one recent run locally; JSON export creates a portable benchmark receipt. Tiny samples describe only the tested cases.
+The app runs three versioned synthetic benchmarks: invoice extraction, support classification, and bounded passage reasoning. Each has five cases. A browser can retain one recent run locally; JSON export creates a portable benchmark receipt. Tiny samples describe only the tested cases. The capabilities view includes fixed routing, sandbox, web, guardrail, and repository-MCP checks; a control is not evidence until Otari returns the corresponding live event.
 
 ## Open-weight model roles
 
@@ -38,7 +38,7 @@ The analyst can explain a result but cannot change deterministic scores. A recor
 
 ## Verified rubric coverage
 
-Evidence supports **55 of 100 potential points** from prior real Otari execution: 30 for two distinct open-weight roles, 20 for distinct model roles and hosted code execution, and 5 for the working use case. This is our evidence assessment, not an official judge score. Production currently loads with inference disabled, so the historical live requests are not presented as current production runs. Fallback, gateway budget enforcement, web tools, guardrails, and the personally recorded demo remain unverified or unavailable. See the [matrix](docs/RUBRIC_EVIDENCE.md) and [production acceptance record](evidence/production-acceptance.json).
+Our evidence assessment currently supports **55/100 potential points**, not an official score: 30 for two meaningful open-weight model roles, 20 for distinct roles and hosted code execution, and 5 for the working application. A participant-reported production invoice run is recorded separately from independently inspectable gateway receipts. Routing fallback, Otari budget enforcement, MCP, web retrieval, guardrails, and the personal demo recording remain unverified or unavailable. See the [matrix](docs/RUBRIC_EVIDENCE.md), [Otari proof](docs/OTARI_PROOF.md), and [production observation](evidence/production-observation.json).
 
 ## Architecture
 
@@ -68,7 +68,7 @@ Open the local URL printed by Next.js. Without credentials, the workspace shows 
 | `UPSTASH_REDIS_REST_URL`   | Durable production request limiter                             |
 | `UPSTASH_REDIS_REST_TOKEN` | Server-only limiter token                                      |
 
-On Vercel, public inference requires both the explicit switch and durable Redis limits. It also requires an Otari-side hard spending boundary. Production is live but its configuration is not available in this workspace; the public catalog reports inference disabled. See [deployment and safety requirements](docs/OTARI_INTEGRATION.md#vercel-and-public-inference).
+On Vercel, public inference requires both the explicit switch and durable Redis limits. It also requires an Otari-side hard spending boundary. A read-only catalog observation on the selected domain returned `demoEnabled: true`, which reflects environment presence rather than tested limiter behavior; the deployment commit and private settings are not independently available here. See [deployment and safety requirements](docs/OTARI_INTEGRATION.md#vercel-and-public-inference) and the [production evidence record](evidence/production-observation.json).
 
 ## Tests
 

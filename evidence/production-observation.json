@@ -1,0 +1,66 @@
+{
+  "recordVersion": 1,
+  "productionUrl": "https://modelswitch-lab.vercel.app",
+  "observedOn": "2026-11-05",
+  "deploymentCommitVerified": false,
+  "homepage": {
+    "httpStatus": 200,
+    "title": "ModelSwitch Lab",
+    "workspaceHeadingPresent": true
+  },
+  "publicCatalogObservation": {
+    "source": "Read-only GET /api/catalog from the selected production host",
+    "httpStatus": 200,
+    "vercelRequestId": "fra1::iad1::2jdth-1793875276299-dde473d35888",
+    "configured": true,
+    "demoEnabled": true,
+    "region": "US",
+    "evaluatorModel": "alibaba/qwen3.8-27b",
+    "analystModel": "meta/llama-3.3-70b-instruct",
+    "routingPolicy": "modelswitch-fallback",
+    "tools": {
+      "otari_code_execution": true,
+      "otari_web_fetch": "workspace_disabled",
+      "otari_web_search": "workspace_disabled"
+    },
+    "limitations": [
+      "demoEnabled is an environment-derived gate; it does not prove Redis rate-limit behavior.",
+      "The public catalog does not disclose deployment source SHA or secrets.",
+      "This observation does not verify a production completion or budget enforcement."
+    ]
+  },
+  "reportedProductionRun": {
+    "provenance": "Participant-reported production observation; request traces and server receipts were not accessible for independent corroboration in this session.",
+    "timestamp": null,
+    "runId": null,
+    "scenario": "invoice extraction",
+    "datasetVersion": null,
+    "evaluator": {
+      "modelId": "alibaba/qwen3.8-27b",
+      "provider": "not independently corroborated",
+      "casesPassed": 3,
+      "casesTotal": 3,
+      "accuracy": 1,
+      "passRate": 1,
+      "reportedLatencyMs": 5660,
+      "reportedCostUsd": 0.00171,
+      "requestIds": []
+    },
+    "analyst": {
+      "modelId": "meta/llama-3.3-70b-instruct",
+      "provider": "Bedrock (participant-reported)",
+      "reportedCostUsd": 0.000237,
+      "requestIds": []
+    },
+    "reportedCombinedCostUsd": 0.001947,
+    "resultsAndInterpretationReportedVisibleInProduction": true,
+    "independentlyVerified": false
+  },
+  "verificationLimits": {
+    "productionRequestTrace": "Not retrieved; this environment could not reach the selected production host.",
+    "receiptExport": "Not retrieved.",
+    "currentRateLimiterBehavior": "Not exercised; no requests were sent to production inference.",
+    "browserSecretScan": "Not performed against Vercel's private deployment; no secret is included in the public catalog response.",
+    "exactDeploymentCommit": "Not available without authorized Vercel deployment metadata."
+  }
+}

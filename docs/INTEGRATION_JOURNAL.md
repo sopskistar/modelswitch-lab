@@ -38,3 +38,15 @@ reported cost. The browser had zero errors. Browser review caught a footer
 navigation issue caused by using Next Link with the existing view state; that
 was corrected. The tablet footer wrap was also corrected after Hallmark review.
 Latest captures replay this saved run and do not incur additional inference.
+
+2026-11-05: The official Otari MCP guide confirms inline `mcp_servers` on the
+managed completion routes, with explicit iteration limits. Non-streaming Chat
+Completions hides managed MCP activity; Messages streaming with
+`mcp-client-2025-11-20` reports tool-use and tool-result blocks. Added a fixed,
+read-only Qwen repository inspector for DeepWiki, limited to
+`mozilla-ai/otari` and `read_wiki_structure`; no arbitrary URLs, repo selection,
+or mutations are accepted. Added parsing/evidence-gating tests, but no live
+gateway request was made. The direct external endpoint check timed out at the
+environment network boundary and is not treated as an Otari failure. The latest
+production catalog is observed with `demoEnabled: true`; a reported invoice run
+was not independently corroborated because request IDs/receipt were unavailable.

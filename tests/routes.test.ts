@@ -3,6 +3,7 @@ import { OtariError } from '@/lib/otari';
 const mocks = vi.hoisted(() => ({
   request: vi.fn(),
   complete: vi.fn(),
+  completeWithMcpActivity: vi.fn(),
   rate: vi.fn(),
   demo: vi.fn(),
   models: [{ id: 'evaluator' }, { id: 'analyst' }, { id: 'policy' }],
@@ -35,6 +36,7 @@ vi.mock('@/lib/otari', async (importOriginal) => {
     OtariClient: class {
       request = mocks.request;
       complete = mocks.complete;
+      completeWithMcpActivity = mocks.completeWithMcpActivity;
     },
   };
 });
@@ -52,6 +54,7 @@ beforeEach(() => {
   mocks.demo.mockReturnValue(true);
   mocks.rate.mockResolvedValue(undefined);
   mocks.complete.mockReset();
+  mocks.completeWithMcpActivity.mockReset();
   mocks.request.mockReset();
 });
 describe('bounded execution route', () => {
@@ -169,6 +172,48 @@ describe('bounded execution route', () => {
     expect(response.status).toBe(409);
     expect((await response.json()).error.code).toBe('tool_unavailable');
     expect(mocks.complete).not.toHaveBeenCalled();
+  });
+  it('uses only the fixed public MCP source and requires gateway activity to verify', async () => {
+    mocks.completeWithMcpActivity.mockResolvedValue({
+      content: 'Otari documents managed MCP.',
+      metadata: { requestId: 'gateway-mcp-1' },
+      mcpActivity: [
+        {
+          type: 'mcp_tool_use',
+          callId: 'call-1',
+          name: 'read_wiki_structure',
+          input: { repoName: 'mozilla-ai/otari' },
+        },
+        {
+          type: 'mcp_tool_result',
+          callId: 'call-1',
+          name: 'read_wiki_structure',
+          isError: false,
+          result: 'docs/mcp.md',
+        },
+      ],
+      streamComplete: true,
+    });
+    const response = await send({ action: 'mcp', runId });
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({
+      experiment: 'mcp',
+      verified: true,
+      source: { repository: 'mozilla-ai/otari' },
+    });
+    expect(mocks.completeWithMcpActivity).toHaveBeenCalledWith(
+      expect.objectContaining({
+        model: 'evaluator',
+        max_tool_iterations: 2,
+        mcp_servers: [
+          expect.objectContaining({
+            url: 'https://mcp.deepwiki.com/mcp',
+            allowed_tools: ['read_wiki_structure'],
+          }),
+        ],
+      }),
+      expect.stringContaining(runId),
+    );
   });
   it('checks actual sandbox exit and metrics', async () => {
     mocks.request.mockResolvedValue({

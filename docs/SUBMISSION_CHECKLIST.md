@@ -21,14 +21,13 @@
 
 ## Deployment
 
-- [x] Live site responds: <https://modelswitchlab.vercel.app> (HTTP 200, checked 2026-11-05).
-- [x] Production smoke: public catalog confirms hosted model discovery; inference remains disabled and returns `503 demo_disabled`.
-- [ ] Exact deployed Git commit: not independently confirmed. The workspace has no Vercel CLI/auth or linked project file, and GitHub's public deployment API returned no deployment records. See `evidence/production-acceptance.json`.
-- [x] Production branch intent: `main` at `53671da73606e5e619e8224224a8647ee21cdae1`; whether Vercel currently serves that exact commit still needs owner dashboard confirmation.
-- [ ] Before enabling public inference, configure an Otari-side hard spending ceiling, durable Upstash Redis limits, and `PUBLIC_DEMO_ENABLED=true`; otherwise leave it disabled.
-- [ ] Confirm the deployed SHA in Vercel and add the production domain to its build/deployment record.
-- [ ] Once durable Upstash limits, Otari hard budget, and public inference flag are verified, run one small production benchmark and verify rate-limiter behavior.
+- [x] Selected live site: <https://modelswitch-lab.vercel.app> (public catalog observed with `demoEnabled: true`; exact deployment SHA remains unverified).
+- [ ] Production run corroborated with Otari request IDs, trace and saved receipt; participant-reported results are recorded separately.
+- [ ] Exact deployed Git commit: not independently confirmed. Inspect the selected `modelswitch-lab` Vercel project, not the similarly named duplicate.
+- [ ] Verify durable Upstash behavior and the current Otari spending boundary before another live run.
+- [ ] After pushing this commit to `main`, verify Vercel deployed that exact SHA on the selected domain.
+- [ ] Verify production result trace/receipt if accessible; do not repeat inference solely to replace missing historical metadata.
 
 ## Final repository state
 
-Both `main` and `hackathon/mozfest-otari-2026` should contain the merged project and final submitted polish. Preserve the first-integration commit and merge history; do not force-push or delete the submission branch.
+Both `main` and `hackathon/mozfest-otari-2026` will be synchronized at the final submitted commit. Preserve the first-integration commit and merge history; do not force-push or delete the submission branch.

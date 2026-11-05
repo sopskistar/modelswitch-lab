@@ -1,0 +1,27 @@
+{
+  "recordVersion": 1,
+  "observedOn": "2026-11-05",
+  "status": "implemented_unverified",
+  "implementation": {
+    "applicationRoute": "/api/execute action=mcp",
+    "gatewayEndpoint": "POST /api/v1/messages",
+    "server": "https://mcp.deepwiki.com/mcp",
+    "repository": "mozilla-ai/otari",
+    "allowedTools": ["read_wiki_structure"],
+    "model": "alibaba/qwen3.8-27b",
+    "maxToolIterations": 2,
+    "activityEvidence": "Otari Messages stream MCP beta events"
+  },
+  "liveExecution": {
+    "verified": false,
+    "requestId": null,
+    "toolUse": null,
+    "toolResult": null,
+    "reason": "No Otari call was made. An approved direct connectivity check from this environment timed out before a response; this does not establish whether the Otari gateway can reach DeepWiki."
+  },
+  "limitations": [
+    "A successful live request must contain matching Otari-owned mcp_tool_use and successful mcp_tool_result events.",
+    "Chat Completions and Responses hide managed MCP activity; this integration uses streamed Messages with the documented MCP beta.",
+    "The fixed public DeepWiki endpoint and repository are read-only, but the generated documentation is third-party content and is treated as untrusted."
+  ]
+}

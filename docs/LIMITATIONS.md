@@ -7,13 +7,17 @@
 - **Advanced points:** code execution and distinct model roles have real successful execution proof.
   Web tools are workspace-disabled. Guardrails return a fail-closed 502 with no
   service configured. Policy routing succeeded without actual failover; fallback
-  and real budget enforcement remain unverified.
-  MCP and per-user budgets are not implemented. Six capabilities are a target,
-  not the delivered evidence-backed result.
-- **Production is live, deployment commit unknown:** the supplied production URL
-  serves the app and catalog, but this workspace has no Vercel CLI/auth or linked
-  project; GitHub has no deployment record. The exact deployed SHA is not
-  confirmed. Public inference reports disabled. See `production-acceptance.json`.
+  and real budget enforcement remain unverified. MCP is implemented as a fixed,
+  read-only Otari Messages request but has not produced a live tool event. Per-user
+  budgets are not implemented. Six capabilities remain a target, not the
+  delivered evidence-backed result.
+- **Production is live, deployment commit unknown:** the selected
+  `modelswitch-lab.vercel.app` public catalog was observed with the configured
+  demo gate enabled. The exact deployed SHA and private Vercel settings are not
+  available here; Redis behavior is untested. The participant-reported invoice
+  run lacks request IDs/receipt for independent corroboration. See
+  `production-observation.json` and the older, superseded
+  `production-acceptance.json`.
 - **Small sample:** five cases per scenario cannot establish statistical
   superiority. Synthetic fixtures intentionally include easy and edge cases;
   they are not a representative real-world workload.
@@ -32,9 +36,9 @@
   enablement. A failed quota store blocks execution. Local counters are temporary.
   Application quotas are not proof of Otari spending or per-user budgets. A hard
   gateway budget is still required. Concurrency of two is per server process.
-  The public catalog's `demoEnabled: false` does not distinguish a false feature
-  flag from missing Redis credentials. No rate-limit test was possible while the
-  inference gate was off.
+  The public catalog's `demoEnabled: true` reflects the feature flag and Redis
+  environment variables being present, not successful durable counter behavior.
+  No rate-limit boundary test was performed.
 - **Web:** only curated URLs; configure the hosted workspace allowlist before
   public enablement. Tool output remains untrusted. A model document summary is
   not a scored public-document benchmark and cannot prove retrieval without

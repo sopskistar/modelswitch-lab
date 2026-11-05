@@ -155,7 +155,26 @@ The current recheck again returned authentication for `/budgets`. No isolated
 test credential or budget was created, and the configured inference key's
 balance is not represented as an enforced spending ceiling.
 
-## Guardrails, MCP, and per-user budgets
+## Managed MCP repository inspection
+
+The capabilities page offers a fixed, read-only repository inspection for
+`mozilla-ai/otari` through DeepWiki at `https://mcp.deepwiki.com/mcp`. It
+passes `mcp_servers` directly to hosted Otari's `/messages` endpoint, restricts
+the exposed tool to `read_wiki_structure`, and caps output at 180 tokens and
+the managed loop at two iterations. It does not accept arbitrary URLs or
+repository identifiers. Otari's current [MCP guide](https://github.com/mozilla-ai/otari/blob/main/docs/mcp.md)
+documents inline servers and the streamed `mcp-client-2025-11-20` activity
+blocks. The app requires a matching `mcp_tool_use` and successful
+`mcp_tool_result` in that stream before returning `verified: true`.
+
+The endpoint and tool names were verified from DeepWiki's public repository
+documentation, but no live Otari call has yet been made. Direct outbound
+connectivity from the development environment timed out; the gateway's ability
+to connect remains unknown. Do not count MCP until an actual production or
+operator run returns a gateway request ID and both activity blocks. The app
+must not fall back to a local GitHub fetch and represent it as Otari MCP.
+
+## Guardrails and per-user budgets
 
 The safe prompt-injection fixture requests top-level `guardrails` with profile
 `prompt-injection`, mode `block`, `on_unavailable:block`. Hosted Otari returned
@@ -163,20 +182,22 @@ The safe prompt-injection fixture requests top-level `guardrails` with profile
 evaluation is claimed. A safety model listed in the catalog is not an inference
 guardrail service. `OTARI_SAFETY_MODEL` in a pre-existing local file is unused.
 
-MCP and per-user budgets are not implemented: no supported account integration
-or service-key end-user setup was available. Do not put arbitrary browser user
-labels in Otari's `user` field; ordinary keys bill their own user, and real
-per-user budgets require a service key and configured end-user budgets.
+Per-user budgets remain unimplemented: no authorized service-key/end-user
+budget setup is available. Do not put arbitrary browser user labels in Otari's
+`user` field; ordinary keys bill their own user, and real per-user budgets
+require a service key and configured end-user budgets.
 
 ## Vercel and public inference
 
 Production must set `OTARI_API_KEY`, `OTARI_BASE_URL`,
 `OTARI_EVALUATOR_MODEL`, and `OTARI_ANALYST_MODEL`. `OTARI_FALLBACK_POLICY` is
-optional and is used only for the routing check. `PUBLIC_DEMO_ENABLED` must
-remain `false` until a small Otari-side hard budget and durable limiter are
-configured. To enable, set it to `true` and provide both
-`UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`; production refuses
-execution without these values. The Redis limiter applies 120 global attempted
+optional and is used only for the routing check. The selected production
+catalog returned `demoEnabled: true`, which means the explicit flag and both
+Upstash variable values were present when observed; this check does not test
+Redis behavior or inspect private Vercel values. Keep inference enabled only
+while a small Otari-side hard budget and durable limiter remain configured.
+Production refuses execution without both
+`UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`. The Redis limiter applies 120 global attempted
 operations per UTC day and 12 per client per minute. This is not a substitute
 for the Otari spending boundary.
 

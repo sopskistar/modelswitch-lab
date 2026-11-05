@@ -1,5 +1,69 @@
 # Hosted Otari proof
 
+## Selected production domain and reported run — 2026-11-05
+
+The selected demo is [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app)
+(hyphenated). A read-only `/api/catalog` observation on that domain returned
+HTTP 200, `configured: true`, `demoEnabled: true`, the expected Qwen and Llama
+model IDs, `modelswitch-fallback`, code execution available, and web fetch/search
+`workspace_disabled`. The flag is computed from deployment environment
+configuration; it does not prove that Redis counters work or reveal the deployed
+commit. No production inference request was sent in this session.
+
+The participant reports a real production invoice run: Qwen3.8 passed 3/3
+(100% accuracy/pass rate), 5.66 seconds, $0.001710; a separate Llama 3.3 analyst
+through Bedrock reported $0.000237; combined reported cost $0.001947. The
+production UI reportedly showed results and interpretation. The timestamp, run
+ID, request IDs, receipt export and trace were not available here, so these
+values are explicitly **participant-reported and not independently corroborated**.
+See [`production-observation.json`](../evidence/production-observation.json).
+
+On `2026-11-05`, a read-only request to the selected production catalog returned
+HTTP 200 with Vercel request ID
+`fra1::iad1::2jdth-1793875276299-dde473d35888`. It confirmed the currently
+configured hosted roles, policy, tool availability and `demoEnabled: true`.
+The homepage returned HTTP 200 with the expected ModelSwitch Lab title and
+workspace. A live Chromium navigation attempt from this environment ended with
+`ERR_NETWORK_CHANGED`; no inference was sent and no production browser
+accessibility result is claimed.
+
+The older [production acceptance record](../evidence/production-acceptance.json)
+captured the earlier non-hyphenated domain with inference disabled. It is retained
+as historical evidence and is not the selected production site's current state.
+
+## Managed MCP implementation — not yet verified
+
+The app now has a fixed, read-only **Inspect repository** check. It calls hosted
+Otari `POST /api/v1/messages` with inline `mcp_servers` for the public DeepWiki
+endpoint and allowlists only `read_wiki_structure` for `mozilla-ai/otari`.
+It enables Otari's documented `mcp-client-2025-11-20` Messages beta and only
+marks the check verified when a matching gateway-owned `mcp_tool_use` and
+successful `mcp_tool_result` appear in the stream. The request is capped at 180
+output tokens and two tool-loop iterations; it has no user-controlled URL or
+repository input and is subject to the normal public rate limiter.
+
+The hosted request has **not** been made. The authorized direct connectivity
+check from this environment timed out before receiving an MCP response. This
+does not prove the gateway itself cannot reach DeepWiki. The implementation is
+therefore not counted for rubric points. See [`mcp-status.json`](../evidence/mcp-status.json)
+for the redacted status record and [Otari's MCP documentation](https://github.com/mozilla-ai/otari/blob/main/docs/mcp.md).
+
+## Spending ceilings — operator-reported, no enforcement proof
+
+The participant reports two separate $1 monthly ceilings attached in Otari:
+the `Setup guide` production key and `modelswitch-budget-proof` test key. These
+were not changed. The inference credential cannot read organization spending
+records; past organization management reads returned HTTP 401 `Invalid master
+key`. Current spend, remaining dollars, reset state, and the exact key-budget
+association therefore are not fetched by the application. No `budget_exceeded`
+response was observed. The redacted provenance record is
+[`budget-operator-report.json`](../evidence/budget-operator-report.json).
+
+Previously observed model costs are usage reports, not proof that the boundary
+was enforced. The existing $1 ceilings must not be exhausted to establish the
+point. Budget capability remains unverified pending a safe, gateway-recorded
+refusal or independently inspectable Otari usage/enforcement evidence.
+
 Historical request evidence below is redacted, checked into the repository, and
 linked to its machine-readable record. Request IDs can be checked against the
 Otari account's request/usage history by an authorized owner. Those requests

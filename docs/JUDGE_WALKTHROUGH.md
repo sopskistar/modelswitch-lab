@@ -2,53 +2,51 @@
 
 ## Before you begin
 
-The production application is live at [modelswitchlab.vercel.app](https://modelswitchlab.vercel.app). On 2026-11-05, the site and public catalog were checked directly. The production catalog reports `demoEnabled: false`; the Run button is disabled and the execution route returns `503 demo_disabled`. You can inspect the full workspace and evidence views, but cannot run a production benchmark until durable rate limiting and an Otari-side spending ceiling are confirmed. Local setup is in the [README](../README.md#run-locally).
-
-The five-case historical comparison is in [`evidence/browser-smoke.json`](../evidence/browser-smoke.json). The latest one-case live smoke is in [`evidence/polish-live-smoke.json`](../evidence/polish-live-smoke.json). Both contain real Otari responses, not test fixtures. Test-suite intercepts are not evidence of hosted execution.
+Open the selected production application at [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app) (with a hyphen). A read-only catalog observation returned `demoEnabled: true`; the separate participant-reported invoice run is recorded in [`production-observation.json`](../evidence/production-observation.json), but its request IDs and receipt were not independently retrieved. Prior independently inspectable Otari request records are in [`evidence/browser-smoke.json`](../evidence/browser-smoke.json) and [`evidence/polish-live-smoke.json`](../evidence/polish-live-smoke.json). Intercepted test responses are never live evidence.
 
 ## Seven checkpoints
 
 ### 1. Open the application
 
-**Public visitor:** Open the [production site](https://modelswitchlab.vercel.app). No visitor API key or sign-in is needed. The page loads with an explicit public-inference-disabled state.
+**Public visitor:** Open the [production site](https://modelswitch-lab.vercel.app). No visitor API key or sign-in is needed.
 
 **Observe:** The Workspace, scenario ledger, theme control, and view navigation. This is an evaluation workbench, not a general chat screen.
 
 ### 2. Select a synthetic scenario
 
-Choose invoice extraction, support classification, or bounded reasoning. Expand a case in **Test cases** to see the synthetic input and expected answer. The production workspace exposes all three scenarios and permits setup changes; its Run button remains disabled while the demo gate is off.
+Choose invoice extraction, support classification, or bounded reasoning. Expand a case in **Test cases** to see the synthetic input and expected answer. The production catalog previously showed the demo gate enabled; if the Run action is unavailable at recording time, inspect the evidence below rather than retrying repeatedly.
 
 **Observe:** The expected values are visible before execution, so a judge can independently understand how a response is scored.
 
 ### 3. Choose two open-weight models
 
-The live catalog currently lists Qwen3.8 27B (`alibaba/qwen3.8-27b`) and Llama 3.3 70B Instruct (`meta/llama-3.3-70b-instruct`). You can inspect their roles and select them in the workspace; production inference is not enabled. Use the independently inspectable two-role records linked above for actual executions.
+The catalog lists Qwen3.8 27B (`alibaba/qwen3.8-27b`) and Llama 3.3 70B Instruct (`meta/llama-3.3-70b-instruct`). The participant reports a production Qwen evaluator run and separate Llama analyst call; inspect the production evidence record and distinguish its provenance from gateway request receipts.
 
-**Observe:** In prior recorded runs, the evaluator performed the benchmark task and the distinct analyst made a separate request after verified results existed. Model IDs came from the gateway catalog; serving provider/model came from Otari responses. Production currently allows inspection and selection, not execution.
+**Observe:** In prior recorded runs, the evaluator performed the benchmark task and the distinct analyst made a separate request after verified results existed. Model IDs came from the gateway catalog; serving provider/model came from Otari responses. A recent production catalog observation reported the demo gate enabled; private rate/spend protections were not independently inspected in this pass.
 
 ### 4. Execute the benchmark
 
-Production observation: **Run benchmark** is disabled. A safe empty POST returned 503 `demo_disabled` before request parsing or upstream execution. Do not present that refusal as a benchmark or run production inference until the operator has confirmed rate and spend protections.
+Select a small synthetic invoice sample and run it once. The participant reports Qwen 3/3 with a separate Llama analyst. If repeating this at a live recording, use the smallest sample and stop after the first completed run. Do not call the user-reported values independently verified without its trace/request IDs.
 
-**Observe:** There are no production results until the operator enables the protected demo. In an enabled run, outcomes arrive case by case; failures and unsubmitted cases remain visible, and the app does not replace them with fixtures.
+**Observe:** In a completed run, outcomes arrive case by case; failures and unsubmitted cases remain visible, and the app does not replace them with fixtures. Stop after one successful run; the participant-reported result lacks an independently available trace/receipt.
 
 ### 5. Compare measured results
 
-Open **Results**. The empty state is shown for a fresh browser. Historical comparisons are linked above and in the evidence matrix; they are dated records, not production results.
+Open **Results** and compare measured accuracy, pass rate, latency and cost. The reported production result is Qwen 3/3 at $0.001710, Llama analyst at $0.000237, total $0.001947; compare those only as a participant-reported observation. The older independent five-case comparison remains in the evidence files.
 
 **Observe:** Weights are exposed under **Score formula and full metrics**. Historical evidence has a five-case sample: Qwen 5/5, Llama 4/5, and $0.001741 reported cost including analyst. It is one dated run, not a live average or universal ranking.
 
 ### 6. Inspect requests and analyst role
 
-Open **Request trace**. A fresh production browser has no traces, which is the correct empty state. The real request IDs, models, providers, and usage from previous Otari executions are in [OTARI_PROOF.md](OTARI_PROOF.md). JSON export is only available after a run; no production receipt was generated during acceptance because inference is disabled.
+Open **Request trace** and inspect the evaluator and separate analyst events. Export a receipt after the run. The currently available participant report did not include request IDs or the receipt, so it is not independently corroborated; historical trace IDs and provider metadata are linked in [OTARI_PROOF.md](OTARI_PROOF.md).
 
-**Observe:** In completed runs, application scoring is distinct from gateway metadata. The analyst interprets verified metrics but does not set or override scores. JSON export downloads a benchmark receipt after a run; the fresh production state has no receipt to export.
+**Observe:** In completed runs, application scoring is distinct from gateway metadata. The analyst interprets verified metrics but does not set or override scores. JSON export downloads a benchmark receipt after a run. The participant's reported run did not include a receipt that can be independently inspected here.
 
 ### 7. Inspect hosted Otari evidence
 
-Open **Otari capabilities**. The production catalog reports code execution available and both web tools workspace-disabled. This is tool availability, not proof of a production tool execution. No current production guardrail status, routing failover, or budget enforcement was verified.
+Open **Otari capabilities**. Routing and code checks each make one real request; **Inspect repository** attempts a fixed Qwen + DeepWiki managed MCP call, and the result counts only if the streamed Otari response contains a matching tool-use/result pair. Web tools are reported `workspace_disabled`; no fallback event or budget refusal is verified.
 
-**Observe:** Only completed hosted execution with an actual request ID earns a verified label. See [OTARI_PROOF.md](OTARI_PROOF.md) for redacted historical evidence, including the code request, distinct model requests, and the routing request that resolved without failover.
+**Observe:** Only completed hosted execution with actual request evidence earns verified status. The MCP implementation remains unverified until a real call returns and is saved. See [OTARI_PROOF.md](OTARI_PROOF.md) for request IDs and status.
 
 ## Operator-only checks
 

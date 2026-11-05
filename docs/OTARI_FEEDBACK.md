@@ -80,3 +80,14 @@ capability/permissions/funding readiness view would shorten setup.
 
 Local sandbox DNS/browser restrictions, npm's peer-resolution crash, and the
 Turbopack port restriction were development-environment issues, not Otari issues.
+
+## Follow-up observation — 2026-11-05
+
+The current MCP guide documents managed MCP on inline `mcp_servers`. A useful
+integration detail is that non-streaming Chat Completions can hide the managed
+MCP tool call and result, while a streamed Messages request with the documented
+MCP beta exposes server-owned activity blocks. We are implementing that narrow
+path, but have not made a hosted MCP request yet. A direct public MCP connectivity
+check from this environment timed out; this does not establish a hosted Otari
+service problem. The implementation remains unverified until the gateway
+returns the corresponding request ID and use/result pair.

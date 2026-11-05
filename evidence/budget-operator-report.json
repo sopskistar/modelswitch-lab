@@ -1,0 +1,34 @@
+{
+  "recordVersion": 1,
+  "observedOn": "2026-11-05",
+  "provenance": "Participant-reported Otari dashboard state; no dashboard export or gateway usage record was available for independent corroboration.",
+  "budgets": [
+    {
+      "label": "Setup guide production API key",
+      "reportedMonthlyLimitUsd": 1,
+      "reportedAttached": true,
+      "scope": "production API key"
+    },
+    {
+      "label": "modelswitch-budget-proof API key",
+      "reportedMonthlyLimitUsd": 1,
+      "reportedAttached": true,
+      "scope": "dedicated test API key"
+    }
+  ],
+  "gatewayUsageRead": {
+    "availableToInferenceKey": false,
+    "managementReads": "Previously returned HTTP 401 Invalid master key.",
+    "currentSpendUsd": null,
+    "remainingUsd": null,
+    "requestLimit": null,
+    "budgetExceededRefusal": null
+  },
+  "status": "operator_reported_only",
+  "rubricVerified": false,
+  "limitations": [
+    "A configured spending ceiling and observed request costs do not prove a gateway refusal at the ceiling.",
+    "The dashboard editor was reported to expose USD limit and reset period, not request_limit.",
+    "No production or test budget was changed and no request was sent to exhaust a boundary."
+  ]
+}

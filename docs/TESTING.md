@@ -24,7 +24,7 @@ for development; `127.0.0.1` is also explicitly allowed in Next's dev origins.
 ## Results observed
 
 - TypeScript, ESLint, production build: passed on the implemented application.
-- Vitest: **100 tests in 4 files**, all passed on the final source.
+- Vitest: **104 tests in 5 files**, all passed on the final source.
 - Playwright: **16 tests**, 8 in desktop Chromium and 8 in mobile Chromium
   (iPhone 13 emulation), **all passed against the final production build**.
 - Axe: automated checks in the theme/responsive tests; no violations on checked
@@ -69,6 +69,11 @@ application or counted as live evidence. No paid live requests are made by the
 ordinary test suite. Test artifacts go under ignored `test-results` and
 `playwright-report`; public screenshots come from the separate unmocked capture.
 
+The MCP adapter and route tests use intercepted Messages events to test parsing,
+fixed-source behavior, and evidence gating. Those mocks do not count as hosted
+MCP execution. A real check requires an Otari request ID and matching streamed
+tool-use/result blocks.
+
 ## Live hosted checks
 
 ### Production acceptance (2026-11-05)
@@ -81,7 +86,8 @@ axe violations, and no horizontal overflow. Screenshots are
 `screenshots/production-desktop-workspace.png` and
 `screenshots/production-mobile-workspace.png`.
 
-The production catalog reports `configured: true` and `demoEnabled: false`.
+That archived record describes the earlier non-hyphenated site and reports
+`configured: true` and `demoEnabled: false`.
 One empty JSON POST returned the safe `503 demo_disabled` response, which the
 route returns before parsing, rate limiting, or starting an Otari request. No
 live model inference was attempted. Consequently, production result export and
@@ -89,6 +95,26 @@ durable rate-limit enforcement could not be tested; the UI has no production
 run to export. The Vercel deployment SHA and private env-variable presence are
 not accessible from this workspace. See
 [`production-acceptance.json`](../evidence/production-acceptance.json).
+
+The selected official domain is now the hyphenated
+`https://modelswitch-lab.vercel.app`. Its latest catalog observation returned
+`demoEnabled: true`, and the participant reports a live invoice benchmark.
+Request IDs and receipt have not been independently retrieved in this pass;
+see [`production-observation.json`](../evidence/production-observation.json).
+Redis behavior and deployed commit remain unverified. No repeat inference call
+was made.
+
+A fresh read-only catalog request on 2026-11-05 returned HTTP 200 and Vercel request ID
+`fra1::iad1::2jdth-1793875276299-dde473d35888`; the homepage also returned HTTP
+200 and its expected title/workspace HTML. A production Chromium audit attempt
+failed with `ERR_NETWORK_CHANGED`, so desktop/mobile browser accessibility and
+screenshots are limited to the locally built app. No inference request was sent.
+
+Fresh local screenshots of the updated capabilities view are
+[`desktop`](screenshots/capabilities-review-desktop.png) and
+[`mobile`](screenshots/capabilities-review-mobile.png). They were captured from
+the local production build with catalog metadata intercepted for layout only;
+they do not show a live Otari MCP execution.
 
 The production browser check is acceptance inspection, not the intercepted
 Playwright test suite. No fixtures were presented as live production output.

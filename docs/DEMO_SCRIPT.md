@@ -2,20 +2,20 @@
 
 The participant records the actual application screen and narrates personally.
 Do not generate narration, a synthetic presenter, or a fabricated screen recording.
-Production is live but currently has inference disabled. Do not imply that a
-production run works unless the owner confirms the spending cap and durable
-rate limiter and you repeat a small live run. If that setup is still pending,
-show the production disabled state, then inspect the redacted historic request
-evidence in the repository. A local operator run is another option when its
-credentials and budget are confirmed.
+The selected production site is https://modelswitch-lab.vercel.app. Its public
+catalog was observed with `demoEnabled: true`; a participant reports an invoice
+run and separate analyst response. The request IDs and receipt were not
+independently recovered in this pass, so call those values participant-reported
+unless you can open their live trace. Confirm the small Otari spending boundary
+and durable Upstash limiter still apply before demonstrating inference.
 
 | Time      | Show                                                                               | Explain in your own words                                                                                                                                      |
 | --------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0:00–0:30 | Workspace and a synthetic invoice                                                  | The developer's decision: which model solves this task reliably at an acceptable cost?                                                                         |
-| 0:30–1:30 | If enabled, a small live run; otherwise the synthetic workspace and dated evidence | Real hosted Otari inference; deterministic scoring instead of an AI opinion of quality. Make clear whether the shown run is current, local, or historical.     |
+| 0:30–1:30 | A small live invoice run, if enabled; stop after one run | Real hosted Otari inference; deterministic scoring. Say whether values are live UI observations, participant-reported, or independently inspectable gateway evidence. |
 | 1:30–2:00 | Comparison and objective weights                                                   | Tradeoffs measured only on tested cases; missing costs remain unknown                                                                                          |
 | 2:00–2:35 | Separate analyst request in trace                                                  | Evaluator executes the task; another open-weight family diagnoses verified metrics                                                                             |
-| 2:35–3:40 | Capabilities and exported evidence                                                 | Show actual executed features and gateway request IDs. Code and distinct roles have evidence now. Only show six as verified after all six really pass.         |
+| 2:35–3:40 | Capabilities; run repository MCP once only after a live trace is ready | Code and distinct model roles have historical evidence. MCP is implemented but unverified until actual Otari tool-use/result events appear. Do not repeat uncertain calls. |
 | 3:40–4:20 | Trace, JSON benchmark receipt, and reproduction guide                              | Separate gateway metadata from application events; inspect request IDs, effective models, providers, reported usage, tools, and fallback fields where returned |
 | 4:20–4:45 | Known limitations                                                                  | Tiny datasets, missing hosted setup, exact verified scope                                                                                                      |
 
@@ -25,11 +25,10 @@ that two-role inference and six capabilities are not yet demonstrated. This is
 an honest progress demonstration, not a 100-point completion claim.
 
 Before recording: hide `.env.local`, terminal history and dashboard credentials;
-confirm the production SHA in Vercel; verify a hard Otari budget and durable
-Upstash limits; only then enable the public demo and run one tiny benchmark.
-If those checks are incomplete, leave inference disabled and use dated evidence
-with its timestamp visible. Record the real screen, not test fixtures or
-screenshots composited into a simulated recording.
+confirm the production SHA in Vercel; verify the Otari spend ceiling and durable
+Upstash behavior; then run at most one tiny live benchmark. If those checks are
+incomplete, show the real UI and dated evidence with provenance clearly stated.
+Record the actual screen, not test fixtures or composited screenshots.
 
 # Optional personal feedback recording, 3–5 minutes
 

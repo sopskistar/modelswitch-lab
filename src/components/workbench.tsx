@@ -386,7 +386,16 @@ export function Workbench() {
       setExperimentBusy('');
     }
   }
-  const caps = capabilities(catalog?.tools);
+  const mcpCompletion = experiment?.data.completion as
+    { metadata?: { requestId?: string | null } } | undefined;
+  const mcpEvidence =
+    experiment?.id === 'mcp' &&
+    experiment.data.verified === true &&
+    typeof mcpCompletion?.metadata?.requestId === 'string'
+      ? experiment.data
+      : undefined;
+  const caps = capabilities(catalog?.tools, mcpEvidence);
+  const liveAdvancedPoints = advancedVerifiedPoints + (mcpEvidence ? 10 : 0);
   const ready = Boolean(
     catalog?.configured && catalog.demoEnabled && !catalog.error && selected.length,
   );
@@ -941,7 +950,7 @@ export function Workbench() {
         {view === 'capabilities' && (
           <>
             <div className="evidence-summary">
-              <strong>{advancedVerifiedPoints} / 60 advanced points verified</strong>
+              <strong>{liveAdvancedPoints} / 60 advanced points verified</strong>
               <p>Hosted discovery is evidence of availability. It is not evidence of execution.</p>
             </div>
             <div className="table-scroll">
@@ -1000,6 +1009,20 @@ export function Workbench() {
               </div>
               <div className="experiment-row">
                 <div>
+                  <h3>Repository evidence inspector</h3>
+                  <p>Qwen reads the public Otari repository through DeepWiki MCP.</p>
+                </div>
+                <button
+                  className="button quiet"
+                  type="button"
+                  disabled={!!experimentBusy || !catalog?.demoEnabled}
+                  onClick={() => runExperiment('mcp')}
+                >
+                  {experimentBusy === 'mcp' ? 'Inspecting…' : 'Inspect repository'}
+                </button>
+              </div>
+              <div className="experiment-row">
+                <div>
                   <h3>Public document</h3>
                   <label className="sr-only" htmlFor="public-source">
                     Public document source
@@ -1054,7 +1077,11 @@ export function Workbench() {
               </div>
             </section>
             {experiment && (
-              <section className="experiment-result" aria-live="polite">
+              <section
+                id="capability-check-result"
+                className="experiment-result"
+                aria-live="polite"
+              >
                 <div className="section-head">
                   <h2>
                     {experiment.data.verified
@@ -1218,6 +1245,7 @@ function Empty({
   );
 }
 function CapabilityRow({ cap }: { cap: Capability }) {
+  const href = cap.file.startsWith('#') ? cap.file : `/api/evidence?file=${cap.file}`;
   return (
     <tr>
       <th scope="row">
@@ -1229,7 +1257,7 @@ function CapabilityRow({ cap }: { cap: Capability }) {
         <span className="status">{cap.status}</span>
       </td>
       <td>
-        <a href={`/api/evidence?file=${cap.file}`} target="_blank" rel="noreferrer">
+        <a href={href} target={href.startsWith('#') ? undefined : '_blank'} rel="noreferrer">
           Inspect JSON
         </a>
       </td>

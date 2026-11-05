@@ -116,6 +116,88 @@ describe('hosted adapter', () => {
       }),
     );
   });
+  it('captures gateway-owned MCP activity from the Otari Messages stream', async () => {
+    const events = [
+      { type: 'message_start', message: { id: 'msg-1', usage: { input_tokens: 9 } } },
+      {
+        type: 'content_block_start',
+        index: 0,
+        content_block: {
+          type: 'mcp_tool_use',
+          id: 'call-1',
+          name: 'read_wiki_structure',
+          input: { repoName: 'mozilla-ai/otari' },
+        },
+      },
+      {
+        type: 'content_block_start',
+        index: 1,
+        content_block: {
+          type: 'mcp_tool_result',
+          id: 'call-1',
+          name: 'read_wiki_structure',
+          content: [{ type: 'text', text: 'docs/mcp.md' }],
+          is_error: false,
+        },
+      },
+      {
+        type: 'content_block_delta',
+        index: 2,
+        delta: { type: 'text_delta', text: 'Otari documents MCP support.' },
+      },
+      { type: 'message_delta', usage: { output_tokens: 6 } },
+      { type: 'message_stop' },
+    ];
+    const stream = events
+      .map((event) => `event: ${event.type}\ndata: ${JSON.stringify(event)}\n\n`)
+      .join('');
+    const mock = vi.fn().mockResolvedValue(
+      new Response(stream, {
+        headers: {
+          'Content-Type': 'text/event-stream',
+          'Otari-Request-ID': 'mcp-request-1',
+          'Otari-Provider': 'deepinfra',
+          'Otari-Model': 'Qwen/Qwen3.8-27B',
+        },
+      }),
+    );
+    const client = new OtariClient('private-key', undefined, 100, mock);
+    const result = await client.completeWithMcpActivity({
+      model: 'alibaba/qwen3.8-27b',
+      max_tokens: 100,
+      max_tool_iterations: 2,
+      messages: [{ role: 'user', content: 'Inspect the fixed repository.' }],
+      mcp_servers: [
+        {
+          name: 'deepwiki',
+          url: 'https://mcp.deepwiki.com/mcp',
+          allowed_tools: ['read_wiki_structure'],
+        },
+      ],
+    });
+    expect(result.content).toBe('Otari documents MCP support.');
+    expect(result.metadata).toMatchObject({
+      requestId: 'mcp-request-1',
+      provider: 'deepinfra',
+      effectiveModel: 'Qwen/Qwen3.8-27B',
+      promptTokens: 9,
+      completionTokens: 6,
+      costUsd: null,
+    });
+    expect(result.mcpActivity).toHaveLength(2);
+    expect(result.streamComplete).toBe(true);
+    expect(result.mcpActivity[0].name).toBe('read_wiki_structure');
+    expect(result.mcpActivity[1].isError).toBe(false);
+    expect(mock).toHaveBeenCalledWith(
+      'https://api.otari.ai/api/v1/messages',
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Authorization: 'Bearer private-key',
+          'Anthropic-Beta': 'mcp-client-2025-11-20',
+        }),
+      }),
+    );
+  });
   it('validates accessible model metadata', async () => {
     const client = new OtariClient(
       'key',

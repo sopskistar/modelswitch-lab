@@ -37,7 +37,11 @@ export const fallbackVerified = completed('routing').some(
 export const advancedVerifiedPoints =
   10 * [codeVerified, rolesVerified, fallbackVerified].filter(Boolean).length;
 export type CapabilityStatus =
-  'Verified live' | 'Implemented, unverified' | 'Unavailable on account' | 'Not implemented';
+  | 'Verified live'
+  | 'Verified live this session'
+  | 'Implemented, unverified'
+  | 'Unavailable on account'
+  | 'Not implemented';
 export interface Capability {
   id: string;
   name: string;
@@ -46,8 +50,24 @@ export interface Capability {
   detail: string;
   file: string;
 }
-export function capabilities(tools: Tool[] = []): Capability[] {
+export function capabilities(
+  tools: Tool[] = [],
+  mcpEvidence?: Record<string, unknown>,
+): Capability[] {
   const web = tools.find((t) => t.id === 'otari_web_fetch');
+  const mcpCompletion = mcpEvidence?.completion as
+    | {
+        metadata?: {
+          requestId?: string | null;
+          effectiveModel?: string | null;
+          provider?: string | null;
+        };
+      }
+    | undefined;
+  const mcpRequestId = mcpCompletion?.metadata?.requestId;
+  const mcpModel = mcpCompletion?.metadata?.effectiveModel;
+  const mcpProvider = mcpCompletion?.metadata?.provider;
+  const mcpVerified = mcpEvidence?.verified === true && typeof mcpRequestId === 'string';
   return [
     {
       id: 'routing',
@@ -63,9 +83,11 @@ export function capabilities(tools: Tool[] = []): Capability[] {
       id: 'mcp',
       name: 'MCP integration',
       points: 10,
-      status: 'Not implemented',
-      detail: 'No read-only MCP integration is configured or executed.',
-      file: 'discovery.json',
+      status: mcpVerified ? 'Verified live this session' : 'Implemented, unverified',
+      detail: mcpVerified
+        ? `Otari completed the read-only repository MCP call${mcpProvider ? ` through ${mcpProvider}` : ''}${mcpModel ? ` on ${mcpModel}` : ''}; request ${mcpRequestId}.`
+        : 'A bounded Qwen request targets the fixed public mozilla-ai/otari repository through DeepWiki MCP. Verification requires matching Otari tool-use/result events and a request ID.',
+      file: mcpVerified ? '#capability-check-result' : 'mcp-status.json',
     },
     {
       id: 'web',
@@ -94,8 +116,8 @@ export function capabilities(tools: Tool[] = []): Capability[] {
       points: 10,
       status: 'Implemented, unverified',
       detail:
-        'Setup guide and denial parsing are implemented. Insufficient account credit is not budget enforcement.',
-      file: 'smoke.json',
+        'Participant reports separate $1 monthly ceilings on the production and test keys. Current spend, remaining balance, and a gateway budget refusal are not independently available.',
+      file: 'budget-operator-report.json',
     },
     {
       id: 'roles',

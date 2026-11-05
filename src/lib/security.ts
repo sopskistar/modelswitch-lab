@@ -29,7 +29,7 @@ export const requestSchema = z.discriminatedUnion('action', [
     .strict(),
   z
     .object({
-      action: z.enum(['routing', 'guardrail', 'web', 'code']),
+      action: z.enum(['routing', 'guardrail', 'web', 'code', 'mcp']),
       runId: z.uuid(),
       source: z.enum(['manifesto', 'otari']).optional(),
     })
