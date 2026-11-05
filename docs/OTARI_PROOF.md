@@ -43,6 +43,40 @@ The composite `demoEnabled: false` does not disclose whether
 production environment values were not accessible or read. The public catalog
 lists model metadata and tool availability only; it returns no API credentials.
 
+## Dedicated budget-key attempt — 2026-11-05
+
+The current local `.env.local` environment contains the Qwen evaluator setting
+(`alibaba/qwen3.8-27b`), but `OTARI_BUDGET_TEST_KEY` is not available as an
+active environment assignment. I did not substitute another key. The probe
+stopped before making any HTTP request, so there is no test-key
+model-access result, observed budget configuration, response status, error code,
+request ID, or spend. The budget boundary and request-count-versus-dollar
+configuration on the named key remain unknown.
+
+Current [Otari budget docs](https://github.com/mozilla-ai/otari/blob/main/docs/budgets.md)
+support `max_budget` in USD, `token_limit`, `request_limit` per period, and
+per-user `rpm_limit`/`tpm_limit`. A budget record alone enforces nothing until
+it is attached as a key budget/ceiling. The docs describe setting an existing
+budget or custom amount on a key; inspect the authorized account UI/API to see
+the actual boundary attached to this specific key.
+
+For a genuine request-count test, the operator should make the test key
+available as `OTARI_BUDGET_TEST_KEY` locally and confirm (without copying the
+secret into logs) that its attached budget has `request_limit: 1`. Then verify
+Qwen access, make one short completion, and make exactly one more. Capture both
+statuses and the second request's `Otari-Error-Code`, `Otari-Budget-Scope`,
+`Retry-After`, and request ID if returned. A dollar-only `max_budget` is not
+evidence of a request-count limit, and this work did not attempt to spend one
+down.
+
+Keep refusal types separate: Otari documents `budget_exceeded` as HTTP 403
+with `Otari-Budget-Scope` (and `Retry-After` when a reset will make it admissible);
+`insufficient_funds` as HTTP 402 because the hosted organization has no funds;
+and `rate_limited` as HTTP 429 for a gateway rate rule. ModelSwitch Lab's own
+`demo_disabled`/`demo_limit` responses are application-level refusals and have
+no Otari budget proof. These are documented response semantics, not results
+observed from this test key. See the [Otari API error reference](https://github.com/mozilla-ai/otari/blob/main/docs/api-reference.md).
+
 ## Real model roles
 
 The bounded verifier completed at `2026-11-04T16:10:07Z`:
