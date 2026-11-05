@@ -1,6 +1,7 @@
 import type { Tool } from './types';
 import verification from '../../evidence/verification.json';
 import mcpProof from '../../evidence/mcp-status.json';
+import routingProof from '../../evidence/routing-production.json';
 interface EvidenceRecord {
   role: string;
   status: string;
@@ -35,10 +36,17 @@ export const rolesVerified = completed('evaluator').some(
 export const fallbackVerified = completed('routing').some(
   (r) => r.result?.metadata?.fallback === true,
 );
+export const routingVerified =
+  routingProof.verification.routingPolicyResolution === true &&
+  Boolean(
+    routingProof.gateway.requestId &&
+    routingProof.gateway.effectiveModel &&
+    routingProof.gateway.provider,
+  );
 export const mcpVerified =
   mcpProof.liveExecution.verified === true && Boolean(mcpProof.liveExecution.requestId);
 export const advancedVerifiedPoints =
-  10 * [codeVerified, rolesVerified, fallbackVerified, mcpVerified].filter(Boolean).length;
+  10 * [codeVerified, rolesVerified, routingVerified, mcpVerified].filter(Boolean).length;
 export type CapabilityStatus =
   | 'Verified live'
   | 'Verified live this session'
@@ -80,11 +88,13 @@ export function capabilities(
       id: 'routing',
       name: 'Routing and fallbacks',
       points: 10,
-      status: fallbackVerified ? 'Verified live' : 'Implemented, unverified',
-      detail: fallbackVerified
-        ? 'Actual gateway fallback recorded in serving headers.'
-        : 'The policy served a real request. Observed attempt count 1, fallback false; actual failover remains unverified.',
-      file: 'verification.json',
+      status: routingVerified ? 'Verified live' : 'Implemented, unverified',
+      detail: routingVerified
+        ? `Otari routed ${routingProof.gateway.requestedPolicy} to ${routingProof.gateway.effectiveModel} through ${routingProof.gateway.provider}; attempt ${routingProof.gateway.attempts}, fallback ${routingProof.gateway.fallback}. Failover itself remains unverified.`
+        : fallbackVerified
+          ? 'Actual gateway fallback recorded in serving headers.'
+          : 'The routing policy has not been verified with a live request and effective model/provider metadata.',
+      file: routingVerified ? 'routing-production.json' : 'verification.json',
     },
     {
       id: 'mcp',

@@ -1,0 +1,38 @@
+{
+  "recordVersion": 1,
+  "observedAt": "2026-11-05T11:14:43Z",
+  "productionUrl": "https://modelswitch-lab.vercel.app",
+  "source": "One fixed-prompt request through the production application capability control; no retries.",
+  "application": {
+    "path": "/api/execute",
+    "httpStatus": 200,
+    "vercelRequestId": "fra1::iad1::z9l5t-1793877281776-86e8f6414e32",
+    "runId": "b6af89b7-b1ed-4953-812a-0a6388c8bb7d"
+  },
+  "gateway": {
+    "requestId": "5f2cc001-a521-435e-8b51-df0f91452dc5",
+    "requestedPolicy": "modelswitch-fallback",
+    "effectiveModel": "Qwen/Qwen3.8-27B",
+    "provider": "deepinfra",
+    "attempts": 1,
+    "fallback": false,
+    "gatewayDurationMs": 1306,
+    "measuredLatencyMs": 1382,
+    "promptTokens": 81,
+    "completionTokens": 57,
+    "totalTokens": 138,
+    "reportedCostUsd": 0.000159,
+    "pricingSource": "deployment"
+  },
+  "outputSummary": "The policy-selected model classified the fixed duplicate-charge request as billing.",
+  "verification": {
+    "routingPolicyResolution": true,
+    "fallbackObserved": false,
+    "interpretation": "This verifies that the application sent the named Otari routing policy and Otari selected/served Qwen through DeepInfra. No provider failure or failover was induced; fallback behavior is not independently demonstrated by this request."
+  },
+  "limitations": [
+    "No fallback event occurred; gateway metadata explicitly reports fallback=false and attempts=1.",
+    "This is one fixed synthetic routing check, not a resilience stress test.",
+    "This record is redacted application evidence, not a signed external attestation."
+  ]
+}

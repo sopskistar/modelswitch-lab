@@ -342,7 +342,13 @@ export async function POST(request: Request) {
     );
     const verified =
       input.action === 'routing'
-        ? completion.metadata.fallback === true
+        ? Boolean(
+            completion.metadata.requestId &&
+            completion.metadata.requestedModel === roles.policy &&
+            completion.metadata.effectiveModel &&
+            completion.metadata.provider &&
+            completion.content.trim(),
+          )
         : input.action === 'web'
           ? completion.metadata.toolCalls.some(
               (t) => t.type === 'web_fetch' && t.status === 'completed',

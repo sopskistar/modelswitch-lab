@@ -60,23 +60,27 @@ signed attestation. Historical real request records are linked from
 
 ### 7. Inspect Otari capabilities
 
-**Click:** Open **Otari capabilities** and inspect **Repository evidence
-inspector** and its evidence link.
+**Click:** Open **Otari capabilities**. Inspect **Routing and fallbacks** and
+**Repository evidence inspector** via **Inspect JSON**.
 
-**Observe:** The redacted production proof records one real Otari-managed
+**Observe:** Routing shows the production policy, effective Qwen model,
+DeepInfra provider, request ID, latency, reported cost, one attempt, and
+`fallback=false`. This proves real policy resolution; no failover was observed.
+The MCP row links the redacted production proof of one real Otari-managed
 DeepWiki MCP call, its successful result, request ID, Qwen/DeepInfra identity,
-one attempt and no fallback. The application currently displays the previous
-deployed evidence record until the latest commit deploys; the committed source
-has the corrected event parser. See [`mcp-status.json`](../evidence/mcp-status.json)
-and [the capability matrix](RUBRIC_EVIDENCE.md).
+and one attempt. The source has the corrected event parser and production
+evidence, but the last production read still returned the earlier unverified
+MCP record; do not claim the new evidence screen is deployed until Vercel
+serves it. See [`routing-production.json`](../evidence/routing-production.json),
+[`mcp-status.json`](../evidence/mcp-status.json), and [the capability matrix](RUBRIC_EVIDENCE.md).
 
 ## Operator-only evidence
 
 These require authorized Otari workspace or owner setup and are not public-demo
 actions:
 
-- Routing: existing production policy resolved, but recorded one attempt and
-  `fallback=false`; no safe fallback event is yet proven.
+- Routing is publicly demonstrable through the fixed policy check; no safe
+  fallback event is yet proven. Do not alter the production policy to force it.
 - Budget: two operator-reported $1 monthly ceilings exist; no gateway refusal
   or usage-record proof is available, and neither ceiling was exhausted.
 - Web search/fetch and inference guardrails: unavailable in the current hosted

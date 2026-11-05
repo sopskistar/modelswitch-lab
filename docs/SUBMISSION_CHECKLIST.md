@@ -10,7 +10,7 @@
 
 ## Evidence and demo
 
-- [x] Verified Otari capabilities: distinct open-weight roles, code execution, and one production-managed MCP tool call/result. See [proof](OTARI_PROOF.md) and [rubric matrix](RUBRIC_EVIDENCE.md).
+- [x] Verified Otari capabilities: distinct open-weight roles, code execution, production policy routing (without failover), and one production-managed MCP tool call/result. See [proof](OTARI_PROOF.md) and [rubric matrix](RUBRIC_EVIDENCE.md).
 - [x] Real model IDs, serving providers, request IDs, measured outputs and reported usage recorded in `evidence/`.
 - [x] Existing project pull request #1 was merged into `main`.
 - [x] Written Otari feedback: [OTARI_FEEDBACK.md](OTARI_FEEDBACK.md).

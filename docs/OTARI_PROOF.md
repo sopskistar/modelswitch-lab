@@ -260,12 +260,18 @@ unknown. Tool availability by itself is not counted; this completed result is.
 
 ## Routing evidence
 
-Policy request
-[`79c948e4-57bf-43d8-86eb-ef8eca8ec5f7`](../evidence/verification.json)
-was served by Qwen through DeepInfra with one attempt and fallback false. This
-proves policy resolution only. **Actual gateway failover is not verified.**
-The current inference credential cannot read routing policy management (401).
-No production policy was altered and no provider failure was induced.
+The production application sent one fixed task through the named Otari policy
+`modelswitch-fallback`. Request
+[`5f2cc001-a521-435e-8b51-df0f91452dc5`](../evidence/routing-production.json)
+resolved to `Qwen/Qwen3.8-27B` through `deepinfra`, with one attempt, measured
+latency 1,382 ms, reported cost $0.000159, and `fallback=false`. The model
+returned the expected billing classification. This verifies that the
+application actually invokes policy routing and that Otari returned its
+effective serving identity. It does **not** demonstrate fallback: no provider
+failure was induced and the gateway explicitly reported false. The old
+operator verifier also recorded policy resolution in
+[`verification.json`](../evidence/verification.json). No production policy was
+altered; management configuration remains inaccessible to the inference key.
 
 ## Refreshed hosted tools and services
 

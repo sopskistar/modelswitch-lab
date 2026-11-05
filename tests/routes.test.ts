@@ -264,7 +264,23 @@ describe('bounded execution route', () => {
     });
     expect((await (await send({ action: 'code', runId })).json()).verified).toBe(false);
   });
-  it('requires an actual fallback before verifying routing', async () => {
+  it('verifies policy resolution while preserving an absent fallback event', async () => {
+    mocks.complete.mockResolvedValue({
+      content: '{"category":"billing"}',
+      metadata: {
+        requestId: 'route-1',
+        requestedModel: 'policy',
+        effectiveModel: 'Qwen/Qwen3.8-27B',
+        provider: 'deepinfra',
+        attempts: 1,
+        fallback: false,
+      },
+    });
+    const result = await (await send({ action: 'routing', runId })).json();
+    expect(result.verified).toBe(true);
+    expect(result.completion.metadata.fallback).toBe(false);
+  });
+  it('does not verify routing without gateway identity metadata', async () => {
     mocks.complete.mockResolvedValue({ content: 'billing', metadata: { fallback: false } });
     expect((await (await send({ action: 'routing', runId })).json()).verified).toBe(false);
   });

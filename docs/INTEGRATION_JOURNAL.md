@@ -66,3 +66,14 @@ read-only evidence-route request returned 200 but still served the previous
 unverified JSON, confirming the source fix is not yet verified in production.
 Vercel auth/project metadata remains unavailable; do not claim the exact
 deployment SHA.
+
+2026-11-05: One bounded production UI/API routing check verified that the app
+actually sent `modelswitch-fallback` to Otari. Request
+`5f2cc001-a521-435e-8b51-df0f91452dc5` resolved to Qwen/DeepInfra, with one
+attempt, `fallback=false`, 1,382 ms measured latency, and $0.000159 reported
+cost. No policy was edited and no failure was induced. The old app-level
+`verified` bit meant “fallback occurred” and was false despite successful
+policy resolution; updated its meaning to verify reported policy selection and
+effective identity, while preserving `fallback=false` as a separate fact.
+Added `routing-production.json` and an explicit regression test. This counts
+the rubric's routing use, not a demonstrated failover.

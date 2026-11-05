@@ -24,7 +24,7 @@ for development; `127.0.0.1` is also explicitly allowed in Next's dev origins.
 ## Results observed
 
 - TypeScript, ESLint, production build: passed on the implemented application.
-- Vitest: **104 tests in 5 files**, all passed on the final source.
+- Vitest: **107 tests in 5 files**, all passed on the final tested source.
 - Playwright: **16 tests**, 8 in desktop Chromium and 8 in mobile Chromium
   (iPhone 13 emulation), **all passed against the final production build**.
 - Axe: automated checks in the theme/responsive tests; no violations on checked
@@ -74,6 +74,12 @@ fixed-source behavior, and evidence gating. Those mocks do not count as hosted
 MCP execution. A real check requires an Otari request ID and matching streamed
 tool-use/result blocks.
 
+The latest routing regression test confirms that one production policy
+resolution with an Otari request ID and effective model/provider is verified
+as routing, while `fallback=false` remains visible and is not labeled failover.
+The capability evidence count is now 40/60: routing, code execution, distinct
+model roles, and MCP.
+
 ## Live hosted checks
 
 ### Production acceptance (2026-11-05)
@@ -100,17 +106,20 @@ The selected official domain is the hyphenated
 `https://modelswitch-lab.vercel.app`. Its latest catalog observation returned
 `demoEnabled: true`; this reflects configuration presence, not successful
 Redis limiter behavior. The participant-reported invoice benchmark still lacks
-independent traces/receipt. A separate single production MCP request was made
-and returned a successful DeepWiki tool result through Otari; details and IDs
-are in [`mcp-status.json`](../evidence/mcp-status.json) and
-[`production-observation.json`](../evidence/production-observation.json).
-No extra inference calls were sent to recreate evidence.
+independent traces/receipt. One production policy-routing check and one
+production MCP request were made. Otari resolved `modelswitch-fallback` to Qwen
+through DeepInfra (`fallback=false`, $0.000159) and returned a successful
+DeepWiki tool result respectively. Details and request IDs are in
+[`routing-production.json`](../evidence/routing-production.json),
+[`mcp-status.json`](../evidence/mcp-status.json), and
+[`production-observation.json`](../evidence/production-observation.json). No
+additional inference calls were sent to recreate evidence.
 
 The selected production evidence route now returns HTTP 200, but its response
 was the previous `implemented_unverified` MCP record. Thus the route from
 `67a4624e83dde54b3f19067a0182d85e1bbf5551` is deployed, while the corrected
-parser/evidence commit is not yet confirmed deployed. Exact Vercel source SHA
-remains unavailable.
+parser/evidence and routing-status commit is not yet confirmed deployed. Exact
+Vercel source SHA remains unavailable.
 
 A fresh read-only catalog request on 2026-11-05 returned HTTP 200 and Vercel request ID
 `fra1::iad1::2jdth-1793875276299-dde473d35888`; the homepage also returned HTTP

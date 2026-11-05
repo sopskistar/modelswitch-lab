@@ -87,9 +87,11 @@ fallback with a second application call.
 
 The capabilities check records `Otari-Model`, `Otari-Provider`,
 `Otari-Attempt-Count`, `Otari-Fallback`, and `Otari-Request-ID` when returned.
-The real policy request `79c948e4-57bf-43d8-86eb-ef8eca8ec5f7` completed
-through DeepInfra with one attempt and `fallback:false`. This proves policy
-resolution, not that a fallback occurred. We require `fallback:true` to verify the full target.
+The production app request `5f2cc001-a521-435e-8b51-df0f91452dc5` resolved
+through DeepInfra with one attempt, `fallback:false`, and a reported cost of
+$0.000159. This verifies policy routing in the application; it does not prove
+that a fallback occurred. The status/evidence view explicitly keeps those facts
+separate.
 
 For a controlled failover, ask an authorized operator to create a dedicated test
 policy with a primary provider instance intentionally left **unconfigured** and

@@ -122,5 +122,25 @@
       "The gateway reported no cost; this value is unknown, not zero.",
       "Exact Vercel source commit remains unverified."
     ]
+  },
+  "routingProductionExecution": {
+    "observedAt": "2026-11-05T11:14:43Z",
+    "applicationUrl": "https://modelswitch-lab.vercel.app/api/execute",
+    "runId": "b6af89b7-b1ed-4953-812a-0a6388c8bb7d",
+    "httpStatus": 200,
+    "vercelRequestId": "fra1::iad1::z9l5t-1793877281776-86e8f6414e32",
+    "responseVerifierAtExecution": false,
+    "responseVerifierReason": "The then-deployed route marked routing verified only when a fallback occurred; this request correctly reported fallback=false.",
+    "otariRequestId": "5f2cc001-a521-435e-8b51-df0f91452dc5",
+    "requestedPolicy": "modelswitch-fallback",
+    "effectiveModel": "Qwen/Qwen3.8-27B",
+    "provider": "deepinfra",
+    "attempts": 1,
+    "fallback": false,
+    "gatewayDurationMs": 1306,
+    "latencyMs": 1382,
+    "reportedCostUsd": 0.000159,
+    "evidenceFile": "routing-production.json",
+    "interpretation": "Real application request resolved through the Otari policy to its reported model/provider. Policy routing is verified; failover was not observed. No policy or production credential was modified."
   }
 }
