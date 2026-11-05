@@ -25,7 +25,7 @@
 - [ ] Production run corroborated with Otari request IDs, trace and saved receipt; participant-reported results are recorded separately.
 - [ ] Exact deployed Git commit: not independently confirmed. Inspect the selected `modelswitch-lab` Vercel project, not the similarly named duplicate.
 - [ ] Verify durable Upstash behavior and the current Otari spending boundary before another live run.
-- [x] On 2026-11-05 12:29–12:35 UTC, the selected production host returned HTTP 200 for both routing and MCP evidence routes; the MCP route served `verified_live` with request ID `d9283ac4-3aec-4ee3-8151-08937bb08554`.
+- [x] On 2026-11-05 13:02 UTC, post-push production GETs returned HTTP 200 for routing evidence, MCP evidence, and catalog. MCP served `verified_live` with request ID `d9283ac4-3aec-4ee3-8151-08937bb08554`.
 - [x] Later catalog check reported web fetch/search available. One bounded allowlisted fetch returned HTTP 400 (Otari request `9bd36cf5-6ddf-433a-9d1a-95295a50fae5`) without completed tool evidence; it is not a verified capability.
 - [ ] Confirm the exact deployed Git SHA in the selected `modelswitch-lab` Vercel project; public evidence-route availability does not identify the deployment commit.
 - [ ] Verify production result trace/receipt if accessible; do not repeat inference solely to replace missing historical metadata.

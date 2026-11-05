@@ -1,6 +1,6 @@
 # Hosted Otari proof
 
-## Latest production evidence check — 2026-11-05 12:55 UTC
+## Latest production evidence check — 2026-11-05 13:02 UTC
 
 Read-only GETs to `/api/evidence?file=routing-production.json` and
 `/api/evidence?file=mcp-status.json` both returned HTTP 200 from the selected
@@ -10,13 +10,13 @@ verified_live`, and the redacted successful record for Otari request
 `read_wiki_structure` call, no reported cost). The routing receipt contains
 request `5f2cc001-a521-435e-8b51-df0f91452dc5`, policy `modelswitch-fallback`,
 Qwen/DeepInfra, attempts=1, fallback=false. Vercel request ID for the MCP
-evidence read: `fra1::iad1::xxtmg-1793883336505-b77deaf0f9bc`.
+evidence read: `fra1::iad1::8p7kj-1793883723166-627f2bd43331`.
 
 These checks confirm the static receipts are served by production, not a
-particular Vercel Git SHA. A later read-only catalog check at 12:55 UTC returned
+particular Vercel Git SHA. A later read-only catalog check at 13:02 UTC returned
 HTTP 200 and reported both `otari_web_fetch` and `otari_web_search` as
 `available: true` (Vercel request
-`fra1::iad1::nkv7p-1793883337063-2e11b31d2332`). This supersedes the earlier
+`fra1::iad1::sph8m-1793883721437-6515d80340e5`). This supersedes the earlier
 `workspace_disabled` discovery, but proves availability only.
 
 One bounded public-app fetch attempt used the fixed allowlisted Mozilla

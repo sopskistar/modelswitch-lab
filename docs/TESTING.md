@@ -122,8 +122,8 @@ MCP route served `verified_live`, request
 `d9283ac4-3aec-4ee3-8151-08937bb08554`. The production evidence records do not
 expose the exact Vercel source SHA.
 
-After the documentation push, read-only production GETs again returned HTTP
-200 for routing evidence, MCP evidence, and the catalog. The catalog reported
+After the final documentation push, read-only production GETs at 13:02 UTC
+again returned HTTP 200 for routing evidence, MCP evidence, and the catalog. The catalog reported
 web fetch and search available. One bounded allowlisted fetch through
 `/api/execute` returned HTTP 400 and Otari request
 `9bd36cf5-6ddf-433a-9d1a-95295a50fae5`; the app exposed only generic

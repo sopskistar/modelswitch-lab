@@ -153,14 +153,14 @@
     "interpretation": "Real application request resolved through the Otari policy to its reported model/provider. Policy routing is verified; failover was not observed. No policy or production credential was modified."
   },
   "latestEvidenceRouteVerification": {
-    "checkedAt": "2026-11-05T12:55:36Z",
+    "checkedAt": "2026-11-05T13:02:03Z",
     "productionUrl": "https://modelswitch-lab.vercel.app",
-    "vercelRequestId": "fra1::iad1::xxtmg-1793883336505-b77deaf0f9bc",
+    "vercelRequestId": "fra1::iad1::8p7kj-1793883723166-627f2bd43331",
     "checks": [
       {
         "path": "/api/evidence?file=mcp-status.json",
         "httpStatus": 200,
-        "vercelRequestId": "fra1::iad1::xxtmg-1793883336505-b77deaf0f9bc",
+        "vercelRequestId": "fra1::iad1::8p7kj-1793883723166-627f2bd43331",
         "servedRecordVersion": 2,
         "servedStatus": "verified_live",
         "otariRequestId": "d9283ac4-3aec-4ee3-8151-08937bb08554",
@@ -170,7 +170,7 @@
       {
         "path": "/api/evidence?file=routing-production.json",
         "httpStatus": 200,
-        "vercelRequestId": "fra1::iad1::ffl52-1793883335315-884e23250769",
+        "vercelRequestId": "fra1::iad1::cjb4v-1793883722478-6d96e1894e0e",
         "otariRequestId": "5f2cc001-a521-435e-8b51-df0f91452dc5",
         "requestedPolicy": "modelswitch-fallback",
         "effectiveModel": "Qwen/Qwen3.8-27B",
@@ -182,10 +182,10 @@
     "interpretation": "Both redacted evidence records are served by the selected production host. This does not reveal the Vercel deployment Git SHA and is not a fresh inference execution."
   },
   "latestToolCatalogCheck": {
-    "checkedAt": "2026-11-05T12:55:37Z",
+    "checkedAt": "2026-11-05T13:02:01Z",
     "path": "/api/catalog",
     "httpStatus": 200,
-    "vercelRequestId": "fra1::iad1::nkv7p-1793883337063-2e11b31d2332",
+    "vercelRequestId": "fra1::iad1::sph8m-1793883721437-6515d80340e5",
     "configured": true,
     "demoEnabled": true,
     "tools": {
