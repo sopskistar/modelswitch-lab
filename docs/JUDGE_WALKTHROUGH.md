@@ -82,9 +82,10 @@ actions:
   fallback event is yet proven. Do not alter the production policy to force it.
 - Budget: two operator-reported $1 monthly ceilings exist; no gateway refusal
   or usage-record proof is available, and neither ceiling was exhausted.
-- Web search/fetch: currently `workspace_disabled`. An Otari workspace
-  owner/admin must enable Web access with a narrow allowlist; then tool
-  discovery will show whether the hosted fetch/search backend is configured.
+- Web search/fetch: catalog now reports both available, but one allowlisted
+  fetch returned HTTP 400 without a completed tool event. Inspect request
+  `9bd36cf5-6ddf-433a-9d1a-95295a50fae5` in Otari activity before any retry;
+  do not count it as verified retrieval.
 - Inference guardrails: the latest recorded profile discovery found no
   configured guardrail service; no model-only substitute is claimed.
 - Per-user budgets: no service-key/user-budget workflow has been executed.

@@ -20,7 +20,8 @@ and durable Upstash limiter still apply before demonstrating inference.
 | 4:20–4:45 | Known limitations                                                                  | Tiny datasets, missing hosted setup, exact verified scope                                                                                                      |
 
 If the account becomes unfunded again: show the real 402 credit refusal, real working Python
-sandbox, `workspace_disabled` web tools, and the recorded unavailable guardrail. Say plainly
+sandbox, the available-but-unverified web tool status (one HTTP 400 with no
+completed tool event), and the recorded unavailable guardrail. Say plainly
 that the evidence-supported assessment is 75/100 potential; fallback, budgets,
 web retrieval, guardrails, and the personal video remain outstanding. This is
 an honest progress demonstration, not a 100-point completion claim.

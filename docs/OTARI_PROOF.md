@@ -1,6 +1,6 @@
 # Hosted Otari proof
 
-## Latest production evidence check — 2026-11-05 12:35 UTC
+## Latest production evidence check — 2026-11-05 12:55 UTC
 
 Read-only GETs to `/api/evidence?file=routing-production.json` and
 `/api/evidence?file=mcp-status.json` both returned HTTP 200 from the selected
@@ -10,19 +10,31 @@ verified_live`, and the redacted successful record for Otari request
 `read_wiki_structure` call, no reported cost). The routing receipt contains
 request `5f2cc001-a521-435e-8b51-df0f91452dc5`, policy `modelswitch-fallback`,
 Qwen/DeepInfra, attempts=1, fallback=false. Vercel request ID for the MCP
-evidence read: `fra1::iad1::q4b8q-1793882113463-a0b1cbd754cc`.
+evidence read: `fra1::iad1::xxtmg-1793883336505-b77deaf0f9bc`.
 
 These checks confirm the static receipts are served by production, not a
-particular Vercel Git SHA. The public catalog still reports web fetch/search as
-`workspace_disabled`. Otari's current [tools documentation](https://github.com/mozilla-ai/otari/blob/main/docs/tools.md)
-identifies Web access as an owner/admin workspace policy. The next authorized
-step is to enable that policy in the Otari dashboard with a narrow domain
-allowlist, then recheck tool discovery. If discovery changes to
-`not_configured`, the hosted deployment operator must configure the web fetch
-backend and, for search, a search provider. The current public response does
-not disclose whether those backends exist; the confirmed blocker today is the
-workspace policy, and enabling policy alone cannot provide a missing backend.
-No web inference request was sent.
+particular Vercel Git SHA. A later read-only catalog check at 12:55 UTC returned
+HTTP 200 and reported both `otari_web_fetch` and `otari_web_search` as
+`available: true` (Vercel request
+`fra1::iad1::nkv7p-1793883337063-2e11b31d2332`). This supersedes the earlier
+`workspace_disabled` discovery, but proves availability only.
+
+One bounded public-app fetch attempt used the fixed allowlisted Mozilla
+Manifesto URL. The application returned HTTP 400 and Otari request
+`9bd36cf5-6ddf-433a-9d1a-95295a50fae5` (Vercel request
+`fra1::iad1::cvt7c-1793883384242-385af6bc5a95`). The safe app response exposed
+only normalized `gateway_error`; it did not include the raw Otari error code,
+provider/model response metadata, or a completed `web_fetch` tool event. Cost
+is unknown. No retry was made. Thus, web retrieval remains unverified. An
+authorized Otari operator should inspect that request ID in hosted request
+activity to identify the 400 cause before any retry. See the structured
+redacted details in [`production-observation.json`](../evidence/production-observation.json).
+
+Otari's current [tools documentation](https://github.com/mozilla-ai/otari/blob/main/docs/tools.md)
+describes `otari_web_fetch` declarations, per-request use/domain bounds, and
+gateway tool-call evidence. The application used its fixed allowlisted URL and
+one-use declaration. The current blocker is request-level rejection, not the
+previously observed workspace policy. No second request was sent.
 
 The current [budget](https://github.com/mozilla-ai/otari/blob/main/docs/budgets.md),
 [configuration](https://github.com/mozilla-ai/otari/blob/main/docs/configuration.md),
@@ -308,7 +320,7 @@ operator verifier also recorded policy resolution in
 [`verification.json`](../evidence/verification.json). No production policy was
 altered; management configuration remains inaccessible to the inference key.
 
-## Refreshed hosted tools and services
+## Hosted tools and services — historical discovery snapshot
 
 The read-only discovery record was refreshed at
 `2026-11-04T23:15:18Z`: [discovery.json](../evidence/discovery.json).
@@ -316,7 +328,7 @@ The read-only discovery record was refreshed at
 - `/models` returned 162 accessible catalog entries.
 - `otari_code_execution` is available; its completed live execution proof is
   described above.
-- `otari_web_fetch` and `otari_web_search` both report
+- At this discovery timestamp, `otari_web_fetch` and `otari_web_search` both report
   `available: false`, reason `workspace_disabled`.
 - Guardrail profile discovery returns `available: false` because no guardrails
   service is configured. The earlier 502 fail-closed refusal is not an evaluated

@@ -1,11 +1,12 @@
 # Rubric evidence
 
 Recorded 2026-11-04; refreshed 2026-11-05. Target ceiling: 100. Current
-evidence supports **75/100 potential points**: 30 for two meaningful
+evidence supports **up to 75/100 potential points**: 30 for two meaningful
 open-weight roles, 40 for verified advanced capabilities (policy routing,
 code execution, distinct roles and one hosted MCP tool execution), and 5 for
-the working use case. This
-is our evidence assessment, not an official judge score. The separately reported
+the working use case. The routing points depend on judges accepting verified
+policy resolution without an observed failover. This is our evidence
+assessment, not an official judge score. The separately reported
 production invoice run remains participant-reported. Routing fallback, gateway
 budget enforcement, web retrieval, guardrails and the personally recorded demo
 remain unverified or unavailable.
@@ -16,7 +17,7 @@ remain unverified or unavailable.
 | Second open-weight role       | 10              | `/api/execute` analyst action, signed receipts     | **Yes**                      | `verification.json`, Llama analyst `bd24f101-ff53-452a-97a6-27016e8e8600`; primary license links in integration guide                            | Complete evaluator cases, inspect separate analyst request and serving identity                              | **Verified live**                       | Diagnostic text supports deterministic scores                      |
 | Model routing and fallbacks   | 10              | `/api/execute` routing action                      | **Yes: policy resolution**    | [`routing-production.json`](../evidence/routing-production.json), production Otari request `5f2cc001-a521-435e-8b51-df0f91452dc5`; policy → Qwen/DeepInfra, attempt=1, fallback=false | Open Otari Capabilities and inspect the receipt; **Check routing** sends one fixed synthetic task through the named policy | **Routing verified live; fallback unverified** | No failure was induced and no fallback occurred; `fallback=false` is preserved |
 | MCP integrations              | 10              | `/api/execute` fixed repository MCP action; streamed Otari Messages adapter | **Yes**                        | [`mcp-status.json`](../evidence/mcp-status.json), Otari request `d9283ac4-3aec-4ee3-8151-08937bb08554`; one `read_wiki_structure` use and successful result | Open Otari Capabilities and inspect the committed production proof; for a fresh demonstration, run **Inspect repository** once and inspect returned Otari request/activity | **Verified live** | Gateway result block omits use ID/name; this request exposed exactly one allowlisted tool, and the complete stream contained one successful result after its use; reported cost unavailable |
-| Web search or fetch           | 10              | `/api/execute` web action; exact source allowlist  | No                            | Latest production catalog: `workspace_disabled`; see hosted-policy explanation in `OTARI_PROOF.md`                                              | Owner enables Web access policy; recheck tool discovery; execute one curated Otari fetch and inspect tool event | Blocked by workspace policy; backend unknown | Workspace policy cannot enable a missing backend                    |
+| Web search or fetch           | 10              | `/api/execute` web action; exact source allowlist  | Attempted; no tool event       | Catalog reports fetch/search available. One allowlisted fetch returned HTTP 400, Otari request `9bd36cf5-6ddf-433a-9d1a-95295a50fae5`; no completed tool event, raw error code or cost | Authorized operator inspects the request ID in Otari activity; only retry after resolving the 400; require completed `otari_tool_calls` evidence | Available, execution unverified         | App exposes generic gateway_error; tool execution, model/provider and cost unconfirmed |
 | Code execution                | 10              | `/api/execute` code action; typed verifier         | **Yes**                      | `verification.json`, `732c1ded-aba4-4210-8cd7-1251027e367c`; exit 0, correct=4, total=5, accuracy=.8                                             | `npm run otari:verify -- --capabilities-only` or Check sandbox                                               | **Verified live**                       | Fixed control vectors; cost unreported                             |
 | Budgets/spending limits       | 10              | Otari key spending ceilings; denial normalization | No gateway refusal observed | [`budget-operator-report.json`](../evidence/budget-operator-report.json): participant reports separate $1 monthly ceilings on production and test keys; management reads had 401 | Inspect Otari owner-visible spend-ceiling and usage records; use a gateway `budget_exceeded` refusal only if a safe boundary can be configured | Unverified; no enforcement evidence | Current spend/remaining is not readable; dashboard has no request-limit field; do not equate spend or `insufficient_funds` with a budget refusal |
 | Multiple distinct model roles | 10              | Evaluator scoring then separate analyst action     | **Yes**                      | Typed verifier and `browser-smoke.json` record distinct role requests and real providers                                                         | Run benchmark, inspect analyst event and request IDs/models                                                  | **Verified live**                       | Comparison calls alone are not the distinct-role proof             |
@@ -59,11 +60,11 @@ one Qwen evaluator and a separate Llama analyst for $0.000384 reported total.
 This confirms the current routes still execute through Otari; it is not a new
 rubric point or a comparative benchmark.
 
-The latest read-only production catalog still reports web fetch/search as
-`workspace_disabled`; no hosted guardrail service was configured in the latest
-profile discovery. Hosted docs identify workspace web policy as an owner/admin
-setting and distinguish policy from deployment/provider availability. Detailed
-request IDs and the 2026-11-05 live check are in [OTARI_PROOF.md](OTARI_PROOF.md).
+The latest read-only production catalog reports web fetch/search available,
+but one bounded fetch attempt returned HTTP 400 without a completed tool event;
+it does not qualify for points. No hosted guardrail service was configured in
+the latest profile discovery. Request IDs and the 2026-11-05 live checks are in
+[OTARI_PROOF.md](OTARI_PROOF.md).
 
 Otari's current budget documentation and generated OpenAPI support both
 `max_budget` (USD) and `request_limit` (requests per budget period). Read-only
@@ -96,8 +97,10 @@ The selected production host returned HTTP 200 for both
 record with successful `read_wiki_structure` execution and Otari request
 `d9283ac4-3aec-4ee3-8151-08937bb08554`. This supersedes earlier 404/old-record
 observations in the history below; the exact Vercel source commit remains
-unknown. A fresh public catalog check still reports web fetch and search as
-`workspace_disabled`. No authorized service/admin credential is present for
+unknown. A fresh catalog check supersedes the earlier `workspace_disabled`
+discovery: fetch and search now report available, but the one fetch attempt
+returned HTTP 400 with no tool event and was not retried. No authorized
+service/admin credential is present for
 creating per-user budgets; no budget mutation or inference test was attempted.
 The previously recorded hosted guardrail discovery found no configured
 guardrail service, so no further guardrail probe was made. No safe fallback

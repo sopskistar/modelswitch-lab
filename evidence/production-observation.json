@@ -153,13 +153,14 @@
     "interpretation": "Real application request resolved through the Otari policy to its reported model/provider. Policy routing is verified; failover was not observed. No policy or production credential was modified."
   },
   "latestEvidenceRouteVerification": {
-    "checkedAt": "2026-11-05T12:35:13Z",
+    "checkedAt": "2026-11-05T12:55:36Z",
     "productionUrl": "https://modelswitch-lab.vercel.app",
-    "vercelRequestId": "fra1::iad1::q4b8q-1793882113463-a0b1cbd754cc",
+    "vercelRequestId": "fra1::iad1::xxtmg-1793883336505-b77deaf0f9bc",
     "checks": [
       {
         "path": "/api/evidence?file=mcp-status.json",
         "httpStatus": 200,
+        "vercelRequestId": "fra1::iad1::xxtmg-1793883336505-b77deaf0f9bc",
         "servedRecordVersion": 2,
         "servedStatus": "verified_live",
         "otariRequestId": "d9283ac4-3aec-4ee3-8151-08937bb08554",
@@ -169,6 +170,7 @@
       {
         "path": "/api/evidence?file=routing-production.json",
         "httpStatus": 200,
+        "vercelRequestId": "fra1::iad1::ffl52-1793883335315-884e23250769",
         "otariRequestId": "5f2cc001-a521-435e-8b51-df0f91452dc5",
         "requestedPolicy": "modelswitch-fallback",
         "effectiveModel": "Qwen/Qwen3.8-27B",
@@ -178,5 +180,36 @@
       }
     ],
     "interpretation": "Both redacted evidence records are served by the selected production host. This does not reveal the Vercel deployment Git SHA and is not a fresh inference execution."
+  },
+  "latestToolCatalogCheck": {
+    "checkedAt": "2026-11-05T12:55:37Z",
+    "path": "/api/catalog",
+    "httpStatus": 200,
+    "vercelRequestId": "fra1::iad1::nkv7p-1793883337063-2e11b31d2332",
+    "configured": true,
+    "demoEnabled": true,
+    "tools": {
+      "otari_web_fetch": {"available": true},
+      "otari_web_search": {"available": true},
+      "otari_code_execution": {"available": true}
+    },
+    "interpretation": "Hosted catalog reports fetch and search available. This is discovery only and does not prove either tool ran."
+  },
+  "webFetchAttempt": {
+    "attemptedAt": "2026-11-05T12:56:24Z",
+    "path": "/api/execute",
+    "action": "web",
+    "source": "https://www.mozilla.org/en-US/about/manifesto/",
+    "sourceWasApplicationAllowlisted": true,
+    "applicationHttpStatus": 400,
+    "vercelRequestId": "fra1::iad1::cvt7c-1793883384242-385af6bc5a95",
+    "otariRequestId": "9bd36cf5-6ddf-433a-9d1a-95295a50fae5",
+    "applicationNormalizedError": "gateway_error",
+    "rawOtariErrorCodeExposedByApplication": null,
+    "toolExecutionEvidence": false,
+    "effectiveModel": null,
+    "provider": null,
+    "reportedCostUsd": null,
+    "interpretation": "One bounded production request reached Otari but returned HTTP 400. The application response did not include the raw gateway error code or completion metadata, and no completed web_fetch tool event was returned. No retry was made; web retrieval is not verified and no rubric points are claimed."
   }
 }
