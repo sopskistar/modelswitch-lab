@@ -50,3 +50,9 @@ gateway request was made. The direct external endpoint check timed out at the
 environment network boundary and is not treated as an Otari failure. The latest
 production catalog is observed with `demoEnabled: true`; a reported invoice run
 was not independently corroborated because request IDs/receipt were unavailable.
+
+2026-11-05: Pushed source commit `67a4624e83dde54b3f19067a0182d85e1bbf5551`
+to both `main` and `hackathon/mozfest-otari-2026`. The selected production
+evidence endpoint still returned 404 for the new `mcp-status.json` route, so
+the new MCP control has not been live-tested. The workspace has no Vercel CLI,
+project link, token, or org/project IDs to inspect deployment readiness.

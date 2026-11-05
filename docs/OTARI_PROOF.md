@@ -27,6 +27,15 @@ workspace. A live Chromium navigation attempt from this environment ended with
 `ERR_NETWORK_CHANGED`; no inference was sent and no production browser
 accessibility result is claimed.
 
+Source commit `67a4624e83dde54b3f19067a0182d85e1bbf5551` was pushed to both
+`main` and `hackathon/mozfest-otari-2026`. After that push, the production
+evidence route `/api/evidence?file=mcp-status.json` still returned HTTP 404
+`Unknown evidence file.` This shows the selected host does not yet serve the
+new route, but cannot identify its deployed source commit. No MCP inference call
+was sent. Vercel CLI, project link, deployment token, and project/org IDs are
+absent in this workspace; the selected Vercel project's deployment status needs
+owner-side inspection.
+
 The older [production acceptance record](../evidence/production-acceptance.json)
 captured the earlier non-hyphenated domain with inference disabled. It is retained
 as historical evidence and is not the selected production site's current state.

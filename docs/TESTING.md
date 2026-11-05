@@ -104,6 +104,11 @@ see [`production-observation.json`](../evidence/production-observation.json).
 Redis behavior and deployed commit remain unverified. No repeat inference call
 was made.
 
+After pushing source commit `67a4624e83dde54b3f19067a0182d85e1bbf5551` to both
+branches, the selected production host returned 404 for
+`/api/evidence?file=mcp-status.json`. The host therefore did not yet expose the
+new source route at the time checked; its exact deployed SHA is unknown.
+
 A fresh read-only catalog request on 2026-11-05 returned HTTP 200 and Vercel request ID
 `fra1::iad1::2jdth-1793875276299-dde473d35888`; the homepage also returned HTTP
 200 and its expected title/workspace HTML. A production Chromium audit attempt

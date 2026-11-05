@@ -25,9 +25,9 @@
 - [ ] Production run corroborated with Otari request IDs, trace and saved receipt; participant-reported results are recorded separately.
 - [ ] Exact deployed Git commit: not independently confirmed. Inspect the selected `modelswitch-lab` Vercel project, not the similarly named duplicate.
 - [ ] Verify durable Upstash behavior and the current Otari spending boundary before another live run.
-- [ ] After pushing this commit to `main`, verify Vercel deployed that exact SHA on the selected domain.
+- [ ] Vercel has not yet been verified: after pushing `67a4624e83dde54b3f19067a0182d85e1bbf5551` to `main`, the selected production route returned 404 for `mcp-status.json`. Inspect the selected `modelswitch-lab` project and confirm the production deployment SHA before judging.
 - [ ] Verify production result trace/receipt if accessible; do not repeat inference solely to replace missing historical metadata.
 
 ## Final repository state
 
-Both `main` and `hackathon/mozfest-otari-2026` will be synchronized at the final submitted commit. Preserve the first-integration commit and merge history; do not force-push or delete the submission branch.
+`main` and `hackathon/mozfest-otari-2026` are synchronized; both contain implementation commit `67a4624e83dde54b3f19067a0182d85e1bbf5551`. Preserve the first-integration commit and merge history; do not force-push or delete the submission branch.

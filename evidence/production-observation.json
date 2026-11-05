@@ -2,6 +2,8 @@
   "recordVersion": 1,
   "productionUrl": "https://modelswitch-lab.vercel.app",
   "observedOn": "2026-11-05",
+  "sourceCommitPushed": "67a4624e83dde54b3f19067a0182d85e1bbf5551",
+  "branchesAtSourceCommit": ["main", "hackathon/mozfest-otari-2026"],
   "deploymentCommitVerified": false,
   "homepage": {
     "httpStatus": 200,
@@ -61,6 +63,12 @@
     "receiptExport": "Not retrieved.",
     "currentRateLimiterBehavior": "Not exercised; no requests were sent to production inference.",
     "browserSecretScan": "Not performed against Vercel's private deployment; no secret is included in the public catalog response.",
-    "exactDeploymentCommit": "Not available without authorized Vercel deployment metadata."
+    "postPushRouteCheck": {
+      "request": "GET /api/evidence?file=mcp-status.json",
+      "httpStatus": 404,
+      "response": "Unknown evidence file.",
+      "interpretation": "The selected production host does not yet serve this commit's new evidence route; the exact deployed SHA remains unknown."
+    },
+    "exactDeploymentCommit": "Not available: Vercel CLI/authentication, VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID, and a linked .vercel/project.json are absent."
   }
 }

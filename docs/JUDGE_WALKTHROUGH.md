@@ -4,6 +4,12 @@
 
 Open the selected production application at [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app) (with a hyphen). A read-only catalog observation returned `demoEnabled: true`; the separate participant-reported invoice run is recorded in [`production-observation.json`](../evidence/production-observation.json), but its request IDs and receipt were not independently retrieved. Prior independently inspectable Otari request records are in [`evidence/browser-smoke.json`](../evidence/browser-smoke.json) and [`evidence/polish-live-smoke.json`](../evidence/polish-live-smoke.json). Intercepted test responses are never live evidence.
 
+The latest source commit has been pushed to GitHub, but the selected production
+host still returned 404 for the new MCP evidence route. Until Vercel deploys
+the latest `main`, the new repository inspection control may not be available
+on the public site. Do not claim it as a production demonstration before
+checking that control and its live result.
+
 ## Seven checkpoints
 
 ### 1. Open the application
