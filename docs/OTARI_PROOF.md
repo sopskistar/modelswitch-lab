@@ -2,9 +2,10 @@
 
 ## Deployment status after final push — 2026-11-05 16:47 UTC
 
-Commit `1e74ef764d9b2642a3a655c9e6217572c857a55b` is pushed to both `main`
-and `hackathon/mozfest-otari-2026`. Read-only checks to the selected production
-domain still returned the old workspace copy at `/` (HTTP 200; visible heading
+The feature implementation and deployment evidence follow-up are pushed to
+both `main` and `hackathon/mozfest-otari-2026`.
+Read-only checks to the selected production domain still returned the old
+workspace copy at `/` (HTTP 200; visible heading
 “Put a model to the test.”) and HTTP 404 at `/app?view=model-switch`. Therefore
 the new landing and model-switch UI is not live yet. The check records
 Vercel request IDs in
@@ -12,8 +13,8 @@ Vercel request IDs in
 
 This environment has no Vercel CLI, linked project, or Vercel token. In the
 existing Vercel project `modelswitch-lab`, inspect the newest Production
-deployment's source branch/commit and build result. It must serve the pushed
-`main` commit above. If no such deployment exists, deploy that commit from the
+deployment's source branch/commit and build result. It must serve the latest
+pushed `main` revision. If no such deployment exists, deploy that revision from the
 existing project; do not use the duplicate project. Recheck `/` and `/app` after
 it completes. No exact deployment SHA is claimed.
 

@@ -2,7 +2,8 @@
   "recordVersion": 1,
   "checkedAt": "2026-11-05T16:47:38Z",
   "productionUrl": "https://modelswitch-lab.vercel.app",
-  "expectedCommit": "1e74ef764d9b2642a3a655c9e6217572c857a55b",
+  "featureImplementationCommit": "1e74ef764d9b2642a3a655c9e6217572c857a55b",
+  "deploymentStatusDocumentationCommitAtCheck": "333371a",
   "expectedBranch": "main",
   "checks": [
     {
@@ -19,11 +20,11 @@
       "vercelRequestId": "fra1::nvghd-1793897258409-4d47f83b0936"
     }
   ],
-  "conclusion": "The official production site does not yet serve commit 1e74ef7: it returns the previous workspace at / and 404 at /app. The repository is pushed, but deployment is not verified.",
+  "conclusion": "At the time checked, the official production site did not yet serve the landing and Model Switch feature commit 1e74ef7: it returned the previous workspace at / and 404 at /app. A documentation-only commit 333371a followed on both branches. Deployment of the latest main revision remains unverified.",
   "access": {
     "vercelCli": false,
     "projectLink": false,
     "vercelToken": false
   },
-  "nextOperatorAction": "In the existing Vercel project modelswitch-lab, inspect the latest Production deployment for branch main and commit 1e74ef764d9b2642a3a655c9e6217572c857a55b. Review its build result; if no deployment exists, deploy that existing main commit. Do not select the duplicate project."
+    "nextOperatorAction": "In the existing Vercel project modelswitch-lab, inspect the latest Production deployment and confirm it was built from the latest main branch revision. Review its build result; if no deployment exists, deploy latest main from the existing project. Do not select the duplicate project."
 }

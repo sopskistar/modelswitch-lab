@@ -8,7 +8,7 @@
 - [x] Fixed routing-policy action remains separate from manual model selection and does not perform application retries.
 - [x] Real bounded production smoke record: Llama success (request `77cf5458-46f6-40c9-98ab-80468ba890ec`); Qwen timeout without a gateway request ID. No repeated request was made.
 - [x] Web diagnostic updated: workspace tools discover as available; two web-fetch calls returned HTTP 400 without tool events. Root cause remains unknown.
-- [x] Final commit `1e74ef764d9b2642a3a655c9e6217572c857a55b` pushed to `main` and `hackathon/mozfest-otari-2026` with fast-forward-only updates.
+- [x] Model Switch implementation and deployment evidence commits were pushed to `main` and `hackathon/mozfest-otari-2026` with fast-forward-only updates; the branches are synchronized.
 - [ ] Confirm the selected Vercel deployment serves the landing and Model Switch UI and identify its exact deployment SHA. The latest public check still serves the prior workspace and `/app` returns 404; see [`production-deployment-check.json`](../evidence/production-deployment-check.json).
 - [ ] Participant records and personally narrates the project demo; no video is claimed here.
 

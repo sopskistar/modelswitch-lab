@@ -1,6 +1,6 @@
 # Judge walkthrough
 
-Start at the selected public demo: [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app). **Deployment status checked Nov 5, 2026:** the domain still serves the previous workspace at `/` and returns 404 for `/app?view=model-switch`; this commit has not reached production. The walkthrough below describes the verified local build. Until the existing `modelswitch-lab` Vercel project deploys commit `1e74ef7`, judges should inspect the committed receipts and follow the prior production capabilities page. See [`production-deployment-check.json`](../evidence/production-deployment-check.json) for Vercel request IDs and the operator action.
+Start at the selected public demo: [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app). **Deployment status checked Nov 5, 2026:** the domain still serves the previous workspace and returns 404 for `/app?view=model-switch`; the feature implementation is on GitHub but has not reached production. The walkthrough below describes the verified local build. Until the existing `modelswitch-lab` Vercel project deploys the latest `main` revision, judges should inspect the committed receipts and follow the prior production capabilities page. See [`production-deployment-check.json`](../evidence/production-deployment-check.json) for Vercel request IDs and the operator action.
 
 ## Seven checkpoints
 
