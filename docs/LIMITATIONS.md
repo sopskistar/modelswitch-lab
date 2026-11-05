@@ -4,11 +4,13 @@
   balance; later funded requests completed both open-weight roles and a real
   comparison. Historical refusals remain in `smoke.json`. A successful request
   does not verify that an explicit spending budget is attached.
-- **Advanced points:** code execution and distinct model roles have real successful execution proof.
+- **Advanced points:** code execution, distinct model roles, and one
+  production-hosted MCP tool execution have real successful execution proof.
   Web tools are workspace-disabled. Guardrails return a fail-closed 502 with no
   service configured. Policy routing succeeded without actual failover; fallback
-  and real budget enforcement remain unverified. MCP is implemented as a fixed,
-  read-only Otari Messages request but has not produced a live tool event. Per-user
+  and real budget enforcement remain unverified. The production MCP request
+  returned a successful read-only tool event; the corrected verifier/evidence
+  have not yet been confirmed on the deployment. Per-user
   budgets are not implemented. Six capabilities remain a target, not the
   delivered evidence-backed result.
 - **Production is live, deployment commit unknown:** the selected

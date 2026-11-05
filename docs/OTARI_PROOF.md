@@ -8,7 +8,8 @@ HTTP 200, `configured: true`, `demoEnabled: true`, the expected Qwen and Llama
 model IDs, `modelswitch-fallback`, code execution available, and web fetch/search
 `workspace_disabled`. The flag is computed from deployment environment
 configuration; it does not prove that Redis counters work or reveal the deployed
-commit. No production inference request was sent in this session.
+commit. No inference request was sent as part of this initial catalog check;
+one separate, bounded production MCP request is recorded below.
 
 The participant reports a real production invoice run: Qwen3.8 passed 3/3
 (100% accuracy/pass rate), 5.66 seconds, $0.001710; a separate Llama 3.3 analyst
@@ -40,7 +41,7 @@ The older [production acceptance record](../evidence/production-acceptance.json)
 captured the earlier non-hyphenated domain with inference disabled. It is retained
 as historical evidence and is not the selected production site's current state.
 
-## Managed MCP implementation — not yet verified
+## Managed MCP — verified in production
 
 The app now has a fixed, read-only **Inspect repository** check. It calls hosted
 Otari `POST /api/v1/messages` with inline `mcp_servers` for the public DeepWiki
@@ -51,11 +52,32 @@ successful `mcp_tool_result` appear in the stream. The request is capped at 180
 output tokens and two tool-loop iterations; it has no user-controlled URL or
 repository input and is subject to the normal public rate limiter.
 
-The hosted request has **not** been made. The authorized direct connectivity
-check from this environment timed out before receiving an MCP response. This
-does not prove the gateway itself cannot reach DeepWiki. The implementation is
-therefore not counted for rubric points. See [`mcp-status.json`](../evidence/mcp-status.json)
-for the redacted status record and [Otari's MCP documentation](https://github.com/mozilla-ai/otari/blob/main/docs/mcp.md).
+One bounded request was made on the selected production site on 2026-11-05.
+Otari request `d9283ac4-3aec-4ee3-8151-08937bb08554` was served by effective
+model `Qwen/Qwen3.8-27B` through `deepinfra`; the gateway reported one attempt,
+`fallback=false`, and 989 ms gateway duration. The stream contained the single
+allowlisted `read_wiki_structure` call for `mozilla-ai/otari`, followed by a
+successful result with the wiki structure showing its MCP documentation. The
+model then summarized that result. The application response was HTTP 200 and
+the Vercel request ID was
+`fra1::iad1::z8vsh-1793875890729-beddd0b66157`. Otari did not report cost.
+
+The original response's app-level `verified` flag was false because the parser
+incorrectly expected the result block to repeat the use-block id/name. Otari's
+[documented Messages event schema](https://github.com/mozilla-ai/otari/blob/main/docs/mcp.md#messages-streaming-activity)
+places the opaque id on `mcp_tool_use`; the corresponding result block carries
+content and `is_error` and follows the use block. The corrected verifier
+requires one allowed use, one successful result after it, a completed stream,
+and the Otari request ID. This production request satisfies that evidence rule.
+The fixed evidence record is in [`mcp-status.json`](../evidence/mcp-status.json).
+
+The production `/api/evidence?file=mcp-status.json` route is currently present
+(HTTP 200), but a fresh read still served the prior unverified JSON, so the
+updated evidence record and corrected verifier have not yet been confirmed on
+the deployment. The exact production source SHA remains unavailable without
+authorized Vercel deployment metadata. The live run itself is corroborated by
+the production `/api/execute` response and Otari headers captured during this
+work; cost remains unknown rather than zero.
 
 ## Spending ceilings — operator-reported, no enforcement proof
 
@@ -260,7 +282,7 @@ The read-only discovery record was refreshed at
   inference key. This is not evidence of budget enforcement or a broken
   management service.
 
-No MCP call or per-user budget execution is present. No management credentials
+No per-user budget execution is present. No management credentials
 or settings changes were attempted. See the [rubric matrix](RUBRIC_EVIDENCE.md)
 for status, blockers, and safe reproduction instructions.
 

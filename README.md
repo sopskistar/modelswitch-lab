@@ -38,7 +38,7 @@ The analyst can explain a result but cannot change deterministic scores. A recor
 
 ## Verified rubric coverage
 
-Our evidence assessment currently supports **55/100 potential points**, not an official score: 30 for two meaningful open-weight model roles, 20 for distinct roles and hosted code execution, and 5 for the working application. A participant-reported production invoice run is recorded separately from independently inspectable gateway receipts. Routing fallback, Otari budget enforcement, MCP, web retrieval, guardrails, and the personal demo recording remain unverified or unavailable. The latest pushed source may not yet be deployed: the production host still returned 404 for its new evidence route. See the [matrix](docs/RUBRIC_EVIDENCE.md), [Otari proof](docs/OTARI_PROOF.md), and [production observation](evidence/production-observation.json).
+Our evidence assessment supports **65/100 potential points**, not an official score: 30 for two meaningful open-weight model roles, 30 for distinct roles, hosted code execution and a successful hosted Otari MCP call, and 5 for the working application. The production MCP request is recorded with its gateway request ID, model/provider, successful tool result and limitations. Routing fallback, gateway budget enforcement, web retrieval, guardrails and the personal demo recording remain unverified or unavailable. This source update corrects the MCP verifier and adds its redacted evidence; the production deployment currently still serves the previous unverified evidence record. See the [matrix](docs/RUBRIC_EVIDENCE.md), [Otari proof](docs/OTARI_PROOF.md), and [MCP evidence](evidence/mcp-status.json).
 
 ## Architecture
 

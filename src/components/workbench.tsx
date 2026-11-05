@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { fixtures, scenarios } from '@/lib/fixtures';
 import { recommendation, summarize, weights } from '@/lib/scoring';
 import { exportCsv, exportJson } from '@/lib/export';
-import { capabilities, advancedVerifiedPoints } from '@/lib/capabilities';
+import { capabilities, advancedVerifiedPoints, mcpVerified } from '@/lib/capabilities';
 import { sources } from '@/lib/security';
 import type { Capability } from '@/lib/capabilities';
 import type {
@@ -395,7 +395,7 @@ export function Workbench() {
       ? experiment.data
       : undefined;
   const caps = capabilities(catalog?.tools, mcpEvidence);
-  const liveAdvancedPoints = advancedVerifiedPoints + (mcpEvidence ? 10 : 0);
+  const liveAdvancedPoints = advancedVerifiedPoints + (mcpEvidence && !mcpVerified ? 10 : 0);
   const ready = Boolean(
     catalog?.configured && catalog.demoEnabled && !catalog.error && selected.length,
   );

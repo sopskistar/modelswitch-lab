@@ -1,66 +1,90 @@
 # Judge walkthrough
 
-## Before you begin
-
-Open the selected production application at [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app) (with a hyphen). A read-only catalog observation returned `demoEnabled: true`; the separate participant-reported invoice run is recorded in [`production-observation.json`](../evidence/production-observation.json), but its request IDs and receipt were not independently retrieved. Prior independently inspectable Otari request records are in [`evidence/browser-smoke.json`](../evidence/browser-smoke.json) and [`evidence/polish-live-smoke.json`](../evidence/polish-live-smoke.json). Intercepted test responses are never live evidence.
-
-The latest source commit has been pushed to GitHub, but the selected production
-host still returned 404 for the new MCP evidence route. Until Vercel deploys
-the latest `main`, the new repository inspection control may not be available
-on the public site. Do not claim it as a production demonstration before
-checking that control and its live result.
+Open the selected demo at [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app).
+The production inference gate was enabled at last catalog check. Make one small
+synthetic run only; do not repeat a completed run. If the demo gate is closed,
+use the linked redacted receipts instead of retrying.
 
 ## Seven checkpoints
 
-### 1. Open the application
+### 1. Open the live application
 
-**Public visitor:** Open the [production site](https://modelswitch-lab.vercel.app). No visitor API key or sign-in is needed.
+**Click:** Open the production URL.
 
-**Observe:** The Workspace, scenario ledger, theme control, and view navigation. This is an evaluation workbench, not a general chat screen.
+**Observe:** The Workspace, scenario list, navigation and theme control. The
+application is a benchmark workbench, not a general chat screen.
 
-### 2. Select a synthetic scenario
+### 2. Select a synthetic benchmark
 
-Choose invoice extraction, support classification, or bounded reasoning. Expand a case in **Test cases** to see the synthetic input and expected answer. The production catalog previously showed the demo gate enabled; if the Run action is unavailable at recording time, inspect the evidence below rather than retrying repeatedly.
+**Click:** Choose invoice extraction, support classification, or bounded
+reasoning. Expand a test case.
 
-**Observe:** The expected values are visible before execution, so a judge can independently understand how a response is scored.
+**Observe:** Synthetic input and expected output are visible before execution;
+the evaluator output is scored against that ground truth.
 
-### 3. Choose two open-weight models
+### 3. Select two open-weight roles
 
-The catalog lists Qwen3.8 27B (`alibaba/qwen3.8-27b`) and Llama 3.3 70B Instruct (`meta/llama-3.3-70b-instruct`). The participant reports a production Qwen evaluator run and separate Llama analyst call; inspect the production evidence record and distinguish its provenance from gateway request receipts.
+**Click:** Leave Qwen3.8 27B selected as evaluator and choose Llama 3.3 70B as
+the distinct analyst role in the workspace.
 
-**Observe:** In prior recorded runs, the evaluator performed the benchmark task and the distinct analyst made a separate request after verified results existed. Model IDs came from the gateway catalog; serving provider/model came from Otari responses. A recent production catalog observation reported the demo gate enabled; private rate/spend protections were not independently inspected in this pass.
+**Observe:** The evaluator performs the benchmark; after deterministic scoring,
+the separate analyst interprets verified metrics. See [model evidence](OTARI_PROOF.md#real-model-roles).
 
-### 4. Execute the benchmark
+### 4. Run one bounded benchmark
 
-Select a small synthetic invoice sample and run it once. The participant reports Qwen 3/3 with a separate Llama analyst. If repeating this at a live recording, use the smallest sample and stop after the first completed run. Do not call the user-reported values independently verified without its trace/request IDs.
+**Click:** Select the smallest available test count and press **Run benchmark**
+once.
 
-**Observe:** In a completed run, outcomes arrive case by case; failures and unsubmitted cases remain visible, and the app does not replace them with fixtures. Stop after one successful run; the participant-reported result lacks an independently available trace/receipt.
+**Observe:** Each case completes, fails, or remains skipped explicitly. The
+production catalog has reported the demo gate enabled, but this is not a
+guarantee that Redis limiting or spend enforcement has been independently
+tested. Stop after one completed run.
 
-### 5. Compare measured results
+### 5. Compare results and recommendation
 
-Open **Results** and compare measured accuracy, pass rate, latency and cost. The reported production result is Qwen 3/3 at $0.001710, Llama analyst at $0.000237, total $0.001947; compare those only as a participant-reported observation. The older independent five-case comparison remains in the evidence files.
+**Click:** Open **Results** and expand the score methodology.
 
-**Observe:** Weights are exposed under **Score formula and full metrics**. Historical evidence has a five-case sample: Qwen 5/5, Llama 4/5, and $0.001741 reported cost including analyst. It is one dated run, not a live average or universal ranking.
+**Observe:** Deterministic accuracy, pass rate, measured latency and reported
+cost. The recommendation follows the selected objective; it does not establish
+universal model superiority from a small sample. A prior five-case run and its
+reported total cost are documented as historical evidence only.
 
-### 6. Inspect requests and analyst role
+### 6. Inspect traces and receipt
 
-Open **Request trace** and inspect the evaluator and separate analyst events. Export a receipt after the run. The currently available participant report did not include request IDs or the receipt, so it is not independently corroborated; historical trace IDs and provider metadata are linked in [OTARI_PROOF.md](OTARI_PROOF.md).
+**Click:** Open **Request trace**, then export the benchmark receipt.
 
-**Observe:** In completed runs, application scoring is distinct from gateway metadata. The analyst interprets verified metrics but does not set or override scores. JSON export downloads a benchmark receipt after a run. The participant's reported run did not include a receipt that can be independently inspected here.
+**Observe:** Evaluator and analyst have distinct Otari request IDs, identities,
+providers and timings when returned. The JSON receipt is local evidence, not a
+signed attestation. Historical real request records are linked from
+[OTARI_PROOF.md](OTARI_PROOF.md).
 
-### 7. Inspect hosted Otari evidence
+### 7. Inspect Otari capabilities
 
-Open **Otari capabilities**. Routing and code checks each make one real request; **Inspect repository** attempts a fixed Qwen + DeepWiki managed MCP call, and the result counts only if the streamed Otari response contains a matching tool-use/result pair. Web tools are reported `workspace_disabled`; no fallback event or budget refusal is verified.
+**Click:** Open **Otari capabilities** and inspect **Repository evidence
+inspector** and its evidence link.
 
-**Observe:** Only completed hosted execution with actual request evidence earns verified status. The MCP implementation remains unverified until a real call returns and is saved. See [OTARI_PROOF.md](OTARI_PROOF.md) for request IDs and status.
+**Observe:** The redacted production proof records one real Otari-managed
+DeepWiki MCP call, its successful result, request ID, Qwen/DeepInfra identity,
+one attempt and no fallback. The application currently displays the previous
+deployed evidence record until the latest commit deploys; the committed source
+has the corrected event parser. See [`mcp-status.json`](../evidence/mcp-status.json)
+and [the capability matrix](RUBRIC_EVIDENCE.md).
 
-## Operator-only checks
+## Operator-only evidence
 
-These require Otari workspace/owner permissions and must not be presented as public-demo actions:
+These require authorized Otari workspace or owner setup and are not public-demo
+actions:
 
-- Enable web fetch/search with a narrow domain allowlist, then capture an actual returned tool call.
-- Configure an isolated fallback policy using the documented safe test method and capture `Otari-Fallback: true`.
-- Create a dedicated low-limit key or budget and capture a gateway budget denial distinct from account balance or app rate limits.
-- Configure the hosted inference guardrail service and capture an evaluated block verdict.
+- Routing: existing production policy resolved, but recorded one attempt and
+  `fallback=false`; no safe fallback event is yet proven.
+- Budget: two operator-reported $1 monthly ceilings exist; no gateway refusal
+  or usage-record proof is available, and neither ceiling was exhausted.
+- Web search/fetch and inference guardrails: unavailable in the current hosted
+  workspace discovery.
+- Per-user budgets: no service-key/user-budget workflow has been executed.
 
-The inference key alone returned authentication errors for routing and budget management. No management token, unsafe credential, policy mutation, flood, or fake result was used. Exact blockers and reproduction guidance are in the [evidence matrix](RUBRIC_EVIDENCE.md) and [Otari integration guide](OTARI_INTEGRATION.md).
+The selected production `/api/catalog` and evidence routes are reachable, but
+the exact Vercel source commit is not independently known. The current live
+MCP transaction is recorded in the redacted evidence files; do not claim a
+newly committed verifier is deployed until the evidence route serves the
+updated record.

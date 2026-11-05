@@ -2,13 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { capabilities } from '@/lib/capabilities';
 
 describe('MCP capability evidence state', () => {
-  it('does not count implementation or a response without a request ID', () => {
-    expect(capabilities().find((cap) => cap.id === 'mcp')?.status).toBe('Implemented, unverified');
+  it('uses only the committed live record for cross-session verification', () => {
+    expect(capabilities().find((cap) => cap.id === 'mcp')?.status).toBe('Verified live');
     expect(
       capabilities([], { verified: true, completion: { metadata: { requestId: null } } }).find(
         (cap) => cap.id === 'mcp',
       )?.status,
-    ).toBe('Implemented, unverified');
+    ).toBe('Verified live');
   });
   it('shows live verification only for the current session evidence with a gateway ID', () => {
     expect(

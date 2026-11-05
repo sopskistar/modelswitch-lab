@@ -1,5 +1,6 @@
 import type { Tool } from './types';
 import verification from '../../evidence/verification.json';
+import mcpProof from '../../evidence/mcp-status.json';
 interface EvidenceRecord {
   role: string;
   status: string;
@@ -34,8 +35,10 @@ export const rolesVerified = completed('evaluator').some(
 export const fallbackVerified = completed('routing').some(
   (r) => r.result?.metadata?.fallback === true,
 );
+export const mcpVerified =
+  mcpProof.liveExecution.verified === true && Boolean(mcpProof.liveExecution.requestId);
 export const advancedVerifiedPoints =
-  10 * [codeVerified, rolesVerified, fallbackVerified].filter(Boolean).length;
+  10 * [codeVerified, rolesVerified, fallbackVerified, mcpVerified].filter(Boolean).length;
 export type CapabilityStatus =
   | 'Verified live'
   | 'Verified live this session'
@@ -67,7 +70,11 @@ export function capabilities(
   const mcpRequestId = mcpCompletion?.metadata?.requestId;
   const mcpModel = mcpCompletion?.metadata?.effectiveModel;
   const mcpProvider = mcpCompletion?.metadata?.provider;
-  const mcpVerified = mcpEvidence?.verified === true && typeof mcpRequestId === 'string';
+  const currentMcpVerified = mcpEvidence?.verified === true && typeof mcpRequestId === 'string';
+  const proofRequestId = mcpProof.liveExecution.requestId;
+  const proofEffectiveModel = mcpProof.liveExecution.effectiveModel;
+  const proofProvider = mcpProof.liveExecution.provider;
+  const hasMcpProof = mcpVerified && typeof proofRequestId === 'string';
   return [
     {
       id: 'routing',
@@ -83,11 +90,17 @@ export function capabilities(
       id: 'mcp',
       name: 'MCP integration',
       points: 10,
-      status: mcpVerified ? 'Verified live this session' : 'Implemented, unverified',
-      detail: mcpVerified
+      status: currentMcpVerified
+        ? 'Verified live this session'
+        : hasMcpProof
+          ? 'Verified live'
+          : 'Implemented, unverified',
+      detail: currentMcpVerified
         ? `Otari completed the read-only repository MCP call${mcpProvider ? ` through ${mcpProvider}` : ''}${mcpModel ? ` on ${mcpModel}` : ''}; request ${mcpRequestId}.`
-        : 'A bounded Qwen request targets the fixed public mozilla-ai/otari repository through DeepWiki MCP. Verification requires matching Otari tool-use/result events and a request ID.',
-      file: mcpVerified ? '#capability-check-result' : 'mcp-status.json',
+        : hasMcpProof
+          ? `Redacted production evidence records Otari MCP on ${proofEffectiveModel} through ${proofProvider}; request ${proofRequestId}.`
+          : 'A bounded Qwen request targets the fixed public mozilla-ai/otari repository through DeepWiki MCP. Verification requires a successful gateway tool-use/result pair and request ID.',
+      file: currentMcpVerified ? '#capability-check-result' : 'mcp-status.json',
     },
     {
       id: 'web',

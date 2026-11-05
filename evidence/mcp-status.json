@@ -1,27 +1,55 @@
 {
-  "recordVersion": 1,
+  "recordVersion": 2,
   "observedOn": "2026-11-05",
-  "status": "implemented_unverified",
+  "status": "verified_live",
   "implementation": {
     "applicationRoute": "/api/execute action=mcp",
     "gatewayEndpoint": "POST /api/v1/messages",
     "server": "https://mcp.deepwiki.com/mcp",
     "repository": "mozilla-ai/otari",
     "allowedTools": ["read_wiki_structure"],
-    "model": "alibaba/qwen3.8-27b",
+    "requestedModel": "alibaba/qwen3.8-27b",
     "maxToolIterations": 2,
     "activityEvidence": "Otari Messages stream MCP beta events"
   },
   "liveExecution": {
-    "verified": false,
-    "requestId": null,
-    "toolUse": null,
-    "toolResult": null,
-    "reason": "No Otari call was made. An approved direct connectivity check from this environment timed out before a response; this does not establish whether the Otari gateway can reach DeepWiki."
+    "verified": true,
+    "observedAt": "2026-11-05T10:51:30.729Z",
+    "runId": "b21cf682-55b1-477a-9ddb-d7c2c86b6b70",
+    "vercelRequestId": "fra1::iad1::z8vsh-1793875890729-beddd0b66157",
+    "requestId": "d9283ac4-3aec-4ee3-8151-08937bb08554",
+    "requestedModel": "alibaba/qwen3.8-27b",
+    "effectiveModel": "Qwen/Qwen3.8-27B",
+    "provider": "deepinfra",
+    "attempts": 1,
+    "fallback": false,
+    "gatewayDurationMs": 989,
+    "measuredLatencyMs": 5058,
+    "reportedTokens": {
+      "prompt": 0,
+      "completion": 187,
+      "total": 187
+    },
+    "reportedCostUsd": null,
+    "toolUse": {
+      "event": "mcp_tool_use",
+      "callId": "otari_mcptoolu_654cdd832f534ff9afe8dc7f95f4fe1a",
+      "tool": "read_wiki_structure",
+      "input": {"repoName": "mozilla-ai/otari"}
+    },
+    "toolResult": {
+      "event": "mcp_tool_result",
+      "isError": false,
+      "summary": "Returned the public mozilla-ai/otari wiki page structure, including 5.1 MCP (Model Context Protocol) Integration."
+    },
+    "assistantSummary": "The returned wiki structure documents MCP support and identifies section 5.1 as MCP (Model Context Protocol) Integration.",
+    "verificationMethod": "One request exposed exactly one allowlisted tool. Otari's documented Messages beta emitted one mcp_tool_use followed by one successful mcp_tool_result in the complete stream. The result block does not repeat the use block's id or tool name; the unique one-use/one-result pair is correlated by documented stream order.",
+    "evidenceSource": "Redacted production /api/execute response from hosted Otari; response headers included Otari-Request-ID, Otari-Provider, Otari-Model, Otari-Attempt-Count=1, Otari-Fallback=false, and Otari-Response-Duration-Ms=989."
   },
   "limitations": [
-    "A successful live request must contain matching Otari-owned mcp_tool_use and successful mcp_tool_result events.",
-    "Chat Completions and Responses hide managed MCP activity; this integration uses streamed Messages with the documented MCP beta.",
-    "The fixed public DeepWiki endpoint and repository are read-only, but the generated documentation is third-party content and is treated as untrusted."
+    "Otari did not report a cost for this request.",
+    "This confirms a successful MCP tool execution, not model fallback.",
+    "DeepWiki is a public third-party documentation service; its content is untrusted and the integration is read-only.",
+    "The result is not a cryptographic attestation."
   ]
 }

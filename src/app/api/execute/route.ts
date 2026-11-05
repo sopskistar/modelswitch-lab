@@ -209,28 +209,30 @@ export async function POST(request: Request) {
           key,
         ),
       );
-      const use = completion.mcpActivity.find(
+      const uses = completion.mcpActivity.filter(
         (activity) =>
           activity.type === 'mcp_tool_use' &&
           activity.name === 'read_wiki_structure' &&
           activity.input?.repoName === 'mozilla-ai/otari',
       );
-      const result = use
-        ? completion.mcpActivity.find(
-            (activity) =>
-              activity.type === 'mcp_tool_result' &&
-              Boolean(use.callId) &&
-              activity.callId === use.callId &&
-              activity.name === use.name &&
-              activity.isError === false,
-          )
-        : undefined;
+      const results = completion.mcpActivity.filter(
+        (activity) => activity.type === 'mcp_tool_result' && activity.isError === false,
+      );
+      // Otari's documented Messages beta gives the opaque id on mcp_tool_use;
+      // mcp_tool_result carries content/is_error and follows its corresponding
+      // use block, without repeating the id or tool name. This request allows
+      // exactly one tool, so require one of each in a completed stream.
+      const verified =
+        completion.streamComplete &&
+        Boolean(completion.metadata.requestId) &&
+        uses.length === 1 &&
+        results.length === 1 &&
+        completion.mcpActivity.findIndex((activity) => activity === uses[0]) <
+          completion.mcpActivity.findIndex((activity) => activity === results[0]);
       return NextResponse.json(
         {
           experiment: 'mcp',
-          verified: Boolean(
-            completion.streamComplete && completion.metadata.requestId && use && result,
-          ),
+          verified,
           source: {
             repository: 'mozilla-ai/otari',
             url: 'https://github.com/mozilla-ai/otari',
@@ -238,7 +240,7 @@ export async function POST(request: Request) {
           },
           completion,
           evidenceNote:
-            'Verified requires the matching server-owned MCP tool-use and successful tool-result events in Otari’s streamed Messages response.',
+            'Otari’s Messages beta places a call id on mcp_tool_use and emits the corresponding mcp_tool_result next without repeating that id. This fixed request exposes one allowlisted tool and verification requires exactly one use followed by exactly one successful result in a complete stream.',
         },
         { headers: { 'Cache-Control': 'no-store' } },
       );

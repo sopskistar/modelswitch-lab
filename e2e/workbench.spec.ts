@@ -182,9 +182,11 @@ test('missing configuration and disabled tools', async ({ page }) => {
   await page.getByRole('button', { name: 'Open setup guide' }).click();
   await expect(page.getByRole('heading', { name: 'Configure the server' })).toBeVisible();
 });
-test('capabilities expose evidence without claiming execution', async ({ page }) => {
+test('capabilities expose recorded evidence and keep failed checks unverified', async ({
+  page,
+}) => {
   await page.goto('/?view=capabilities');
-  await expect(page.getByText('20 / 60 advanced points verified')).toBeVisible();
+  await expect(page.getByText('30 / 60 advanced points verified')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Fetch through Otari' })).toBeDisabled();
   await expect(page.getByRole('link', { name: 'Inspect JSON' })).toHaveCount(8);
   await page.route('**/api/execute', (route) => {
@@ -211,7 +213,7 @@ test('capabilities expose evidence without claiming execution', async ({ page })
   await page.getByRole('button', { name: 'Inspect repository' }).click();
   await expect(page.getByRole('heading', { name: 'Check recorded, unverified' })).toBeVisible();
   await expect(page.getByText(/TEST FIXTURE: no hosted MCP events/)).toBeVisible();
-  await expect(page.getByText('20 / 60 advanced points verified')).toBeVisible();
+  await expect(page.getByText('30 / 60 advanced points verified')).toBeVisible();
   const mcpDownload = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export evidence' }).click();
   expect((await mcpDownload).suggestedFilename()).toBe('otari-mcp.json');

@@ -164,15 +164,17 @@ the exposed tool to `read_wiki_structure`, and caps output at 180 tokens and
 the managed loop at two iterations. It does not accept arbitrary URLs or
 repository identifiers. Otari's current [MCP guide](https://github.com/mozilla-ai/otari/blob/main/docs/mcp.md)
 documents inline servers and the streamed `mcp-client-2025-11-20` activity
-blocks. The app requires a matching `mcp_tool_use` and successful
-`mcp_tool_result` in that stream before returning `verified: true`.
+blocks. Otari puts the opaque id on `mcp_tool_use`; the following result carries
+content and `is_error`, without repeating that id/name. The verifier therefore
+requires one allowed tool use and exactly one successful result after it in a
+complete stream, along with the gateway request ID.
 
-The endpoint and tool names were verified from DeepWiki's public repository
-documentation, but no live Otari call has yet been made. Direct outbound
-connectivity from the development environment timed out; the gateway's ability
-to connect remains unknown. Do not count MCP until an actual production or
-operator run returns a gateway request ID and both activity blocks. The app
-must not fall back to a local GitHub fetch and represent it as Otari MCP.
+One bounded production request did execute this workflow. Otari request
+`d9283ac4-3aec-4ee3-8151-08937bb08554` returned a successful
+`read_wiki_structure` result for the fixed repository and Qwen summarized the
+returned structure. See [`evidence/mcp-status.json`](../evidence/mcp-status.json)
+for redacted metadata and [`docs/OTARI_PROOF.md`](OTARI_PROOF.md) for limitations.
+No local GitHub fetch is used or counted.
 
 ## Guardrails and per-user budgets
 

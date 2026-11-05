@@ -1,21 +1,20 @@
 # Rubric evidence
 
 Recorded 2026-11-04; refreshed 2026-11-05. Target ceiling: 100. Current
-evidence supports **55/100 potential points**: 30 for two meaningful
-open-weight roles, 20 for verified advanced features (code + distinct roles),
-and 5 for the working use case. This is our evidence assessment, not an
-official judge score. The latest production result is participant-reported;
-the underlying production request IDs and receipt were not independently
-retrieved during this pass. Routing fallback, gateway budget enforcement,
-MCP, web retrieval, guardrails and the personally recorded demo remain
-unverified or unavailable.
+evidence supports **65/100 potential points**: 30 for two meaningful
+open-weight roles, 30 for verified advanced features (code execution, distinct
+roles and one hosted MCP tool execution), and 5 for the working use case. This
+is our evidence assessment, not an official judge score. The separately reported
+production invoice run remains participant-reported. Routing fallback, gateway
+budget enforcement, web retrieval, guardrails and the personally recorded demo
+remain unverified or unavailable.
 
 | Rubric feature                | Possible points | Implementation location                            | Tested live?                 | Evidence                                                                                                                                         | Reproduction steps                                                                                           | Status                                  | Known limitations                                                  |
 | ----------------------------- | --------------- | -------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------- | ------------------------------------------------------------------ |
 | Meaningful open-weight model  | 20              | `src/lib/otari.ts`, `/api/execute` case action     | **Yes**                      | `verification.json`, evaluator request `2070b955-78a2-4a8a-a02d-d72df5e5f1f9`; real Qwen invoice output and exact scoring                        | Select Qwen, run versioned cases, inspect actual output                                                      | **Verified live**                       | Tiny synthetic samples, no general model rank                      |
 | Second open-weight role       | 10              | `/api/execute` analyst action, signed receipts     | **Yes**                      | `verification.json`, Llama analyst `bd24f101-ff53-452a-97a6-27016e8e8600`; primary license links in integration guide                            | Complete evaluator cases, inspect separate analyst request and serving identity                              | **Verified live**                       | Diagnostic text supports deterministic scores                      |
 | Model routing and fallbacks   | 10              | `/api/execute` routing action                      | Policy served; no failover   | `verification.json`, `79c948e4-57bf-43d8-86eb-ef8eca8ec5f7`, attempt=1, fallback=false                                                           | Check routing; configure isolated controlled fallback test through operator                                  | Implemented, full target unverified     | Policy resolution alone is not actual fallback proof               |
-| MCP integrations              | 10              | `/api/execute` fixed repository MCP action; streamed Otari Messages adapter | No; implementation only | `evidence/mcp-status.json`; no Otari request ID or tool event                                                                   | Open Otari Capabilities and run **Inspect repository** after deployment; require matching gateway-owned tool-use/result events | Implemented, unverified | Local environment could not reach remote hosts; only real hosted events qualify |
+| MCP integrations              | 10              | `/api/execute` fixed repository MCP action; streamed Otari Messages adapter | **Yes**                        | [`mcp-status.json`](../evidence/mcp-status.json), Otari request `d9283ac4-3aec-4ee3-8151-08937bb08554`; one `read_wiki_structure` use and successful result | Open Otari Capabilities and inspect the committed production proof; for a fresh demonstration, run **Inspect repository** once and inspect returned Otari request/activity | **Verified live** | Gateway result block omits use ID/name; this request exposed exactly one allowlisted tool, and the complete stream contained one successful result after its use; reported cost unavailable |
 | Web search or fetch           | 10              | `/api/execute` web action; exact source allowlist  | Discovery only               | Latest `discovery.json`: `workspace_disabled`                                                                                                    | Enable workspace tool/domain restriction; Fetch through Otari; inspect completed tool call                   | Unavailable on hosted account           | Model summary alone cannot prove retrieval                         |
 | Code execution                | 10              | `/api/execute` code action; typed verifier         | **Yes**                      | `verification.json`, `732c1ded-aba4-4210-8cd7-1251027e367c`; exit 0, correct=4, total=5, accuracy=.8                                             | `npm run otari:verify -- --capabilities-only` or Check sandbox                                               | **Verified live**                       | Fixed control vectors; cost unreported                             |
 | Budgets/spending limits       | 10              | Otari key spending ceilings; denial normalization | No gateway refusal observed | [`budget-operator-report.json`](../evidence/budget-operator-report.json): participant reports separate $1 monthly ceilings on production and test keys; management reads had 401 | Inspect Otari owner-visible spend-ceiling and usage records; use a gateway `budget_exceeded` refusal only if a safe boundary can be configured | Unverified; no enforcement evidence | Current spend/remaining is not readable; dashboard has no request-limit field; do not equate spend or `insufficient_funds` with a budget refusal |
@@ -25,11 +24,12 @@ unverified or unavailable.
 | Working real use case         | 5               | Five views, 15 fixtures, scorer and recommendation | **Yes**                      | `browser-smoke.json`, run `365aae24-b64e-43ec-ba02-3c5e9a7d8739`: 10 cases + analyst, no request failures                                        | Select five classification cases and both models; Run; inspect/export                                        | **Verified live**                       | Qwen 5/5, Llama 4/5 only on these cases                            |
 | Recorded Otari demonstration  | 5               | `docs/DEMO_SCRIPT.md`                              | Not recorded                 | Script only                                                                                                                                      | Participant personally records actual screen and narrates                                                    | Awaiting participant                    | No synthetic narration or fabricated recording                     |
 
-Only six of eight advanced targets can count, capped at 60. Two are verified
-now. Do not add all eight potential values or count local equivalents. The path
-to 100 still needs four more verified targets and the personal recording. Web
-and guardrails need hosted setup; fallback and budgets need controlled operator
-tests. MCP/per-user substitutions also need real setup and execution.
+Only six of eight advanced targets can count, capped at 60. Three are verified
+now: distinct model roles, code execution, and MCP. Do not count local
+equivalents. The path to 100 still needs three additional advanced capabilities
+and the personal recording. Web and guardrails need hosted setup; fallback and
+budgets need controlled operator tests. Per-user budgets remain a possible
+substitution only if genuinely enabled and executed.
 
 Live comparison under the balance objective:
 
@@ -67,7 +67,10 @@ checks with the dedicated test inference key confirmed access to the Qwen model
 catalog but returned HTTP 401 `Invalid master key` for organization context,
 organization budgets, and owned keys. The specific test-key ceiling attachment
 could not be inspected, and no budget mutation or inference request was made.
-No new budget point is verified; total evidence remains **55/100 potential**.
+No budget point is verified; the $1 ceilings are operator-reported and no
+gateway refusal or spend record was captured. The revised total is **65/100
+potential** because the separate production MCP request is now independently
+recorded; see the next evidence section and `evidence/mcp-status.json`.
 See the attempt record in [`OTARI_PROOF.md`](OTARI_PROOF.md).
 
 The latest public catalog observation on the selected hyphenated domain reports
@@ -80,9 +83,22 @@ change capability verification or rubric coverage. The older
 historical capture of the other state/domain; consult the newer
 [`production-observation.json`](../evidence/production-observation.json).
 
-The MCP check is implemented but unverified. Otari documents inline MCP fields
-and managed tool execution on the Messages endpoint. Chat Completions and
-Responses hide managed MCP activity; the new route uses the Messages stream's
-documented MCP activity blocks to require matching tool-use/result evidence.
-The current local network could not connect to public hosts, and the hosted
-call has not been made. No MCP points are counted.
+## MCP tool execution (verified live)
+
+One bounded production request used the fixed inline DeepWiki server and
+allowlisted `read_wiki_structure` for `mozilla-ai/otari`. Otari returned
+request `d9283ac4-3aec-4ee3-8151-08937bb08554`, served by effective model
+`Qwen/Qwen3.8-27B` through `deepinfra`, with one attempt and no fallback. The
+stream contained one gateway-owned `mcp_tool_use` and one successful
+`mcp_tool_result`; its result was a repository wiki structure that included
+section 5.1, MCP integration. Cost was not reported. See the redacted
+[`mcp-status.json`](../evidence/mcp-status.json).
+
+Otari's [Messages-stream MCP documentation](https://github.com/mozilla-ai/otari/blob/main/docs/mcp.md#messages-streaming-activity)
+says the call id appears on `mcp_tool_use`; the corresponding result block
+contains content and `is_error`, but does not repeat the id or tool name. The
+initial app verifier incorrectly expected those undocumented fields, so that
+production response was returned with `verified: false`. The corrected verifier
+requires a complete stream, request ID, exactly one allowed use, and exactly
+one successful result following it. It now matches the actual documented
+gateway event shape. This project record is not signed or externally attested.

@@ -96,18 +96,21 @@ run to export. The Vercel deployment SHA and private env-variable presence are
 not accessible from this workspace. See
 [`production-acceptance.json`](../evidence/production-acceptance.json).
 
-The selected official domain is now the hyphenated
+The selected official domain is the hyphenated
 `https://modelswitch-lab.vercel.app`. Its latest catalog observation returned
-`demoEnabled: true`, and the participant reports a live invoice benchmark.
-Request IDs and receipt have not been independently retrieved in this pass;
-see [`production-observation.json`](../evidence/production-observation.json).
-Redis behavior and deployed commit remain unverified. No repeat inference call
-was made.
+`demoEnabled: true`; this reflects configuration presence, not successful
+Redis limiter behavior. The participant-reported invoice benchmark still lacks
+independent traces/receipt. A separate single production MCP request was made
+and returned a successful DeepWiki tool result through Otari; details and IDs
+are in [`mcp-status.json`](../evidence/mcp-status.json) and
+[`production-observation.json`](../evidence/production-observation.json).
+No extra inference calls were sent to recreate evidence.
 
-After pushing source commit `67a4624e83dde54b3f19067a0182d85e1bbf5551` to both
-branches, the selected production host returned 404 for
-`/api/evidence?file=mcp-status.json`. The host therefore did not yet expose the
-new source route at the time checked; its exact deployed SHA is unknown.
+The selected production evidence route now returns HTTP 200, but its response
+was the previous `implemented_unverified` MCP record. Thus the route from
+`67a4624e83dde54b3f19067a0182d85e1bbf5551` is deployed, while the corrected
+parser/evidence commit is not yet confirmed deployed. Exact Vercel source SHA
+remains unavailable.
 
 A fresh read-only catalog request on 2026-11-05 returned HTTP 200 and Vercel request ID
 `fra1::iad1::2jdth-1793875276299-dde473d35888`; the homepage also returned HTTP
@@ -153,5 +156,6 @@ console error count is recorded; HTTP refusals remain explicit outcomes.
 Post-polish live smoke at `2026-11-04T23:41:17Z` completed one real evaluator
 case and one separate analyst request; see `evidence/polish-live-smoke.json`.
 Successful two-model execution is recorded. Web tools, actual fallback,
-gateway budget boundaries, MCP and per-user budgets
-require additional hosted-account setup; they are not implied by mocked tests.
+gateway budget boundaries and per-user budgets require additional hosted-account
+setup; they are not implied by mocked tests. One successful MCP execution is
+recorded separately in `evidence/mcp-status.json`.

@@ -10,7 +10,7 @@
 
 ## Evidence and demo
 
-- [x] Verified Otari capabilities: distinct open-weight roles and code execution. See [proof](OTARI_PROOF.md) and [rubric matrix](RUBRIC_EVIDENCE.md).
+- [x] Verified Otari capabilities: distinct open-weight roles, code execution, and one production-managed MCP tool call/result. See [proof](OTARI_PROOF.md) and [rubric matrix](RUBRIC_EVIDENCE.md).
 - [x] Real model IDs, serving providers, request IDs, measured outputs and reported usage recorded in `evidence/`.
 - [x] Existing project pull request #1 was merged into `main`.
 - [x] Written Otari feedback: [OTARI_FEEDBACK.md](OTARI_FEEDBACK.md).
@@ -25,9 +25,9 @@
 - [ ] Production run corroborated with Otari request IDs, trace and saved receipt; participant-reported results are recorded separately.
 - [ ] Exact deployed Git commit: not independently confirmed. Inspect the selected `modelswitch-lab` Vercel project, not the similarly named duplicate.
 - [ ] Verify durable Upstash behavior and the current Otari spending boundary before another live run.
-- [ ] Vercel has not yet been verified: after pushing `67a4624e83dde54b3f19067a0182d85e1bbf5551` to `main`, the selected production route returned 404 for `mcp-status.json`. Inspect the selected `modelswitch-lab` project and confirm the production deployment SHA before judging.
+- [ ] The selected production evidence route now returns HTTP 200, but it served the old unverified MCP record when checked. Confirm the updated evidence/parser commit is deployed and inspect its SHA in the selected `modelswitch-lab` Vercel project.
 - [ ] Verify production result trace/receipt if accessible; do not repeat inference solely to replace missing historical metadata.
 
 ## Final repository state
 
-`main` and `hackathon/mozfest-otari-2026` are synchronized; both contain implementation commit `67a4624e83dde54b3f19067a0182d85e1bbf5551`. Preserve the first-integration commit and merge history; do not force-push or delete the submission branch.
+`main` and `hackathon/mozfest-otari-2026` must be synchronized after this update. Preserve the first-integration commit and merge history; do not force-push or delete the submission branch.

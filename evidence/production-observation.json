@@ -61,14 +61,55 @@
   "verificationLimits": {
     "productionRequestTrace": "Not retrieved; this environment could not reach the selected production host.",
     "receiptExport": "Not retrieved.",
-    "currentRateLimiterBehavior": "Not exercised; no requests were sent to production inference.",
+    "currentRateLimiterBehavior": "No controlled boundary test was run. The single production MCP request was allowed, but that alone does not verify Redis limiter behavior.",
     "browserSecretScan": "Not performed against Vercel's private deployment; no secret is included in the public catalog response.",
     "postPushRouteCheck": {
       "request": "GET /api/evidence?file=mcp-status.json",
       "httpStatus": 404,
       "response": "Unknown evidence file.",
-      "interpretation": "The selected production host does not yet serve this commit's new evidence route; the exact deployed SHA remains unknown."
+      "interpretation": "Historical first check during rollout; the route later returned HTTP 200. See mcpProductionExecution.latestEvidenceRouteCheck for its current observed response."
     },
     "exactDeploymentCommit": "Not available: Vercel CLI/authentication, VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID, and a linked .vercel/project.json are absent."
+  },
+  "mcpProductionExecution": {
+    "observedAt": "2026-11-05T10:51:30.729Z",
+    "observedAtSource": "Timestamp encoded in the Vercel request ID",
+    "applicationUrl": "https://modelswitch-lab.vercel.app/api/execute",
+    "runId": "b21cf682-55b1-477a-9ddb-d7c2c86b6b70",
+    "vercelRequestId": "fra1::iad1::z8vsh-1793875890729-beddd0b66157",
+    "httpStatus": 200,
+    "experiment": "mcp",
+    "responseVerifierAtExecution": false,
+    "responseVerifierReason": "The deployed application required an id and name on the result block; Otari documents those fields on mcp_tool_use only.",
+    "otariRequestId": "d9283ac4-3aec-4ee3-8151-08937bb08554",
+    "requestedModel": "alibaba/qwen3.8-27b",
+    "effectiveModel": "Qwen/Qwen3.8-27B",
+    "provider": "deepinfra",
+    "attempts": 1,
+    "fallback": false,
+    "gatewayDurationMs": 989,
+    "latencyMs": 5058,
+    "reportedCostUsd": null,
+    "toolUse": {
+      "callId": "otari_mcptoolu_654cdd832f534ff9afe8dc7f95f4fe1a",
+      "name": "read_wiki_structure",
+      "input": {"repoName": "mozilla-ai/otari"}
+    },
+    "toolResult": {
+      "event": "mcp_tool_result",
+      "isError": false,
+      "summary": "Returned the mozilla-ai/otari wiki structure, including 5.1 MCP (Model Context Protocol) Integration."
+    },
+    "latestEvidenceRouteCheck": {
+      "date": "2026-11-05",
+      "path": "/api/evidence?file=mcp-status.json",
+      "httpStatus": 200,
+      "observation": "Route is deployed but serves the previous implemented_unverified record; the source verifier/evidence update in this commit has not yet been verified on production."
+    },
+    "limitations": [
+      "The route returned a genuine completed tool result, but its then-current application-level verified flag was false due to a parser mismatch.",
+      "The gateway reported no cost; this value is unknown, not zero.",
+      "Exact Vercel source commit remains unverified."
+    ]
   }
 }

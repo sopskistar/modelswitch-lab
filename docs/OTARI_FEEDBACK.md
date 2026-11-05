@@ -85,9 +85,11 @@ Turbopack port restriction were development-environment issues, not Otari issues
 
 The current MCP guide documents managed MCP on inline `mcp_servers`. A useful
 integration detail is that non-streaming Chat Completions can hide the managed
-MCP tool call and result, while a streamed Messages request with the documented
-MCP beta exposes server-owned activity blocks. We are implementing that narrow
-path, but have not made a hosted MCP request yet. A direct public MCP connectivity
-check from this environment timed out; this does not establish a hosted Otari
-service problem. The implementation remains unverified until the gateway
-returns the corresponding request ID and use/result pair.
+MCP tool call and result, while streamed Messages with the documented MCP beta
+exposes server-owned activity blocks. One bounded production request used that
+path and returned a successful DeepWiki repository result. We initially
+misread the schema and expected the result event to repeat its call id/name;
+the docs instead place those on the use block and pair the following result by
+stream order. We corrected the parser and recorded the real request rather than
+retrying it. A local direct connectivity timeout remained a local network
+limitation and did not predict gateway-to-MCP reachability.

@@ -53,6 +53,16 @@ was not independently corroborated because request IDs/receipt were unavailable.
 
 2026-11-05: Pushed source commit `67a4624e83dde54b3f19067a0182d85e1bbf5551`
 to both `main` and `hackathon/mozfest-otari-2026`. The selected production
-evidence endpoint still returned 404 for the new `mcp-status.json` route, so
-the new MCP control has not been live-tested. The workspace has no Vercel CLI,
-project link, token, or org/project IDs to inspect deployment readiness.
+evidence endpoint first returned 404 during deployment, so the deployed SHA
+was unknown. A later bounded production request completed through hosted Otari
+and returned one `read_wiki_structure` MCP use plus one successful tool result.
+Otari request `d9283ac4-3aec-4ee3-8151-08937bb08554`, effective Qwen model,
+DeepInfra provider, one attempt, fallback false. The first response's app
+verification was false because the result event omits the id/name fields the
+verifier expected. The current Otari docs confirm that event shape; corrected
+the verifier to require a unique single call/result pair in stream order and
+recorded the redacted proof in `evidence/mcp-status.json`. A subsequent
+read-only evidence-route request returned 200 but still served the previous
+unverified JSON, confirming the source fix is not yet verified in production.
+Vercel auth/project metadata remains unavailable; do not claim the exact
+deployment SHA.

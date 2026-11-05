@@ -186,8 +186,6 @@ describe('bounded execution route', () => {
         },
         {
           type: 'mcp_tool_result',
-          callId: 'call-1',
-          name: 'read_wiki_structure',
           isError: false,
           result: 'docs/mcp.md',
         },
@@ -214,6 +212,30 @@ describe('bounded execution route', () => {
       }),
       expect.stringContaining(runId),
     );
+  });
+  it('does not verify an ambiguous or failed MCP result', async () => {
+    mocks.completeWithMcpActivity.mockResolvedValue({
+      content: 'Repository summary.',
+      metadata: { requestId: 'gateway-mcp-2' },
+      mcpActivity: [
+        {
+          type: 'mcp_tool_use',
+          callId: 'call-1',
+          name: 'read_wiki_structure',
+          input: { repoName: 'mozilla-ai/otari' },
+        },
+        {
+          type: 'mcp_tool_result',
+          callId: null,
+          name: null,
+          isError: true,
+          result: 'failed',
+        },
+      ],
+      streamComplete: true,
+    });
+    const response = await send({ action: 'mcp', runId });
+    expect((await response.json()).verified).toBe(false);
   });
   it('checks actual sandbox exit and metrics', async () => {
     mocks.request.mockResolvedValue({

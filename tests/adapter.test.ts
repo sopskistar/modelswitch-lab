@@ -134,8 +134,6 @@ describe('hosted adapter', () => {
         index: 1,
         content_block: {
           type: 'mcp_tool_result',
-          id: 'call-1',
-          name: 'read_wiki_structure',
           content: [{ type: 'text', text: 'docs/mcp.md' }],
           is_error: false,
         },
