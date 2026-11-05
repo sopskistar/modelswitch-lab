@@ -1,22 +1,28 @@
 # Hosted Otari proof
 
-## Deployment status after final push — 2026-11-05 16:47 UTC
+## Production deployment checks — 2026-11-05
 
-The feature implementation and deployment evidence follow-up are pushed to
-both `main` and `hackathon/mozfest-otari-2026`.
-Read-only checks to the selected production domain still returned the old
-workspace copy at `/` (HTTP 200; visible heading
-“Put a model to the test.”) and HTTP 404 at `/app?view=model-switch`. Therefore
-the new landing and model-switch UI is not live yet. The check records
-Vercel request IDs in
+The initial post-push check at 16:47 UTC returned the previous workspace at `/`
+(HTTP 200; heading “Put a model to the test.”) and HTTP 404 at
+`/app?view=model-switch`. Its Vercel request IDs remain in
 [`production-deployment-check.json`](../evidence/production-deployment-check.json).
 
-This environment has no Vercel CLI, linked project, or Vercel token. In the
-existing Vercel project `modelswitch-lab`, inspect the newest Production
-deployment's source branch/commit and build result. It must serve the latest
-pushed `main` revision. If no such deployment exists, deploy that revision from the
-existing project; do not use the duplicate project. Recheck `/` and `/app` after
-it completes. No exact deployment SHA is claimed.
+At 17:26 UTC, a real browser recheck confirmed the landing and Model Switch
+routes both render successfully. The catalog returned HTTP 200, reported
+configured inference and the Qwen/Llama model IDs. Clicking **Switch to Llama**
+changed the browser's active selection; no `/api/execute` POST was made. Desktop
+and 390px mobile pages had no axe violations, page errors, or horizontal
+overflow. The public model-smoke and web-diagnostic evidence endpoints returned
+HTTP 200. Four production screenshots and the structured record are committed
+in `docs/screenshots/production-*.png` and
+[`production-ui-check.json`](../evidence/production-ui-check.json). This is a
+read-only UI acceptance check, not a new inference request.
+
+The exact Vercel source SHA remains unknown. This environment has no Vercel CLI,
+linked project, or token. The operator should inspect the source commit of the
+current Production deployment in the existing `modelswitch-lab` project and
+confirm it matches the synchronized GitHub branches. Do not use the duplicate
+project. No deployment SHA is inferred from rendered routes.
 
 ## Model Switch production smoke — 2026-11-05 14:17–14:18 UTC
 

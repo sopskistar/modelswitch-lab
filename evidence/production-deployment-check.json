@@ -20,11 +20,44 @@
       "vercelRequestId": "fra1::nvghd-1793897258409-4d47f83b0936"
     }
   ],
-  "conclusion": "At the time checked, the official production site did not yet serve the landing and Model Switch feature commit 1e74ef7: it returned the previous workspace at / and 404 at /app. A documentation-only commit 333371a followed on both branches. Deployment of the latest main revision remains unverified.",
+  "conclusion": "The initial post-push check observed the previous workspace at / and 404 at /app. A later production browser check confirmed the landing and Model Switch routes are now live. The exact Vercel source commit is not exposed, so deployment SHA matching remains unverified.",
+  "latestBrowserRecheck": {
+    "checkedAt": "2026-11-05T17:26:23.630Z",
+    "landingStatus": 200,
+    "landingHeading": "Find the right model. Switch with confidence.",
+    "modelSwitchStatus": 200,
+    "modelSwitchHeading": "Model switch",
+    "catalogHttpStatus": 200,
+    "catalogConfigured": true,
+    "catalogDemoEnabled": true,
+    "accessibleModelIds": [
+      "alibaba/qwen3.8-27b",
+      "meta/llama-3.3-70b-instruct",
+      "modelswitch-fallback"
+    ],
+    "manualBrowserSelection": "Llama 3.3 70B Instruct",
+    "selectionTriggeredInference": false,
+    "paidInferenceRequestsSent": 0,
+    "desktopAndMobileAxeViolations": [],
+    "mobileViewportWidth": 390,
+    "mobileDocumentWidth": 390,
+    "pageErrors": [],
+    "evidenceEndpoints": {
+      "model-switch-production.json": 200,
+      "web-fetch-diagnosis.json": 200
+    },
+    "deploymentGitSha": null,
+    "screenshots": [
+      "docs/screenshots/production-landing-desktop.png",
+      "docs/screenshots/production-landing-mobile.png",
+      "docs/screenshots/production-model-switch-desktop.png",
+      "docs/screenshots/production-model-switch-mobile.png"
+    ]
+  },
   "access": {
     "vercelCli": false,
     "projectLink": false,
     "vercelToken": false
   },
-    "nextOperatorAction": "In the existing Vercel project modelswitch-lab, inspect the latest Production deployment and confirm it was built from the latest main branch revision. Review its build result; if no deployment exists, deploy latest main from the existing project. Do not select the duplicate project."
+    "nextOperatorAction": "In the existing Vercel project modelswitch-lab, verify the latest Production deployment source SHA matches the synchronized main and hackathon branches. The site now serves the feature, but the unauthenticated browser check cannot identify its Git SHA. Do not select the duplicate project."
 }

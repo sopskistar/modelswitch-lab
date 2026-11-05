@@ -9,7 +9,8 @@
 - [x] Real bounded production smoke record: Llama success (request `77cf5458-46f6-40c9-98ab-80468ba890ec`); Qwen timeout without a gateway request ID. No repeated request was made.
 - [x] Web diagnostic updated: workspace tools discover as available; two web-fetch calls returned HTTP 400 without tool events. Root cause remains unknown.
 - [x] Model Switch implementation and deployment evidence commits were pushed to `main` and `hackathon/mozfest-otari-2026` with fast-forward-only updates; the branches are synchronized.
-- [ ] Confirm the selected Vercel deployment serves the landing and Model Switch UI and identify its exact deployment SHA. The latest public check still serves the prior workspace and `/app` returns 404; see [`production-deployment-check.json`](../evidence/production-deployment-check.json).
+- [x] Production browser check confirms landing and Model Switch pages load, catalog discovery works, a manual selection change makes no inference request, and desktop/mobile accessibility checks pass.
+- [ ] Confirm the exact deployed Git SHA in the selected `modelswitch-lab` Vercel project. The public site does not expose it; see [`production-deployment-check.json`](../evidence/production-deployment-check.json).
 - [ ] Participant records and personally narrates the project demo; no video is claimed here.
 
 ## Project identity
@@ -34,6 +35,7 @@
 ## Deployment
 
 - [x] Selected live site: <https://modelswitch-lab.vercel.app> (public catalog observed with `demoEnabled: true`; exact deployment SHA remains unverified).
+- [x] Production landing and Model Switch acceptance check at 2026-11-05 17:26 UTC; zero inference requests sent. See `evidence/production-ui-check.json`.
 - [x] A recent bounded Llama production response is independently recorded with request ID and redacted output in `evidence/model-switch-production.json`; the paired Qwen request timed out with unknown billing status.
 - [ ] Exact deployed Git commit: not independently confirmed. Inspect the selected `modelswitch-lab` Vercel project, not the similarly named duplicate.
 - [ ] Verify durable Upstash behavior and the current Otari spending boundary before another live run.
@@ -44,4 +46,4 @@
 
 ## Final repository state
 
-`main` and `hackathon/mozfest-otari-2026` must be synchronized after this update. Preserve the first-integration commit and merge history; do not force-push or delete the submission branch.
+`main` and `hackathon/mozfest-otari-2026` were synchronized with fast-forward-only updates after this work. Preserve the first-integration commit and merge history; do not force-push or delete the submission branch.

@@ -6,9 +6,11 @@
 
 **Live demo:** [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app) · **[Judge walkthrough](docs/JUDGE_WALKTHROUGH.md)** · [GitHub](https://github.com/sopskistar/modelswitch-lab)
 
-**Deployment note (Nov 5, 2026):** The landing page and Model Switch workflow are pushed to both required GitHub branches, but the official Vercel site still serves the previous workspace and `/app` returns 404. Deploy the latest `main` revision in the existing Vercel project; see the [deployment check](evidence/production-deployment-check.json).
+**Production check (Nov 5, 2026):** The landing and Model Switch pages now load on the official site. A live browser check verified catalog discovery, manual model selection without inference, desktop/mobile layout, and zero axe violations. The exact Vercel source SHA remains unavailable; see the [redacted production check](evidence/production-deployment-check.json).
 
-![ModelSwitch Lab Model Switch workspace](docs/screenshots/model-switch-desktop.png)
+![ModelSwitch Lab landing page](docs/screenshots/production-landing-desktop.png)
+
+[Model Switch desktop](docs/screenshots/production-model-switch-desktop.png) · [Model Switch mobile](docs/screenshots/production-model-switch-mobile.png)
 
 ## Why it is useful
 

@@ -24,13 +24,18 @@ cause remains unknown. See
 [`web-fetch-diagnosis.json`](../evidence/web-fetch-diagnosis.json). No repeat
 request was made after the latest failure.
 
-After pushing the release commit, read-only HTTP checks found the official
-production root still rendered the old “Put a model to the test” workspace and
-`/app?view=model-switch` returned 404. This confirms the new UI is not yet
-deployed. The repository commit is `1e74ef764d9b2642a3a655c9e6217572c857a55b`;
-no Vercel CLI, project link, or token is available to inspect or trigger that
-project's deployment. See
-[`production-deployment-check.json`](../evidence/production-deployment-check.json).
+An initial post-push read-only HTTP check found the old workspace and `/app`
+returned 404; this was superseded by a later deployment. At 2026-11-05 17:26
+UTC, the new landing and Model Switch screens loaded from the official
+production domain. A separate read-only Playwright check confirmed catalog
+discovery, manual switching to Llama without a POST to `/api/execute`, empty
+desktop/mobile axe results, no page errors, and no horizontal overflow at
+390px. Production model-smoke and web-diagnostic evidence endpoints returned
+HTTP 200. Zero paid inference requests were sent. Details and screenshots are
+in [`production-ui-check.json`](../evidence/production-ui-check.json) and
+`docs/screenshots/production-*.png`. Vercel source SHA remains unknown because
+the CLI, project link, and token are unavailable; the rendered UI does not
+prove the exact deployed Git revision.
 
 Use Node 22 and `npm ci` (lockfile + `.npmrc` preserve legacy peer resolution).
 The first npm 10 install crashed resolving optional Vitest peers; no application

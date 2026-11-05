@@ -2,11 +2,11 @@
 
 The participant records the actual application screen and narrates personally.
 Do not generate narration, a synthetic presenter, or a fabricated screen recording.
-The selected production site is https://modelswitch-lab.vercel.app. The committed
-landing page links to `/app?view=model-switch`; the deployment SHA and presence
-of this UI on production are not confirmed. Do not claim a production UI switch
-unless the participant verifies it live. The bounded production API smoke has
-one successful Llama request and a Qwen timeout; see
+The selected production site is https://modelswitch-lab.vercel.app. A live
+browser check on Nov 5 confirmed the landing and `/app?view=model-switch`, and
+that manually changing the selection sends no request. The deployment SHA is
+not independently confirmed. The bounded production API smoke has one
+successful Llama request and a Qwen timeout; see
 [`model-switch-production.json`](../evidence/model-switch-production.json).
 Confirm the Otari spending boundary and durable Upstash limiter before further
 inference.
@@ -15,7 +15,7 @@ inference.
 | --------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | 0:00–0:25 | Landing page, then Launch workspace                      | The product tests, compares, and switches the model used for future ModelSwitch requests.                          |
 | 0:25–1:15 | Model Switch: active model, fixed invoice fixture, result | A model switch is browser-scoped; only the explicit test button sends a request.                                    |
-| 1:15–1:50 | Switch to the second model; inspect its result           | Show the effective model/provider and request ID. Current production record has Llama success and Qwen timeout.  |
+| 1:15–1:50 | Switch to the second model; inspect its result           | After testing, show actual effective model/provider and request ID. Current production record has Llama success and Qwen timeout.  |
 | 1:50–2:20 | Deterministic comparison and recommendation              | The recommendation uses successful same-fixture evidence; one case is not a general ranking.                      |
 | 2:20–2:55 | Otari fallback policy outcome                            | Current policy evidence shows Qwen/DeepInfra, one attempt, `fallback=false`; a manual switch is not failover.       |
 | 2:55–3:35 | Request trace and receipt                                 | Separate app events from actual gateway metadata and show reported usage only.                                     |

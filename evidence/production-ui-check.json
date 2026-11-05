@@ -1,0 +1,44 @@
+{
+  "recordVersion": 1,
+  "checkedAt": "2026-11-05T17:26:23.630Z",
+  "productionUrl": "https://modelswitch-lab.vercel.app",
+  "checks": {
+    "desktop": {
+      "landingStatus": 200,
+      "landingHeading": "Find the right model. Switch with confidence.",
+      "appUrl": "https://modelswitch-lab.vercel.app/app?view=model-switch",
+      "appHeading": "Model switch",
+      "catalogHttpStatus": 200,
+      "catalogConfigured": true,
+      "catalogDemoEnabled": true,
+      "availableModelIds": [
+        "alibaba/qwen3.8-27b",
+        "meta/llama-3.3-70b-instruct",
+        "modelswitch-fallback"
+      ],
+      "activeSelectionAfterManualSwitch": "Active",
+      "landingAxeViolations": [],
+      "appAxeViolations": []
+    },
+    "mobile": {
+      "landingStatus": 200,
+      "landingHeading": "Find the right model. Switch with confidence.",
+      "appStatus": 200,
+      "viewportWidth": 390,
+      "documentWidth": 390,
+      "landingAxeViolations": [],
+      "axeViolations": []
+    }
+  },
+  "evidenceEndpoints": {
+    "model-switch-production.json": 200,
+    "web-fetch-diagnosis.json": 200
+  },
+  "paidInferenceRequestsSent": 0,
+  "pageErrors": [],
+  "deploymentGitSha": null,
+  "limitations": [
+    "This browser check performs catalog and evidence GETs only. It switches the local browser selection but does not press a model test or invoke inference.",
+    "The deployment content is verified by rendered routes; its exact Vercel source commit is not exposed to this unauthenticated check."
+  ]
+}

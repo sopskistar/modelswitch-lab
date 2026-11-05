@@ -14,6 +14,7 @@
     "otari:inspect": "node --conditions=react-server --env-file=.env.local --import tsx scripts/inspect-otari.ts",
     "otari:request": "node --conditions=react-server --env-file=.env.local --import tsx scripts/inspect-request.ts",
     "production:switch-smoke": "node --import tsx scripts/live-model-switch-smoke.ts",
+    "production:ui-check": "node --import tsx scripts/production-ui-check.ts",
     "format": "prettier --write src tests e2e scripts/*.ts scripts/*.mjs *.ts *.mjs *.json .env.example",
     "format:check": "prettier --check src tests e2e scripts/*.ts scripts/*.mjs *.ts *.mjs *.json"
   },

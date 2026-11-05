@@ -1,6 +1,6 @@
 # Judge walkthrough
 
-Start at the selected public demo: [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app). **Deployment status checked Nov 5, 2026:** the domain still serves the previous workspace and returns 404 for `/app?view=model-switch`; the feature implementation is on GitHub but has not reached production. The walkthrough below describes the verified local build. Until the existing `modelswitch-lab` Vercel project deploys the latest `main` revision, judges should inspect the committed receipts and follow the prior production capabilities page. See [`production-deployment-check.json`](../evidence/production-deployment-check.json) for Vercel request IDs and the operator action.
+Start at the selected public demo: [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app). **Production browser check, Nov 5, 2026:** the landing and `/app?view=model-switch` both loaded; the Otari catalog returned the permitted Qwen and Llama models. A manual browser selection changed to Llama without making an inference request. Desktop and 390px mobile checks had no axe violations, page errors, or horizontal overflow. The exact Vercel deployment SHA remains unconfirmed. See the [production check record](../evidence/production-deployment-check.json) and real [desktop](screenshots/production-landing-desktop.png) / [mobile](screenshots/production-model-switch-mobile.png) captures.
 
 ## Seven checkpoints
 
@@ -53,4 +53,4 @@ Start at the selected public demo: [modelswitch-lab.vercel.app](https://modelswi
 - The raw sanitized Otari diagnostic for either web-fetch 400 is needed before a single corrected retry.
 - Hosted inference guardrails and per-user budgets have not been configured or verified.
 - Before any additional live run, confirm the Otari spend ceiling and durable Upstash limiter. `demoEnabled: true` only confirms an environment condition; it does not prove Redis behavior.
-- Public API/model smoke evidence does not prove the new landing or Model Switch UI is deployed. Confirm the selected Vercel project’s deployment commit; do not infer it from static evidence URLs.
+- The browser check confirms that the new landing and Model Switch UI are live. Confirm the selected Vercel project’s deployment commit in its dashboard; the public site does not expose the source SHA.
