@@ -101,10 +101,12 @@
       "summary": "Returned the mozilla-ai/otari wiki structure, including 5.1 MCP (Model Context Protocol) Integration."
     },
     "latestEvidenceRouteCheck": {
-      "date": "2026-11-05",
+      "checkedAt": "2026-11-05T11:09:20Z",
       "path": "/api/evidence?file=mcp-status.json",
       "httpStatus": 200,
-      "observation": "Route is deployed but serves the previous implemented_unverified record; the source verifier/evidence update in this commit has not yet been verified on production."
+      "vercelRequestId": "fra1::iad1::kn892-1793876960070-a170a8c90147",
+      "servedStatus": "implemented_unverified",
+      "observation": "After source commit accb1b2 was pushed to both main and hackathon branches, the route still served the previous record. This check does not confirm that accb1b2 is deployed; exact Vercel source SHA remains unknown."
     },
     "limitations": [
       "The route returned a genuine completed tool result, but its then-current application-level verified flag was false due to a parser mismatch.",
