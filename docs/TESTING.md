@@ -1,5 +1,29 @@
 # Testing and reproduction
 
+## Focused landing and Model Switch checks — 2026-11-05
+
+The final run for the landing and switch changes is recorded below. Added
+checks cover landing navigation and compatibility
+redirects, desktop/mobile overflow and axe scans, model selection without a
+request, Qwen→Llama→Qwen request payload changes, and applying a same-fixture
+recommendation without triggering inference. Unit and route tests validate the
+allowlist, result/failure classification, and model ID passed to the hosted
+Otari adapter. Playwright's intercepted requests are UI contract fixtures only;
+they do not count as live gateway evidence.
+
+One bounded production smoke tested a fixed invoice fixture on both configured
+models, sequentially and without retry. Llama completed through Bedrock with
+Otari request `77cf5458-46f6-40c9-98ab-80468ba890ec`, six correct fields, 929 ms
+and `$0.000170`. Qwen timed out at the application boundary with no Otari
+request ID and unknown billing state. See the redacted
+[`model-switch-production.json`](../evidence/model-switch-production.json).
+No additional paid request is needed to establish the documented limitation.
+
+Web retrieval had two production HTTP 400 responses with no tool event; the
+cause remains unknown. See
+[`web-fetch-diagnosis.json`](../evidence/web-fetch-diagnosis.json). No repeat
+request was made after the latest failure.
+
 Use Node 22 and `npm ci` (lockfile + `.npmrc` preserve legacy peer resolution).
 The first npm 10 install crashed resolving optional Vitest peers; no application
 feature depends on that workaround. Production uses standard Next.js webpack
@@ -21,17 +45,20 @@ and local server binds required approved execution outside this task's sandbox.
 Those environment failures were not counted as successful checks. Use localhost
 for development; `127.0.0.1` is also explicitly allowed in Next's dev origins.
 
-## Results observed
+## Final results — 2026-11-05
 
-- TypeScript, ESLint, production build: passed on the implemented application.
-- Vitest: **107 tests in 5 files**, all passed on the final tested source.
-- Playwright: **16 tests**, 8 in desktop Chromium and 8 in mobile Chromium
-  (iPhone 13 emulation), **all passed against the final production build**.
-- Axe: automated checks in the theme/responsive tests; no violations on checked
-  workspace screens. Both light and dark are included in the final test revision.
-- Hallmark: final static and rendered audit passed with 0 FAIL, 0 REFLEX,
-  0 WARN; five viewport renders completed. See `HALLMARK_LINT.txt`, captures,
-  and `DESIGN_REVIEW.md`.
+- `npm run typecheck`: passed.
+- `npm run lint`: passed.
+- `npm test`: **113 tests in 6 files**, all passed.
+- `npm run format:check`: passed.
+- `npm run build`: passed with Next.js production webpack build.
+- Playwright: **20/20 tests passed**, 10 desktop Chromium and 10 mobile Chromium.
+- Axe: no violations on the tested landing and app views in both projects;
+  responsive checks found no horizontal overflow. Light/dark theme persistence
+  and keyboard navigation are covered.
+- Hallmark rendered audit: **0 FAIL, 0 REFLEX, 0 WARN** after correcting a
+  4px mobile header overflow; five viewport renders completed. See
+  [`HALLMARK_LINT.md`](HALLMARK_LINT.md) and `.hallmark/shots/`.
 - Production browser bundle scanned for the configured Otari key: no match.
 - `npm audit --omit=dev`: **0 vulnerabilities** after updating Zod.
 - Full dependency audit: **13 moderate**, all development lint-chain findings
@@ -39,8 +66,10 @@ for development; `127.0.0.1` is also explicitly allowed in Next's dev origins.
   suggested downgrade/major resolver changes were not applied blindly. These
   tools process trusted repository files, not public application input.
 
-The final report and journal record any later run counts or failures. Never
-interpret the earlier blocked browser/build attempts as passing runs.
+An earlier typecheck found and fixed an unchecked missing-evidence case in
+capability details; the final typecheck and build passed. An initial Hallmark
+render found the mobile overflow described above; the confirming render passed.
+Do not treat intercepted browser responses as live Otari requests.
 
 ## Meaningful coverage
 

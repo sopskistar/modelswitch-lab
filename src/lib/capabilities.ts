@@ -2,6 +2,7 @@ import type { Tool } from './types';
 import verification from '../../evidence/verification.json';
 import mcpProof from '../../evidence/mcp-status.json';
 import routingProof from '../../evidence/routing-production.json';
+import webFetchDiagnosis from '../../evidence/web-fetch-diagnosis.json';
 interface EvidenceRecord {
   role: string;
   status: string;
@@ -66,6 +67,7 @@ export function capabilities(
   mcpEvidence?: Record<string, unknown>,
 ): Capability[] {
   const web = tools.find((t) => t.id === 'otari_web_fetch');
+  const latestWebAttempt = webFetchDiagnosis.attempts.at(-1);
   const mcpCompletion = mcpEvidence?.completion as
     | {
         metadata?: {
@@ -120,8 +122,10 @@ export function capabilities(
       detail:
         web && !web.available
           ? `Hosted tool reports ${web.reason}.`
-          : 'A curated document task uses the Otari fetch tool. Completed tool-call evidence is required.',
-      file: 'discovery.json',
+          : latestWebAttempt
+            ? `Otari discovery reports web fetch available, but the latest allowlisted request returned HTTP ${latestWebAttempt.applicationHttpStatus} without a completed tool event. Request ${latestWebAttempt.otariRequestId}; inspect the redacted diagnostic before retrying.`
+            : 'Otari web fetch execution has not been verified; inspect the capability evidence before retrying.',
+      file: 'web-fetch-diagnosis.json',
     },
     {
       id: 'code',

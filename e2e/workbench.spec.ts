@@ -25,14 +25,108 @@ const catalog = {
 test.beforeEach(async ({ page }) => {
   await page.route('**/api/catalog', (route) => route.fulfill({ json: catalog }));
 });
-test('workspace, scenario selection, URL state, and keyboard focus', async ({ page }) => {
+test('landing and legacy workspace links lead into the app', async ({ page }) => {
   await page.goto('/');
+  await expect(
+    page.getByRole('heading', { name: 'Find the right model. Switch with confidence.' }),
+  ).toBeVisible();
+  await page.getByRole('link', { name: 'Launch workspace' }).first().click();
+  await expect(page).toHaveURL(/\/app(?:\?|$)/);
+  await expect(page.getByRole('heading', { name: 'Model switch' })).toBeVisible();
+  await page
+    .getByRole('navigation', { name: 'Workbench views' })
+    .getByRole('link', { name: 'Workspace' })
+    .click();
+  await expect(page.getByRole('heading', { name: 'Put a model to the test.' })).toBeVisible();
+  await page.goto('/?view=results&scenario=classification');
+  await expect(page).toHaveURL(/\/app\?view=results&scenario=classification/);
+});
+test('workspace, scenario selection, URL state, and keyboard focus', async ({ page }) => {
+  await page.goto('/app');
   await expect(page.getByRole('heading', { name: 'Put a model to the test.' })).toBeVisible();
   await page.getByRole('radio', { name: /Support classification/ }).check();
   await expect(page).toHaveURL(/scenario=classification/);
   await expect(page.getByText('Duplicate charge')).toBeVisible();
   await page.keyboard.press('Tab');
   await expect(page.locator(':focus')).toBeVisible();
+});
+test('model switch changes the next bounded Otari request and switching alone sends nothing', async ({
+  page,
+}, testInfo) => {
+  const receivedModels: string[] = [];
+  await page.route('**/api/execute', async (route) => {
+    const request = route.request().postDataJSON();
+    receivedModels.push(request.model);
+    const fixture = fixtures.extraction[0];
+    const isLlama = request.model === catalog.roles.analyst;
+    const expected = isLlama
+      ? fixture.expected
+      : { ...fixture.expected, paymentReference: 'wrong-reference' };
+    await route.fulfill({
+      json: {
+        result: {
+          model: request.model,
+          caseId: fixture.id,
+          output: JSON.stringify(expected),
+          evaluation: {
+            valid: true,
+            accuracy: isLlama ? 1 : 5 / 6,
+            passed: isLlama,
+            missing: 0,
+            fields: [],
+          },
+          metadata: {
+            requestedModel: request.model,
+            effectiveModel:
+              request.model === catalog.roles.analyst
+                ? 'Llama 3.3 test identity'
+                : 'Qwen 3.8 test identity',
+            provider: request.model === catalog.roles.analyst ? 'test-bedrock' : 'test-deepinfra',
+            requestId: `intercepted-${receivedModels.length}`,
+            attempts: 1,
+            fallback: false,
+            latencyMs: 100,
+            costUsd: 0.0001,
+            toolCalls: [],
+          },
+        },
+        receipt: 'intercepted-only',
+      },
+    });
+  });
+  await page.goto('/app?view=model-switch');
+  await expect(page.getByRole('heading', { name: 'Model switch' })).toBeVisible();
+  await page.screenshot({
+    path: `test-results/screenshots/${testInfo.project.name}-model-switch.png`,
+    fullPage: true,
+  });
+  await expect(page.getByText(catalog.roles.evaluator, { exact: true }).first()).toBeVisible();
+  expect(receivedModels).toEqual([]);
+  await page.getByRole('button', { name: /Switch to llama/i }).click();
+  expect(receivedModels).toEqual([]);
+  await page.getByRole('button', { name: /Test meta\/llama|Test llama/i }).click();
+  await page.getByText('Inspect output and gateway identity').first().click();
+  await expect(page.locator('.switch-result').first().locator('.json').last()).toContainText(
+    'intercepted-1',
+  );
+  expect(receivedModels).toEqual([catalog.roles.analyst]);
+  await page.getByRole('button', { name: /Switch to alibaba\/qwen|Switch to qwen/i }).click();
+  expect(receivedModels).toEqual([catalog.roles.analyst]);
+  await page.getByRole('button', { name: /Test alibaba\/qwen|Test qwen/i }).click();
+  await page.getByText('Inspect output and gateway identity').first().click();
+  await expect(page.locator('.switch-result').first().locator('.json').last()).toContainText(
+    'intercepted-2',
+  );
+  expect(receivedModels).toEqual([catalog.roles.analyst, catalog.roles.evaluator]);
+  await expect(
+    page.getByRole('heading', { name: 'Model decision for this fixture' }),
+  ).toBeVisible();
+  await page
+    .getByRole('button', { name: /Switch to llama/i })
+    .last()
+    .click();
+  await expect(page.locator('.model-active')).toContainText('Active');
+  expect(receivedModels).toEqual([catalog.roles.analyst, catalog.roles.evaluator]);
 });
 test('real run UI contract, loading, results, trace, and export', async ({ page }) => {
   let calls = 0;
@@ -103,7 +197,7 @@ test('real run UI contract, loading, results, trace, and export', async ({ page 
       },
     });
   });
-  await page.goto('/');
+  await page.goto('/app');
   await page.getByRole('button', { name: 'Run benchmark' }).click();
   await expect(page.getByRole('status')).toContainText(/qwen|Analyst/);
   await expect(page.getByText('TEST FIXTURE:', { exact: false })).toBeVisible();
@@ -153,7 +247,7 @@ test('credit failure is honest and remaining cases are skipped', async ({ page }
       },
     });
   });
-  await page.goto('/');
+  await page.goto('/app');
   await page.getByRole('button', { name: 'Run benchmark' }).click();
   await expect(page.getByRole('main').getByRole('alert')).toContainText(
     'Otari account needs credit',
@@ -176,7 +270,7 @@ test('missing configuration and disabled tools', async ({ page }) => {
       },
     }),
   );
-  await page.goto('/');
+  await page.goto('/app');
   await expect(page.getByRole('main').getByRole('alert')).toContainText('Connect hosted Otari');
   await expect(page.getByRole('button', { name: 'Run benchmark' })).toBeDisabled();
   await page.getByRole('button', { name: 'Open setup guide' }).click();
@@ -185,7 +279,7 @@ test('missing configuration and disabled tools', async ({ page }) => {
 test('capabilities expose recorded evidence and keep failed checks unverified', async ({
   page,
 }) => {
-  await page.goto('/?view=capabilities');
+  await page.goto('/app?view=capabilities');
   await expect(page.getByText('40 / 60 advanced points verified')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Fetch through Otari' })).toBeDisabled();
   await expect(page.getByRole('link', { name: 'Inspect JSON' })).toHaveCount(8);
@@ -222,6 +316,23 @@ test('capabilities expose recorded evidence and keep failed checks unverified', 
 });
 test('theme persists, no horizontal page overflow, and axe passes', async ({ page }, testInfo) => {
   await page.goto('/');
+  await expect(
+    page.getByRole('heading', { name: 'Find the right model. Switch with confidence.' }),
+  ).toBeVisible();
+  const landingResults = await new AxeBuilder({ page }).analyze();
+  expect(landingResults.violations).toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)).toBe(
+    false,
+  );
+  await page.screenshot({
+    path: `test-results/screenshots/${testInfo.project.name}-landing.png`,
+    fullPage: true,
+  });
+  await page.getByRole('button', { name: 'Toggle color theme' }).click();
+  const landingMode = await page.locator('html').getAttribute('data-mode');
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-mode', landingMode!);
+  await page.goto('/app');
   await expect(page.getByRole('button', { name: 'Run benchmark' })).toBeEnabled();
   const lightResults = await new AxeBuilder({ page }).analyze();
   expect(lightResults.violations).toEqual([]);
@@ -242,7 +353,7 @@ test('theme persists, no horizontal page overflow, and axe passes', async ({ pag
 });
 test('network interruption retains partial results and allows navigation', async ({ page }) => {
   await page.route('**/api/execute', (route) => route.abort('failed'));
-  await page.goto('/');
+  await page.goto('/app');
   await page.getByRole('button', { name: 'Run benchmark' }).click();
   await expect(page.getByRole('main').getByRole('alert')).toContainText(
     'browser lost the response',
@@ -254,7 +365,7 @@ test('network interruption retains partial results and allows navigation', async
   await expect(page.getByText('Response interrupted', { exact: true })).toBeVisible();
 });
 test('brand marks, latest-run empty state, and footer navigation', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/app');
   await expect(page.getByRole('heading', { name: 'Latest run' })).toBeVisible();
   await expect(page.getByText('No run is saved in this browser yet.')).toBeVisible();
   const marks = page.locator('.brand-mark');

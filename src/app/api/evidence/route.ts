@@ -5,6 +5,8 @@ import verification from '../../../../evidence/verification.json';
 import mcpStatus from '../../../../evidence/mcp-status.json';
 import budgetReport from '../../../../evidence/budget-operator-report.json';
 import routingProduction from '../../../../evidence/routing-production.json';
+import webFetchDiagnosis from '../../../../evidence/web-fetch-diagnosis.json';
+import modelSwitchProduction from '../../../../evidence/model-switch-production.json';
 export function GET(request: Request) {
   const file = new URL(request.url).searchParams.get('file');
   return file === 'discovery.json'
@@ -17,7 +19,11 @@ export function GET(request: Request) {
           ? NextResponse.json(mcpStatus)
           : file === 'routing-production.json'
             ? NextResponse.json(routingProduction)
-            : file === 'budget-operator-report.json'
-              ? NextResponse.json(budgetReport)
-              : NextResponse.json({ error: 'Unknown evidence file.' }, { status: 404 });
+            : file === 'web-fetch-diagnosis.json'
+              ? NextResponse.json(webFetchDiagnosis)
+              : file === 'model-switch-production.json'
+                ? NextResponse.json(modelSwitchProduction)
+                : file === 'budget-operator-report.json'
+                  ? NextResponse.json(budgetReport)
+                  : NextResponse.json({ error: 'Unknown evidence file.' }, { status: 404 });
 }

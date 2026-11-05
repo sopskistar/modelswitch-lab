@@ -1,0 +1,68 @@
+{
+  "recordVersion": 1,
+  "observedOn": "2026-11-05",
+  "productionUrl": "https://modelswitch-lab.vercel.app",
+  "workspaceDiscovery": {
+    "source": "Read-only GET /api/catalog backed by authenticated Otari /models and /tools discovery",
+    "httpStatus": 200,
+    "observedAt": "2026-11-05T13:33:20Z",
+    "vercelRequestId": "fra1::iad1::qq2rl-1793885599594-f4123d34a03d",
+    "otariWebFetch": "available",
+    "otariWebSearch": "available",
+    "region": "US",
+    "evaluatorModel": "alibaba/qwen3.8-27b"
+  },
+  "attempts": [
+    {
+      "source": "Mozilla Manifesto",
+      "url": "https://www.mozilla.org/en-US/about/manifesto/",
+      "applicationHttpStatus": 400,
+      "otariRequestId": "9bd36cf5-6ddf-433a-9d1a-95295a50fae5",
+      "normalizedError": "gateway_error",
+      "gatewayErrorCode": null,
+      "effectiveModel": null,
+      "provider": null,
+      "toolCalls": [],
+      "usageLookupHttpStatus": 404,
+      "reportedCostUsd": null,
+      "sourceRecord": "earlier redacted production observation"
+    },
+    {
+      "source": "Mozilla Manifesto",
+      "url": "https://www.mozilla.org/en-US/about/manifesto/",
+      "applicationHttpStatus": 400,
+      "otariRequestId": "32697174-cde5-4bbd-9cf3-df3f02f01542",
+      "normalizedError": "gateway_error",
+      "gatewayErrorCode": null,
+      "effectiveModel": null,
+      "provider": null,
+      "toolCalls": [],
+      "usageLookupHttpStatus": 404,
+      "reportedCostUsd": null,
+      "vercelRequestId": null
+    }
+  ],
+  "requestConstruction": {
+    "endpoint": "POST /api/v1/chat/completions through the server-side Otari adapter",
+    "requestedModel": "alibaba/qwen3.8-27b",
+    "toolDeclaration": {
+      "type": "otari_web_fetch",
+      "max_uses": 1,
+      "allowed_domains": ["www.mozilla.org"]
+    },
+    "maxToolIterations": 2,
+    "applicationUrlAllowlist": true,
+    "localHttpFetchUsed": false
+  },
+  "diagnosis": {
+    "rootCause": "Not determined from the response evidence available to the application key.",
+    "known": [
+      "The workspace tool catalog reports both web tools available after the owner enabled workspace access.",
+      "The documented declaration fields and fixed public source are present in the application request.",
+      "Both production attempts returned HTTP 400 before any serving model/provider or completed Otari tool call was reported.",
+      "The authenticated GET /usage/requests/{request_id} lookup returned HTTP 404 for each request. Otari documents 404 for unsettled, unknown, other-key, or no-usage-row cases, so it does not establish billing status."
+    ],
+    "neededFromOtari": "Inspect either request ID in hosted request activity and provide the raw sanitized 400 detail or gateway error code plus the rejected field/tool configuration. Do not retry until the rejection is understood.",
+    "rubricStatus": "Web search/fetch execution is unverified; no tool event or web-fetch rubric points are claimed."
+  }
+}

@@ -2,97 +2,71 @@
 
 # ModelSwitch Lab
 
-Run reproducible model evaluations through Mozilla's hosted Otari gateway and inspect the answers, usage, and routing evidence.
+**Test open-weight models, compare their failures, then switch your active test model through Mozilla’s hosted Otari gateway.**
 
-**Live demo:** [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app)<br />
-**Judge? Start here:** [Seven checkpoint walkthrough](docs/JUDGE_WALKTHROUGH.md) · [three minute demo outline](docs/DEMO_SCRIPT.md)
+**Live demo:** [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app) · **[Judge walkthrough](docs/JUDGE_WALKTHROUGH.md)** · [GitHub](https://github.com/sopskistar/modelswitch-lab)
 
-![ModelSwitch Lab benchmark results view](docs/screenshots/desktop-results-live.png)
+![ModelSwitch Lab Model Switch workspace](docs/screenshots/model-switch-desktop.png)
 
-[Desktop workspace](docs/screenshots/desktop-light-workspace-live.png) · [mobile results](docs/screenshots/mobile-results-live.png)
+## Why it is useful
 
-## Why this is useful
+- Run the same synthetic task against supported models and score answers against known fields.
+- See measured accuracy, failures, latency, and gateway-reported cost before choosing a model.
+- Switch the model used by later ModelSwitch requests and inspect Otari’s actual serving identity and routing metadata.
 
-- Test model answers against known, synthetic expected outputs.
-- Compare accuracy, reliability, latency, and gateway-reported cost with visible scoring weights.
-- Inspect each request, effective model, provider, usage, and failure instead of trusting a generated summary.
+The active choice applies to ModelSwitch Lab test requests only. It does not change a developer’s external application. A manual model switch is separate from an Otari policy fallback.
 
-### How Otari powers it
+## Judge? Start here
 
-The server sends all evaluator, analyst, routing, and sandbox requests through **hosted Otari**. ModelSwitch Lab uses the gateway's reported serving identity and usage, scores benchmark answers deterministically, and records request evidence. The application does not call model providers directly.
+Open the [live app](https://modelswitch-lab.vercel.app), follow the [walkthrough](docs/JUDGE_WALKTHROUGH.md), then inspect [redacted request evidence](docs/OTARI_PROOF.md) and the [rubric matrix](docs/RUBRIC_EVIDENCE.md). A four-minute personal recording outline is in [DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md).
 
-## Start judging
+## How it works
 
-1. Open the [live demo](https://modelswitch-lab.vercel.app) and follow the [judge walkthrough](docs/JUDGE_WALKTHROUGH.md).
-2. Review real prior run records in [`evidence/browser-smoke.json`](evidence/browser-smoke.json).
-3. Check the [rubric evidence matrix](docs/RUBRIC_EVIDENCE.md) and [hosted Otari proof](docs/OTARI_PROOF.md).
+1. **Test** a fixed benchmark case with Qwen or Llama.
+2. **Compare** deterministic correctness with observed latency and reported cost.
+3. **Switch** the browser-scoped active test model; the next explicit request uses that model ID through hosted Otari.
 
-The app runs three versioned synthetic benchmarks: invoice extraction, support classification, and bounded passage reasoning. Each has five cases. A browser can retain one recent run locally; JSON export creates a portable benchmark receipt. Tiny samples describe only the tested cases. The capabilities view includes fixed routing, sandbox, web, guardrail, and repository-MCP checks; a control is not evidence until Otari returns the corresponding live event.
+## Otari and model roles
 
-## Open-weight model roles
+Every model request goes through Mozilla’s hosted [Otari](https://github.com/mozilla-ai/otari) gateway. The server reads effective model, provider, request ID, routing and usage metadata from Otari; it never calls model providers directly.
 
-- **Evaluator:** Qwen3.8 27B performs the benchmark task. The model card identifies Apache 2.0 weights: [Qwen3.8-27B](https://huggingface.co/Qwen/Qwen3.8-27B).
-- **Analyst:** Llama 3.3 70B examines server-verified metrics in a separate Otari request. Its weights use Meta's [Llama 3.3 Community License](https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct), with additional terms.
+- **Qwen3.8 27B** (Apache 2.0 weights) is the configured evaluator and performs benchmark tasks. [Model card](https://huggingface.co/Qwen/Qwen3.8-27B).
+- **Llama 3.3 70B Instruct** (Meta Llama Community License) is the separate analyst for verified metrics and is also available for explicit same-fixture model tests. [Model card and license](https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct).
 
-The analyst can explain a result but cannot change deterministic scores. A recorded five-case comparison started **2026-11-04 16:32:53 UTC** and scored Qwen 5/5 and Llama 4/5; the reported total including the analyst was $0.001741. These are timestamped historical observations, not current aggregate statistics or a general model ranking.
+The latest bounded production switch check confirmed a Llama response from Otari (`bedrock`, request `77cf5458-46f6-40c9-98ab-80468ba890ec`, six fields correct, reported cost $0.000170). Its Qwen request timed out without a gateway request ID; no retry was made. This confirms a successful Llama route and records the Qwen failure, but does not establish a fresh two-model comparison. See [the full redacted receipt](evidence/model-switch-production.json).
 
-## Verified rubric coverage
+The analyst interprets deterministic results and cannot change their scores. The app also provides reproducible invoice extraction, support classification, and bounded reasoning scenarios. Small test sets characterize only those cases, not universal model quality.
 
-Our evidence assessment supports **up to 75/100 potential points**, not an official score; the routing points depend on judges accepting verified policy resolution without an observed failover. The evidence covers two meaningful open-weight model roles, distinct model roles, hosted code execution, Otari policy routing, a successful hosted MCP call, and the working application. The production routing request resolved `modelswitch-fallback` to Qwen through DeepInfra; it reported one attempt and `fallback=false`. Both production evidence routes serve their redacted receipts (HTTP 200), though the exact Vercel Git SHA is unknown. Web fetch/search now appear available in the catalog, but one bounded fetch attempt returned HTTP 400 without a completed tool event; no web-retrieval points are claimed. Gateway budget enforcement, guardrails, per-user budgets, and the personal demo recording remain unverified or unavailable. See the [matrix](docs/RUBRIC_EVIDENCE.md), [Otari proof](docs/OTARI_PROOF.md), [routing evidence](evidence/routing-production.json), and [MCP evidence](evidence/mcp-status.json).
+## Verified evidence
 
-## Architecture
+The project evidence assessment is **up to 75/100 potential points**, not an official score. It includes two open-weight model roles, hosted code execution, distinct model roles, policy routing (successful primary; fallback unobserved), a completed Otari-managed MCP call, and a working use case. Web fetch is available in discovery but two requests were rejected with HTTP 400 and no tool result. Gateway budget enforcement, guardrails, per-user budgets, and the personal recording are not verified. Review the [rubric matrix](docs/RUBRIC_EVIDENCE.md), [Otari proof](docs/OTARI_PROOF.md), [routing receipt](evidence/routing-production.json), and [MCP receipt](evidence/mcp-status.json).
 
-Next.js App Router and TypeScript serve a small React workbench. Typed server routes call hosted Otari; Zod validates bounded requests and outputs; deterministic local scoring compares results. The interface retains one recent run in browser storage. There is no application database.
+## Architecture and local setup
 
-## Run locally
-
-Requires Node.js 22 or newer and npm.
+Next.js App Router and TypeScript serve the landing page at `/` and the workbench at `/app`. Server route handlers validate bounded requests and call hosted Otari. Deterministic scoring runs in the app; recent runs and active model choice stay in browser storage. There is no application database.
 
 ```sh
 npm ci
 cp .env.example .env.local
-# Set the private server-side Otari key and accessible model IDs.
+# Add the required server-only Otari settings.
 npm run dev
 ```
 
-Open the local URL printed by Next.js. Without credentials, the workspace shows a setup-required state. Inference is disabled in the example environment. Do not commit `.env.local`.
+Required settings: `OTARI_API_KEY`, `OTARI_BASE_URL`, `OTARI_EVALUATOR_MODEL`, and `OTARI_ANALYST_MODEL`. The routing policy is optional. Public inference should remain disabled unless an Otari spending ceiling and durable Upstash limiter are configured. Never commit `.env.local`.
 
-| Variable                   | Purpose                                                        |
-| -------------------------- | -------------------------------------------------------------- |
-| `OTARI_API_KEY`            | Server-only hosted Otari inference key                         |
-| `OTARI_BASE_URL`           | US or EU hosted API base                                       |
-| `OTARI_EVALUATOR_MODEL`    | Accessible evaluator model ID                                  |
-| `OTARI_ANALYST_MODEL`      | Distinct accessible analyst model ID                           |
-| `OTARI_FALLBACK_POLICY`    | Optional accessible Otari routing policy                       |
-| `PUBLIC_DEMO_ENABLED`      | Explicit public inference switch; keep `false` until protected |
-| `UPSTASH_REDIS_REST_URL`   | Durable production request limiter                             |
-| `UPSTASH_REDIS_REST_TOKEN` | Server-only limiter token                                      |
-
-On Vercel, public inference requires both the explicit switch and durable Redis limits. It also requires an Otari-side hard spending boundary. A read-only catalog observation on the selected domain returned `demoEnabled: true`, which reflects environment presence rather than tested limiter behavior; the deployment commit and private settings are not independently available here. See [deployment and safety requirements](docs/OTARI_INTEGRATION.md#vercel-and-public-inference) and the [production evidence record](evidence/production-observation.json).
-
-## Tests
+## Tests and documentation
 
 ```sh
 npm run typecheck
 npm run lint
 npm test
+npm run format:check
 npm run build
 npm run test:browser
 ```
 
-Browser contract tests intercept requests only inside the test process. They verify interface behavior, not live model performance. See [test coverage and results](docs/TESTING.md).
-
-## Evidence and project notes
-
-- [Hosted Otari proof and request records](docs/OTARI_PROOF.md)
-- [Full rubric evidence and limitations](docs/RUBRIC_EVIDENCE.md)
-- [Architecture](docs/ARCHITECTURE.md)
-- [Testing](docs/TESTING.md)
-- [Otari integration and setup](docs/OTARI_INTEGRATION.md)
-- [Submission checklist](docs/SUBMISSION_CHECKLIST.md)
-- [Observed Otari feedback](docs/OTARI_FEEDBACK.md)
-- [Current limitations](docs/LIMITATIONS.md)
+Browser tests use intercepted requests for UI contracts and do not count as hosted execution. See [test results](docs/TESTING.md), [architecture](docs/ARCHITECTURE.md), [integration and deployment](docs/OTARI_INTEGRATION.md), [limitations](docs/LIMITATIONS.md), [submission checklist](docs/SUBMISSION_CHECKLIST.md), and [observed Otari feedback](docs/OTARI_FEEDBACK.md).
 
 ## License and acknowledgment
 
-ModelSwitch Lab is available under the [MIT License](LICENSE). Built for MozFest Developers Wilding Online 2026 and powered by [Mozilla's hosted Otari](https://github.com/mozilla-ai/otari).
+ModelSwitch Lab is available under the [MIT License](LICENSE). Built for MozFest Developers Wilding Online 2026 and powered by Mozilla’s hosted Otari.

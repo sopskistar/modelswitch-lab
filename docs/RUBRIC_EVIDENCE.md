@@ -61,9 +61,10 @@ This confirms the current routes still execute through Otari; it is not a new
 rubric point or a comparative benchmark.
 
 The latest read-only production catalog reports web fetch/search available,
-but one bounded fetch attempt returned HTTP 400 without a completed tool event;
-it does not qualify for points. No hosted guardrail service was configured in
-the latest profile discovery. Request IDs and the 2026-11-05 live checks are in
+but two bounded requests returned HTTP 400 without a completed tool event;
+they do not qualify for points. The latest hosted error lacks a raw diagnostic,
+so the cause is unknown. No hosted guardrail service was configured in the
+latest profile discovery. Request IDs and the 2026-11-05 live checks are in
 [OTARI_PROOF.md](OTARI_PROOF.md).
 
 Otari's current budget documentation and generated OpenAPI support both
@@ -88,6 +89,30 @@ change capability verification or rubric coverage. The older
 [`production-acceptance.json`](../evidence/production-acceptance.json) is a
 historical capture of the other state/domain; consult the newer
 [`production-observation.json`](../evidence/production-observation.json).
+
+### Model Switch implementation — 2026-11-05
+
+The new `/app?view=model-switch` workflow stores the active choice in this
+browser and sends no request when the user changes it. On an explicit fixed-case
+test, the existing server route validates the selected ID against the current
+Otari catalog and configured evaluator/analyst allowlist, then sends that model
+ID through hosted Otari. Unit, route, and Playwright contract tests cover both
+Qwen↔Llama directions, absence of requests on selection, recommendation
+selection, unsupported IDs, and preservation of the analyst role. Browser tests
+intercept API calls; they validate the client payload but are not live gateway
+proof.
+
+One production API smoke record provides live identity evidence for Llama:
+requested `meta/llama-3.3-70b-instruct`, effective
+`meta.llama3-3-70b-instruct-v1:0`, provider `bedrock`, request
+`77cf5458-46f6-40c9-98ab-80468ba890ec`, valid six-field output, 929 ms, and
+reported cost $0.000170. A sequential Qwen request timed out at the application
+boundary without an Otari request ID; no retry was made. This supports actual
+Llama inference and model-ID-specific server routing, but it is not a
+successful two-model production comparison or a live browser interaction. See
+[`model-switch-production.json`](../evidence/model-switch-production.json).
+It adds no separate Otari rubric points beyond the existing distinct model-role
+category.
 
 ### Hosted capability refresh — 2026-11-05
 

@@ -1,5 +1,17 @@
 # Submission checklist
 
+## Final Model Switch changes — 2026-11-05
+
+- [x] Landing page at `/` and existing workbench at `/app`; legacy query links redirect into the matching app view.
+- [x] Browser-scoped active model choice is validated against the current Otari catalog and server-side role allowlist; selection alone sends no request.
+- [x] Explicit same-fixture test sends the chosen model ID through the existing hosted Otari case route; deterministic output scoring and gateway identity are shown.
+- [x] Fixed routing-policy action remains separate from manual model selection and does not perform application retries.
+- [x] Real bounded production smoke record: Llama success (request `77cf5458-46f6-40c9-98ab-80468ba890ec`); Qwen timeout without a gateway request ID. No repeated request was made.
+- [x] Web diagnostic updated: workspace tools discover as available; two web-fetch calls returned HTTP 400 without tool events. Root cause remains unknown.
+- [ ] Confirm the focused branch has been pushed and both required branches are synchronized after the final commit.
+- [ ] Confirm the selected Vercel deployment serves the landing and Model Switch UI and identify its exact deployment SHA. The public API evidence does not prove UI deployment.
+- [ ] Participant records and personally narrates the project demo; no video is claimed here.
+
 ## Project identity
 
 - [x] Public repository: <https://github.com/sopskistar/modelswitch-lab>
@@ -22,7 +34,7 @@
 ## Deployment
 
 - [x] Selected live site: <https://modelswitch-lab.vercel.app> (public catalog observed with `demoEnabled: true`; exact deployment SHA remains unverified).
-- [ ] Production run corroborated with Otari request IDs, trace and saved receipt; participant-reported results are recorded separately.
+- [x] A recent bounded Llama production response is independently recorded with request ID and redacted output in `evidence/model-switch-production.json`; the paired Qwen request timed out with unknown billing status.
 - [ ] Exact deployed Git commit: not independently confirmed. Inspect the selected `modelswitch-lab` Vercel project, not the similarly named duplicate.
 - [ ] Verify durable Upstash behavior and the current Otari spending boundary before another live run.
 - [x] On 2026-11-05 13:02 UTC, post-push production GETs returned HTTP 200 for routing evidence, MCP evidence, and catalog. MCP served `verified_live` with request ID `d9283ac4-3aec-4ee3-8151-08937bb08554`.

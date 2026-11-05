@@ -6,6 +6,12 @@ import { recommendation, summarize, weights } from '@/lib/scoring';
 import { exportCsv, exportJson } from '@/lib/export';
 import { capabilities, advancedVerifiedPoints, mcpVerified } from '@/lib/capabilities';
 import { sources } from '@/lib/security';
+import {
+  isSwitchableModel,
+  switchRecommendation,
+  switchResultStatus,
+  switchableModels,
+} from '@/lib/model-switch';
 import type { Capability } from '@/lib/capabilities';
 import type {
   CaseResult,
@@ -20,7 +26,7 @@ import type {
 } from '@/lib/types';
 import { Mark } from './mark';
 
-type View = 'workspace' | 'results' | 'trace' | 'capabilities' | 'guide';
+type View = 'workspace' | 'model-switch' | 'results' | 'trace' | 'capabilities' | 'guide';
 interface Catalog {
   configured: boolean;
   demoEnabled: boolean;
@@ -32,9 +38,15 @@ interface Catalog {
   checkedAt?: string;
   error?: { code: string; message: string };
 }
-const views: View[] = ['workspace', 'results', 'trace', 'capabilities', 'guide'];
+interface SwitchTestRecord {
+  at: string;
+  runId: string;
+  result: CaseResult;
+}
+const views: View[] = ['workspace', 'model-switch', 'results', 'trace', 'capabilities', 'guide'];
 const names: Record<View, string> = {
   workspace: 'Workspace',
+  'model-switch': 'Model switch',
   results: 'Results',
   trace: 'Request trace',
   capabilities: 'Otari capabilities',
@@ -82,6 +94,10 @@ export function Workbench() {
   const [catalog, setCatalog] = useState<Catalog | null>(null);
   const [catalogError, setCatalogError] = useState('');
   const [selected, setSelected] = useState<string[]>([]);
+  const [activeModel, setActiveModel] = useState('');
+  const [switchTests, setSwitchTests] = useState<SwitchTestRecord[]>([]);
+  const [switchBusy, setSwitchBusy] = useState(false);
+  const [switchError, setSwitchError] = useState<SafeError | null>(null);
   const [run, setRun] = useState<Run | null>(null);
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState('');
@@ -107,7 +123,7 @@ export function Workbench() {
   function viewAnchor(next: View, children: React.ReactNode, className?: string, label?: string) {
     return (
       <a
-        href={`/?view=${next}`}
+        href={`/app?view=${next}`}
         className={className}
         aria-label={label}
         onClick={(event) => {
@@ -130,6 +146,15 @@ export function Workbench() {
       setSelected(
         data.models.some((m) => m.id === data.roles.evaluator) ? [data.roles.evaluator] : [],
       );
+      const permitted = switchableModels(data.models, data.roles);
+      let saved = '';
+      try {
+        saved = localStorage.getItem('msl-active-model') || '';
+      } catch {}
+      const initial = isSwitchableModel(saved, data.models, data.roles)
+        ? saved
+        : permitted[0]?.id || '';
+      setActiveModel(initial);
     } catch {
       setCatalogError('Could not reach the server. Check your connection, then refresh discovery.');
     }
@@ -160,6 +185,16 @@ export function Workbench() {
           setRun(parsed);
         }
       }
+      const switchSaved = localStorage.getItem('msl-switch-tests');
+      if (switchSaved) {
+        const parsed = JSON.parse(switchSaved) as SwitchTestRecord[];
+        if (
+          Array.isArray(parsed) &&
+          parsed.length <= 8 &&
+          parsed.every((item) => typeof item.at === 'string' && item.result?.model)
+        )
+          setSwitchTests(parsed);
+      }
     } catch {
       setNotice('Recent results could not be restored. Browser storage may be unavailable.');
     }
@@ -182,6 +217,14 @@ export function Workbench() {
       }
     }
   }, [run, storageReady]);
+  useEffect(() => {
+    if (!storageReady) return;
+    try {
+      localStorage.setItem('msl-switch-tests', JSON.stringify(switchTests));
+    } catch {
+      setNotice('Model switch history could not be saved. Export any results you need to keep.');
+    }
+  }, [switchTests, storageReady]);
   useEffect(() => {
     if (navigating.current) {
       resultHeading.current?.focus();
@@ -386,6 +429,53 @@ export function Workbench() {
       setExperimentBusy('');
     }
   }
+  function chooseActiveModel(modelId: string) {
+    if (!catalog || !isSwitchableModel(modelId, catalog.models, catalog.roles)) return;
+    setActiveModel(modelId);
+    try {
+      localStorage.setItem('msl-active-model', modelId);
+    } catch {
+      setNotice('The active model changed for this page, but browser storage is unavailable.');
+    }
+  }
+  async function testActiveModel() {
+    if (
+      !catalog ||
+      !catalog.demoEnabled ||
+      !isSwitchableModel(activeModel, catalog.models, catalog.roles)
+    )
+      return;
+    setSwitchBusy(true);
+    setSwitchError(null);
+    const runId = crypto.randomUUID();
+    try {
+      const { response, data } = await post({
+        action: 'case',
+        scenario: 'extraction',
+        caseId: fixtures.extraction[0].id,
+        model: activeModel,
+        runId,
+      });
+      if (!response.ok || !data.result) {
+        setSwitchError(data.error ?? fallbackError('The active-model request was refused.'));
+        return;
+      }
+      const record: SwitchTestRecord = {
+        at: new Date().toISOString(),
+        runId,
+        result: data.result as CaseResult,
+      };
+      setSwitchTests((current) => [record, ...current].slice(0, 8));
+    } catch {
+      setSwitchError(
+        fallbackError(
+          'The browser lost the response. Inspect Otari before repeating this request.',
+        ),
+      );
+    } finally {
+      setSwitchBusy(false);
+    }
+  }
   const mcpCompletion = experiment?.data.completion as
     { metadata?: { requestId?: string | null } } | undefined;
   const mcpEvidence =
@@ -402,6 +492,21 @@ export function Workbench() {
   const error = run?.cases.find((c) => c.error)?.error;
   const decision = run ? recommendation(run.summaries) : undefined;
   const recommend = decision?.winner;
+  const availableSwitchModels = catalog ? switchableModels(catalog.models, catalog.roles) : [];
+  const latestSwitchTestByModel = new Map<string, SwitchTestRecord>();
+  for (const item of switchTests) {
+    if (!latestSwitchTestByModel.has(item.result.model))
+      latestSwitchTestByModel.set(item.result.model, item);
+  }
+  const switchDecision = switchRecommendation(switchTests.map((item) => item.result));
+  const activeLastResult = activeModel
+    ? latestSwitchTestByModel.get(activeModel)?.result
+    : undefined;
+  const routeCompletion =
+    experiment?.id === 'routing'
+      ? (experiment.data.completion as Completion | undefined)
+      : undefined;
+  const routeMetadata = routeCompletion?.metadata;
   const reportedCostsComplete =
     !!run &&
     run.summaries.every((row) => row.costUsd !== null) &&
@@ -499,9 +604,11 @@ export function Workbench() {
                   ? 'Every score starts with a verifiable answer.'
                   : view === 'trace'
                     ? 'Follow each request from task to interpretation.'
-                    : view === 'capabilities'
-                      ? 'What the hosted gateway actually proved.'
-                      : 'A short path from benchmark to evidence.'}
+                    : view === 'model-switch'
+                      ? 'Change the model used by your next real test request.'
+                      : view === 'capabilities'
+                        ? 'What the hosted gateway actually proved.'
+                        : 'A short path from benchmark to evidence.'}
             </p>
           </div>
           <span className="gateway-label">Hosted Otari{catalog ? ` / ${catalog.region}` : ''}</span>
@@ -691,6 +798,301 @@ export function Workbench() {
             </div>
           </>
         )}
+        {view === 'model-switch' && (
+          <>
+            {!catalog && !catalogError && (
+              <div className="connection skeleton" role="status">
+                Discovering permitted models through Otari…
+              </div>
+            )}
+            {catalogError && (
+              <div className="connection error" role="alert">
+                <p>{catalogError}</p>
+                <button className="button quiet" type="button" onClick={loadCatalog}>
+                  Refresh discovery
+                </button>
+              </div>
+            )}
+            {catalog && !catalog.demoEnabled && (
+              <div className="connection" role="status">
+                <strong>Inference is disabled.</strong>
+                <p>
+                  The model selection remains available. Enable the capped server demo before
+                  sending requests.
+                </p>
+              </div>
+            )}
+            <div className="model-switch-layout">
+              <section className="model-switch-column" aria-labelledby="active-model-heading">
+                <div className="section-head">
+                  <h2 id="active-model-heading">Active test model</h2>
+                  <span className="subtle">This browser</span>
+                </div>
+                {activeModel ? (
+                  <>
+                    <p>
+                      <strong>
+                        {catalog?.models.find((model) => model.id === activeModel)?.name ||
+                          shortModel(activeModel)}
+                      </strong>
+                    </p>
+                    <code>{activeModel}</code>
+                    <p className="micro">Selection type: model ID / manual</p>
+                    <p className="micro">
+                      Last request status:{' '}
+                      {activeLastResult ? switchResultStatus(activeLastResult) : 'Not tested yet'}
+                    </p>
+                    {activeLastResult?.metadata && (
+                      <p className="micro">
+                        Serving model:{' '}
+                        <code>{activeLastResult.metadata.effectiveModel || 'Not reported'}</code>
+                        {' / '}provider:{' '}
+                        <code>{activeLastResult.metadata.provider || 'Not reported'}</code>
+                        {' / '}latency: {duration(activeLastResult.metadata.latencyMs)}
+                        {' / '}reported cost: {money(activeLastResult.metadata.costUsd)}
+                        {' / '}request:{' '}
+                        <code>{activeLastResult.metadata.requestId || 'Not reported'}</code>
+                      </p>
+                    )}
+                    <p className="micro">
+                      Last successful response:{' '}
+                      {activeLastResult?.output ? 'available below' : 'none recorded'}.
+                    </p>
+                    <p className="micro">
+                      This selection changes future ModelSwitch test requests only. It does not
+                      change your external application or Otari policy.
+                    </p>
+                  </>
+                ) : (
+                  <p className="subtle">No permitted evaluator model is available yet.</p>
+                )}
+                <div className="model-choice-list" aria-label="Available models">
+                  {availableSwitchModels.map((model) => {
+                    const last = latestSwitchTestByModel.get(model.id)?.result;
+                    return (
+                      <div className="model-choice" key={model.id}>
+                        <div>
+                          <strong>{model.name || shortModel(model.id)}</strong>
+                          <code>{model.id}</code>
+                          {model.pricing && (
+                            <span className="subtle">
+                              Catalog price per 1M tokens: input{' '}
+                              {money(model.pricing.input_price_per_million)}, output{' '}
+                              {money(model.pricing.output_price_per_million)}
+                            </span>
+                          )}
+                          {last?.metadata?.provider ? (
+                            <span className="subtle">
+                              Last serving provider: {last.metadata.provider}
+                            </span>
+                          ) : (
+                            <span className="subtle">No test response observed yet</span>
+                          )}
+                        </div>
+                        {activeModel === model.id ? (
+                          <span className="model-active">Active</span>
+                        ) : (
+                          <button
+                            className="button quiet"
+                            type="button"
+                            disabled={!storageReady || switchBusy}
+                            onClick={() => chooseActiveModel(model.id)}
+                          >
+                            Switch to {shortModel(model.id)}
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="micro">
+                  Only the configured evaluator and analyst IDs that also appear in the current
+                  Otari catalog are permitted. Switching does not send a request.
+                </p>
+              </section>
+              <section className="model-switch-column" aria-labelledby="model-test-heading">
+                <div className="section-head">
+                  <h2 id="model-test-heading">Test the same task</h2>
+                  <span className="subtle">Synthetic fixture / inv-01</span>
+                </div>
+                <div className="switch-console">
+                  <p>{fixtures.extraction[0].input}</p>
+                  <p>
+                    Expected: six invoice fields. Output is checked with the benchmark’s
+                    deterministic schema and field scorer.
+                  </p>
+                  <button
+                    className="button primary"
+                    type="button"
+                    disabled={!storageReady || !catalog?.demoEnabled || !activeModel || switchBusy}
+                    onClick={testActiveModel}
+                  >
+                    {switchBusy
+                      ? 'Testing active model…'
+                      : `Test ${shortModel(activeModel || 'active model')}`}
+                  </button>
+                </div>
+                {switchError && (
+                  <div className="connection error" role="alert">
+                    <strong>{switchError.code}</strong>
+                    <p>{switchError.message}</p>
+                    {switchError.requestId && <code>Request {switchError.requestId}</code>}
+                  </div>
+                )}
+                {switchTests.length > 0 && (
+                  <div className="switch-results" aria-live="polite">
+                    <h3>Latest requests</h3>
+                    {switchTests.slice(0, 4).map(({ at, runId, result }) => (
+                      <article className="switch-result" key={runId}>
+                        <div className="switch-result-head">
+                          <strong>{shortModel(result.model)}</strong>
+                          <span
+                            className={`status ${result.evaluation?.passed ? 'success' : result.error || result.evaluation ? 'failure' : ''}`}
+                          >
+                            {switchResultStatus(result)}
+                          </span>
+                        </div>
+                        <div className="switch-result-metrics">
+                          <span>
+                            Accuracy{' '}
+                            {result.evaluation ? percent(result.evaluation.accuracy) : 'Not scored'}
+                          </span>
+                          <span>Latency {duration(result.metadata?.latencyMs)}</span>
+                          <span>Reported cost {money(result.metadata?.costUsd)}</span>
+                          <time dateTime={at}>{timestamp(at)}</time>
+                        </div>
+                        {result.error && <p className="micro">{result.error.message}</p>}
+                        <details>
+                          <summary>Inspect output and gateway identity</summary>
+                          {result.output && (
+                            <>
+                              <h3>Actual model output</h3>
+                              <pre className="json">{result.output}</pre>
+                            </>
+                          )}
+                          {result.evaluation && (
+                            <>
+                              <h3>Deterministic evaluation</h3>
+                              <Json value={result.evaluation} />
+                            </>
+                          )}
+                          {result.metadata && (
+                            <>
+                              <h3>Gateway response</h3>
+                              <Json
+                                value={{
+                                  requestedModel: result.metadata.requestedModel,
+                                  effectiveModel: result.metadata.effectiveModel,
+                                  responseModel: result.metadata.responseModel,
+                                  provider: result.metadata.provider,
+                                  requestId: result.metadata.requestId,
+                                  attempts: result.metadata.attempts,
+                                  fallback: result.metadata.fallback,
+                                  costUsd: result.metadata.costUsd,
+                                  latencyMs: result.metadata.latencyMs,
+                                }}
+                              />
+                            </>
+                          )}
+                        </details>
+                      </article>
+                    ))}
+                    {switchDecision && availableSwitchModels.length > 1 ? (
+                      <section className="switch-recommendation">
+                        <h3>Model decision for this fixture</h3>
+                        <p>
+                          <strong>{shortModel(switchDecision.model)}</strong> led on the latest
+                          valid responses for this same fixture, ranked by field accuracy, schema
+                          validity, then measured latency and reported cost as tie-breakers. This
+                          one-case result is not a general ranking.
+                        </p>
+                        {activeModel !== switchDecision.model && (
+                          <button
+                            className="button quiet"
+                            type="button"
+                            onClick={() => chooseActiveModel(switchDecision.model)}
+                          >
+                            Switch to {shortModel(switchDecision.model)}
+                          </button>
+                        )}
+                      </section>
+                    ) : availableSwitchModels.length > 1 ? (
+                      <p className="micro">
+                        Test this same fixture with another model to compare results.
+                      </p>
+                    ) : null}
+                  </div>
+                )}
+              </section>
+            </div>
+            <p className="micro">
+              <a
+                href="/api/evidence?file=model-switch-production.json"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Production smoke evidence
+              </a>
+            </p>
+            <section className="experiments routing-section">
+              <div className="section-head">
+                <h2>Test Otari policy routing</h2>
+                <span className="subtle">Separate from manual switching</span>
+              </div>
+              <div className="experiment-row">
+                <div>
+                  <h3>{catalog?.roles.policy || 'No policy configured'}</h3>
+                  <p>
+                    Sends one fixed synthetic classification request to this policy through hosted
+                    Otari. No application-side retry is used.
+                  </p>
+                </div>
+                <button
+                  className="button quiet"
+                  type="button"
+                  disabled={
+                    !catalog?.demoEnabled || !catalog.roles.policy || !!experimentBusy || switchBusy
+                  }
+                  onClick={() => runExperiment('routing')}
+                >
+                  {experimentBusy === 'routing' ? 'Checking…' : 'Use Otari fallback policy'}
+                </button>
+              </div>
+              {routeCompletion && routeMetadata && (
+                <div className="route-outcome" role="status">
+                  <strong>
+                    {routeMetadata.fallback === true
+                      ? 'Automatic Otari fallback occurred'
+                      : routeMetadata.fallback === false
+                        ? 'Primary succeeded. Backup was not needed.'
+                        : 'Otari did not report whether fallback occurred.'}
+                  </strong>
+                  <p>
+                    Serving model: <code>{routeMetadata.effectiveModel || 'Not reported'}</code>,
+                    Provider: <code>{routeMetadata.provider || 'Not reported'}</code>
+                  </p>
+                  <p>
+                    Request: <code>{routeMetadata.requestId || 'Not reported'}</code>, attempts{' '}
+                    {routeMetadata.attempts ?? 'Not reported'}, cost {money(routeMetadata.costUsd)}
+                  </p>
+                  <details>
+                    <summary>Inspect routing response</summary>
+                    <Json value={experiment?.data} />
+                  </details>
+                  <button className="text-button" type="button" onClick={() => navigate('trace')}>
+                    Open request trace
+                  </button>
+                </div>
+              )}
+              {experiment?.id === 'routing' && !routeCompletion && (
+                <div className="connection error" role="alert">
+                  <strong>Routing result not verified</strong>
+                  <Json value={experiment.data} />
+                </div>
+              )}
+            </section>
+          </>
+        )}
         {view === 'results' &&
           (!run ? (
             <Empty
@@ -820,6 +1222,21 @@ export function Workbench() {
                     synthetic sample{run.caseCount === 1 ? '' : 's'}, and cannot establish universal
                     model superiority.
                   </p>
+                  {run.models.length > 1 &&
+                    recommend.model !== activeModel &&
+                    isSwitchableModel(
+                      recommend.model,
+                      catalog?.models ?? [],
+                      catalog?.roles ?? { evaluator: '', analyst: '', policy: '' },
+                    ) && (
+                      <button
+                        className="button quiet"
+                        type="button"
+                        onClick={() => chooseActiveModel(recommend.model)}
+                      >
+                        Switch active test model
+                      </button>
+                    )}
                 </section>
               )}
               <details className="method-details">
@@ -911,8 +1328,59 @@ export function Workbench() {
               </section>
             </>
           ))}
+        {view === 'trace' && switchTests.length > 0 && (
+          <section className="switch-results" aria-labelledby="model-switch-trace-heading">
+            <div className="section-head">
+              <h2 id="model-switch-trace-heading">Model Switch requests</h2>
+              <span className="subtle">Browser-stored test activity</span>
+            </div>
+            <p className="micro">
+              Each result separates local deterministic scoring from Otari-reported response
+              identity. These are independent one-fixture checks, not part of the latest benchmark.
+            </p>
+            {switchTests.map(({ at, runId, result }) => (
+              <article className="switch-result" key={runId}>
+                <div className="switch-result-head">
+                  <strong>
+                    {shortModel(result.model)} / {result.caseId}
+                  </strong>
+                  <span
+                    className={`status ${result.evaluation?.passed ? 'success' : result.error || result.evaluation ? 'failure' : ''}`}
+                  >
+                    {switchResultStatus(result)}
+                  </span>
+                </div>
+                <div className="switch-result-metrics">
+                  <span>{timestamp(at)}</span>
+                  <span>
+                    Request{' '}
+                    {result.metadata?.requestId || result.error?.requestId || 'Not reported'}
+                  </span>
+                </div>
+                <details>
+                  <summary>Application score and gateway metadata</summary>
+                  <Json
+                    value={{
+                      score: result.evaluation ?? null,
+                      requestedModel: result.metadata?.requestedModel,
+                      effectiveModel: result.metadata?.effectiveModel,
+                      responseModel: result.metadata?.responseModel,
+                      provider: result.metadata?.provider,
+                      requestId: result.metadata?.requestId,
+                      attempts: result.metadata?.attempts,
+                      fallback: result.metadata?.fallback,
+                      latencyMs: result.metadata?.latencyMs,
+                      costUsd: result.metadata?.costUsd,
+                      error: result.error ?? null,
+                    }}
+                  />
+                </details>
+              </article>
+            ))}
+          </section>
+        )}
         {view === 'trace' &&
-          (!run ? (
+          (!run && !switchTests.length ? (
             <Empty
               title="No requests to inspect"
               text="Each benchmark records local events and gateway metadata separately."
@@ -924,10 +1392,10 @@ export function Workbench() {
               <div className="trace-key">
                 <span>Application events</span>
                 <span className="gateway-badge">Gateway-reported metadata</span>
-                <code>{run.id}</code>
+                {run && <code>{run.id}</code>}
               </div>
               <ol className="timeline">
-                {run.trace.map((event, i) => (
+                {(run?.trace ?? []).map((event, i) => (
                   <li key={i} className={event.source === 'gateway' ? 'gateway-event' : ''}>
                     <div className="event-time">
                       <span className="event-index">{String(i + 1).padStart(2, '0')}</span>
@@ -1111,7 +1579,9 @@ export function Workbench() {
             </p>
           </>
         )}
-        {view === 'guide' && <Guide onStart={() => navigate('workspace')} />}
+        {view === 'guide' && (
+          <Guide onStart={() => navigate('workspace')} onSwitch={() => navigate('model-switch')} />
+        )}
       </main>
       <section className="shell latest-run" aria-labelledby="latest-run-title">
         <div className="latest-run-head">
@@ -1264,7 +1734,7 @@ function CapabilityRow({ cap }: { cap: Capability }) {
     </tr>
   );
 }
-function Guide({ onStart }: { onStart: () => void }) {
+function Guide({ onStart, onSwitch }: { onStart: () => void; onSwitch: () => void }) {
   return (
     <div className="guide-layout">
       <div className="guide-content">
@@ -1281,6 +1751,19 @@ function Guide({ onStart }: { onStart: () => void }) {
           </ol>
           <button type="button" className="button primary" onClick={onStart}>
             Open workspace
+          </button>
+        </section>
+        <section>
+          <h2>Switch the active test model</h2>
+          <p>
+            Open Model switch, choose a catalog model already configured for an evaluator or analyst
+            role, then explicitly test the same synthetic invoice fixture. A model switch changes
+            future test request IDs only; it does not change the analyst configuration, an external
+            application, or an Otari routing policy. The result includes the actual serving model,
+            provider, request ID, latency, reported cost, and deterministic fixture score.
+          </p>
+          <button type="button" className="button quiet" onClick={onSwitch}>
+            Open Model switch
           </button>
         </section>
         <section>
@@ -1356,9 +1839,10 @@ function Guide({ onStart }: { onStart: () => void }) {
       <aside className="guide-aside">
         <h2>Judge’s route</h2>
         <a href="?view=workspace">1. Workspace</a>
-        <a href="?view=results">2. Results and scoring</a>
-        <a href="?view=trace">3. Request evidence</a>
-        <a href="?view=capabilities">4. Capability checks</a>
+        <a href="?view=model-switch">2. Switch a test model</a>
+        <a href="?view=results">3. Results and scoring</a>
+        <a href="?view=trace">4. Request evidence</a>
+        <a href="?view=capabilities">5. Capability checks</a>
         <hr />
         <p className="subtle">
           Record your real screen and personally narrate the demo. The repository includes a 3 to 5

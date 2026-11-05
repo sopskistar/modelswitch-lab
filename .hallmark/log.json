@@ -1,42 +1,66 @@
 [
-  {
-    "scope": "app",
-    "shape": "app screen polish",
-    "theme": "console",
-    "axes": "light+dark/uploaded-white-mark/amber",
-    "nav": "existing top bar and view tabs",
-    "footer": "four group directory with recent run summary",
-    "imagery": "user supplied icon and real application captures",
-    "signature": "versioned benchmark case ledger",
-    "sections": [
-      "workspace",
-      "latest run",
-      "four group footer"
-    ],
-    "waived": [],
-    "prompt": "Polish the existing ModelSwitch Lab for MozFest judges without changing navigation or benchmark behavior",
-    "date": "2026-11-04",
-    "mode": "polish"
-  },
-  {
-    "scope": "app",
-    "shape": "app screen",
-    "theme": "console",
-    "axes": "light+dark/grotesk-sans/chromatic-amber",
-    "nav": "top bar and view tabs",
-    "footer": "single ruled line",
-    "imagery": "working product",
-    "signature": "benchmark case ledger",
-    "sections": [
-      "workspace",
-      "results",
-      "request trace",
-      "capabilities",
-      "guide"
-    ],
-    "waived": [],
-    "prompt": "ModelSwitch Lab, a reproducible hosted Otari evaluation workbench",
-    "date": "2026-11-04",
-    "mode": "build"
-  }
+ {
+  "scope": "app",
+  "shape": "product landing and model-switch workbench",
+  "theme": "Console, existing graphite/paper surfaces with warm amber action",
+  "axes": "light+dark/Host Grotesk/Atkinson Mono/amber",
+  "nav": "existing workbench views; landing links into /app",
+  "footer": "restrained product and judge links",
+  "imagery": "actual historical results capture and rendered application screenshots",
+  "signature": "explicit Test, Compare, Switch sequence; separate policy routing explanation",
+  "sections": [
+   "hero",
+   "workflow",
+   "failure signals",
+   "routing distinction",
+   "judge entry",
+   "footer"
+  ],
+  "waived": [],
+  "prompt": "Polish the existing ModelSwitch Lab entry flow and make browser-scoped model switching affect explicit hosted Otari test requests",
+  "date": "2026-11-05",
+  "mode": "redesign",
+  "depth": "polish",
+  "audit": "sloplint clean: 0 FAIL, 0 REFLEX, 0 WARN; 5 rendered screenshots at 1280x800, 1440x900, 1920x1080, 1440 full page, and 375 full page"
+ },
+ {
+  "scope": "app",
+  "shape": "app screen polish",
+  "theme": "console",
+  "axes": "light+dark/uploaded-white-mark/amber",
+  "nav": "existing top bar and view tabs",
+  "footer": "four group directory with recent run summary",
+  "imagery": "user supplied icon and real application captures",
+  "signature": "versioned benchmark case ledger",
+  "sections": [
+   "workspace",
+   "latest run",
+   "four group footer"
+  ],
+  "waived": [],
+  "prompt": "Polish the existing ModelSwitch Lab for MozFest judges without changing navigation or benchmark behavior",
+  "date": "2026-11-04",
+  "mode": "polish"
+ },
+ {
+  "scope": "app",
+  "shape": "app screen",
+  "theme": "console",
+  "axes": "light+dark/grotesk-sans/chromatic-amber",
+  "nav": "top bar and view tabs",
+  "footer": "single ruled line",
+  "imagery": "working product",
+  "signature": "benchmark case ledger",
+  "sections": [
+   "workspace",
+   "results",
+   "request trace",
+   "capabilities",
+   "guide"
+  ],
+  "waived": [],
+  "prompt": "ModelSwitch Lab, a reproducible hosted Otari evaluation workbench",
+  "date": "2026-11-04",
+  "mode": "build"
+ }
 ]

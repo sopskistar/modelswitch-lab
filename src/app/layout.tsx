@@ -10,14 +10,14 @@ export const metadata: Metadata = {
   ),
   title: 'ModelSwitch Lab',
   description:
-    'Run reproducible model benchmarks through hosted Otari. Verify answers, compare measured performance, and inspect request evidence.',
+    'Test open-weight models against known answers, compare reliability, speed and cost, then switch ModelSwitch Lab test requests through hosted Mozilla Otari.',
   icons: {
     icon: '/modelswitch-icon.png',
     apple: '/modelswitch-icon.png',
   },
   openGraph: {
     title: 'ModelSwitch Lab',
-    description: 'A reproducible model reliability workbench powered by hosted Mozilla Otari.',
+    description: 'Test, compare and switch open-weight models using real hosted Otari requests.',
     images: [
       {
         url: '/modelswitch-icon.png',

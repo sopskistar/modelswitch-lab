@@ -145,6 +145,36 @@ describe('bounded execution route', () => {
       expect.stringContaining(runId),
     );
   });
+  it('routes a selected permitted model ID to Otari without changing analyst dispatch', async () => {
+    mocks.complete.mockResolvedValue({
+      content: JSON.stringify({
+        supplier: 'Alder Studio',
+        invoiceNumber: 'AS-1042',
+        date: '2026-10-02',
+        amount: 1250,
+        currency: 'USD',
+        paymentReference: 'ALDER1042',
+      }),
+      metadata: {
+        requestId: 'gateway-llama-test',
+        requestedModel: 'analyst',
+        effectiveModel: 'llama-served',
+      },
+    });
+    const response = await send({
+      action: 'case',
+      runId,
+      model: 'analyst',
+      caseId: 'inv-01',
+      scenario: 'extraction',
+    });
+    expect(response.status).toBe(200);
+    expect(mocks.complete).toHaveBeenCalledWith(
+      expect.objectContaining({ model: 'analyst' }),
+      expect.stringContaining(runId),
+    );
+    expect((await response.json()).result.model).toBe('analyst');
+  });
   it('retains partial case failures without fixture substitution', async () => {
     mocks.complete.mockRejectedValue(
       new OtariError({

@@ -2,29 +2,32 @@
 
 The participant records the actual application screen and narrates personally.
 Do not generate narration, a synthetic presenter, or a fabricated screen recording.
-The selected production site is https://modelswitch-lab.vercel.app. Its public
-catalog was observed with `demoEnabled: true`; a participant reports an invoice
-run and separate analyst response. The request IDs and receipt were not
-independently recovered in this pass, so call those values participant-reported
-unless you can open their live trace. Confirm the small Otari spending boundary
-and durable Upstash limiter still apply before demonstrating inference.
+The selected production site is https://modelswitch-lab.vercel.app. The committed
+landing page links to `/app?view=model-switch`; the deployment SHA and presence
+of this UI on production are not confirmed. Do not claim a production UI switch
+unless the participant verifies it live. The bounded production API smoke has
+one successful Llama request and a Qwen timeout; see
+[`model-switch-production.json`](../evidence/model-switch-production.json).
+Confirm the Otari spending boundary and durable Upstash limiter before further
+inference.
 
-| Time      | Show                                                                               | Explain in your own words                                                                                                                                      |
-| --------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0:00–0:30 | Workspace and a synthetic invoice                                                  | The developer's decision: which model solves this task reliably at an acceptable cost?                                                                         |
-| 0:30–1:30 | A small live invoice run, if enabled; stop after one run | Real hosted Otari inference; deterministic scoring. Say whether values are live UI observations, participant-reported, or independently inspectable gateway evidence. |
-| 1:30–2:00 | Comparison and objective weights                                                   | Tradeoffs measured only on tested cases; missing costs remain unknown                                                                                          |
-| 2:00–2:35 | Separate analyst request in trace                                                  | Evaluator executes the task; another open-weight family diagnoses verified metrics                                                                             |
-| 2:35–3:40 | Capabilities; inspect the routing and repository evidence records | Routing request `5f2cc001-a521-435e-8b51-df0f91452dc5` resolved the policy to Qwen/DeepInfra (`fallback=false`); MCP request `d9283ac4-3aec-4ee3-8151-08937bb08554` returned a successful DeepWiki tool result. Both redacted records are now served by the selected host (HTTP 200); exact deployed SHA remains unknown. Do not induce failure or rerun solely to recreate evidence. |
-| 3:40–4:20 | Trace, JSON benchmark receipt, and reproduction guide                              | Separate gateway metadata from application events; inspect request IDs, effective models, providers, reported usage, tools, and fallback fields where returned |
-| 4:20–4:45 | Known limitations                                                                  | Tiny datasets, missing hosted setup, exact verified scope                                                                                                      |
+| Time      | Show                                                     | Explain in your own words                                                                                          |
+| --------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| 0:00–0:25 | Landing page, then Launch workspace                      | The product tests, compares, and switches the model used for future ModelSwitch requests.                          |
+| 0:25–1:15 | Model Switch: active model, fixed invoice fixture, result | A model switch is browser-scoped; only the explicit test button sends a request.                                    |
+| 1:15–1:50 | Switch to the second model; inspect its result           | Show the effective model/provider and request ID. Current production record has Llama success and Qwen timeout.  |
+| 1:50–2:20 | Deterministic comparison and recommendation              | The recommendation uses successful same-fixture evidence; one case is not a general ranking.                      |
+| 2:20–2:55 | Otari fallback policy outcome                            | Current policy evidence shows Qwen/DeepInfra, one attempt, `fallback=false`; a manual switch is not failover.       |
+| 2:55–3:35 | Request trace and receipt                                 | Separate app events from actual gateway metadata and show reported usage only.                                     |
+| 3:35–4:20 | Capabilities and evidence                                 | Show MCP and code execution receipts; state that web fetch returned 400 without a tool event.                      |
+| 4:20–4:45 | Limitations                                               | Tiny fixture sample, Qwen timeout in latest smoke, no verified gateway budget refusal or actual fallback.          |
 
-If the account becomes unfunded again: show the real 402 credit refusal, real working Python
-sandbox, the available-but-unverified web tool status (one HTTP 400 with no
-completed tool event), and the recorded unavailable guardrail. Say plainly
-that the evidence-supported assessment is 75/100 potential; fallback, budgets,
-web retrieval, guardrails, and the personal video remain outstanding. This is
-an honest progress demonstration, not a 100-point completion claim.
+If inference is unavailable, do not send repeated requests. Show the existing
+redacted Llama receipt, actual routing and MCP evidence, and the real web-fetch
+400 diagnostic. The evidence-supported assessment remains up to 75/100
+potential, conditional on rubric interpretation of policy routing. Budget
+enforcement, web retrieval, guardrails, per-user budgets, actual fallback, and
+the personal video remain unverified.
 
 Before recording: hide `.env.local`, terminal history and dashboard credentials;
 confirm the production SHA in Vercel; verify the Otari spend ceiling and durable

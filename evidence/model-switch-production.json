@@ -1,0 +1,106 @@
+{
+  "recordVersion": 1,
+  "capturedAt": "2026-11-05T14:18:03.321Z",
+  "productionUrl": "https://modelswitch-lab.vercel.app",
+  "execution": "Two sequential calls through the public ModelSwitch Lab bounded case route; synthetic fixture inv-01; no retries.",
+  "fixture": {
+    "scenario": "extraction",
+    "datasetVersion": 1,
+    "caseId": "inv-01",
+    "description": "Synthetic Alder Studio invoice with six known fields."
+  },
+  "requests": [
+    {
+      "startedAt": "2026-11-05T14:17:39.778Z",
+      "applicationHttpStatus": 200,
+      "runId": "2f74ef5f-d550-4c4f-b607-5495f8c497cc",
+      "caseId": "inv-01",
+      "requestedModel": "alibaba/qwen3.8-27b",
+      "result": {
+        "model": "alibaba/qwen3.8-27b",
+        "error": {
+          "code": "timeout",
+          "message": "Otari timed out. Do not automatically retry: the request may be billed.",
+          "status": 504,
+          "retryAfter": null,
+          "requestId": null
+        },
+        "metadata": null
+      },
+      "error": null
+    },
+    {
+      "startedAt": "2026-11-05T14:18:02.200Z",
+      "applicationHttpStatus": 200,
+      "runId": "684117bb-c482-4299-8105-60f8cbe6cfa9",
+      "caseId": "inv-01",
+      "requestedModel": "meta/llama-3.3-70b-instruct",
+      "result": {
+        "model": "meta/llama-3.3-70b-instruct",
+        "output": "```\n{\n  \"supplier\": \"Alder Studio\",\n  \"invoiceNumber\": \"AS-1042\",\n  \"date\": \"2026-10-02\",\n  \"amount\": 1250.00,\n  \"currency\": \"USD\",\n  \"paymentReference\": \"ALDER1042\"\n}\n```",
+        "evaluation": {
+          "valid": true,
+          "accuracy": 1,
+          "passed": true,
+          "missing": 0,
+          "fields": [
+            {
+              "field": "supplier",
+              "expected": "Alder Studio",
+              "actual": "Alder Studio",
+              "match": true
+            },
+            {
+              "field": "invoiceNumber",
+              "expected": "AS-1042",
+              "actual": "AS-1042",
+              "match": true
+            },
+            {
+              "field": "date",
+              "expected": "2026-10-02",
+              "actual": "2026-10-02",
+              "match": true
+            },
+            {
+              "field": "amount",
+              "expected": 1250,
+              "actual": 1250,
+              "match": true
+            },
+            {
+              "field": "currency",
+              "expected": "USD",
+              "actual": "USD",
+              "match": true
+            },
+            {
+              "field": "paymentReference",
+              "expected": "ALDER1042",
+              "actual": "ALDER1042",
+              "match": true
+            }
+          ]
+        },
+        "metadata": {
+          "requestedModel": "meta/llama-3.3-70b-instruct",
+          "responseModel": "meta/llama-3.3-70b-instruct",
+          "effectiveModel": "meta.llama3-3-70b-instruct-v1:0",
+          "provider": "bedrock",
+          "requestId": "77cf5458-46f6-40c9-98ab-80468ba890ec",
+          "attempts": 1,
+          "fallback": false,
+          "latencyMs": 929,
+          "costUsd": 0.00017,
+          "totalTokens": 236
+        }
+      },
+      "error": null
+    }
+  ],
+  "limitations": [
+    "These requests verify gateway model identities for one synthetic fixture; they do not establish a general model ranking.",
+    "The production UI deployment SHA is not inferred from the presence of this API route.",
+    "Application receipts are intentionally excluded from this public evidence file."
+  ]
+}

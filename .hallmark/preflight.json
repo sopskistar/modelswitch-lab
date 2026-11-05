@@ -31,5 +31,21 @@
       "structured JSON benchmark receipt and clearer deterministic recommendation",
       "short judge-first README and current hosted capability evidence"
     ]
+  },
+  "modelSwitchReview": {
+    "scanned": "2026-11-05",
+    "branch": "feat/model-switch-landing from f491909767e7fad11a3bc9395449097dba773500",
+    "preserve": [
+      "hosted Otari benchmark routes and scoring",
+      "existing workbench views, theme, logo, request traces and receipts",
+      "routing, MCP, code execution, rate limits and production evidence"
+    ],
+    "introduce": [
+      "product landing at / and compatibility redirect to /app",
+      "browser-scoped manual model selection for permitted catalog models",
+      "explicit same-fixture test, deterministic recommendation and policy-routing result display",
+      "real historical product preview and desktop/mobile rendered screenshots"
+    ],
+    "liveEvidenceBoundary": "One production Llama case completed; paired Qwen case timed out without a gateway request ID. Playwright request assertions are intercepted fixtures, not live inference."
   }
 }

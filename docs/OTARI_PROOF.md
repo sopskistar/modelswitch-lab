@@ -1,5 +1,43 @@
 # Hosted Otari proof
 
+## Model Switch production smoke — 2026-11-05 14:17–14:18 UTC
+
+The bounded smoke used two sequential POSTs to the existing public case route,
+with the same synthetic invoice fixture `inv-01`, no retries, and no browser
+mocking. The Qwen request returned an application-level timeout (504) without
+an Otari request ID, effective model, provider, or usage. Its billing state is
+unknown; no retry was made. The Llama request completed with valid six-field
+output: requested ID `meta/llama-3.3-70b-instruct`, effective model
+`meta.llama3-3-70b-instruct-v1:0`, provider `bedrock`, Otari request
+`77cf5458-46f6-40c9-98ab-80468ba890ec`, one attempt, `fallback=false`, 929 ms,
+236 tokens, and reported cost `$0.000170`. The application score was 6/6
+fields. Redacted response evidence is in
+[`model-switch-production.json`](../evidence/model-switch-production.json).
+
+This demonstrates a real Llama request through Otari and a successful
+model-specific route. The paired Qwen request did not complete, so this smoke
+does not prove a successful two-model comparison. It also used the existing
+public API, not a live browser interaction with the new model-selection screen.
+The focused branch's Playwright tests verify the UI payload contract using
+intercepted fixtures; those fixtures are not hosted inference evidence. No
+deployment SHA is inferred from the API response.
+
+## Web-fetch diagnostic refresh — 2026-11-05 13:33 UTC
+
+After workspace web access was enabled, authenticated catalog discovery on the
+selected production domain reported `otari_web_fetch` and `otari_web_search`
+available. A single bounded request to the public Mozilla Manifesto URL still
+returned HTTP 400, Otari request `32697174-cde5-4bbd-9cf3-df3f02f01542`, with no
+tool call, completed response metadata, or known cost. A usage lookup returned
+404, which does not resolve whether usage settled. An earlier request
+`9bd36cf5-6ddf-433a-9d1a-95295a50fae5` had the same outcome. The application
+does not expose raw gateway diagnostic fields, so the cause is **unknown**, not
+attributed to workspace policy or a specific request parameter. The redacted
+structured record is [`web-fetch-diagnosis.json`](../evidence/web-fetch-diagnosis.json).
+Required next step: an authorized Otari operator inspects either request in
+hosted activity and supplies the sanitized error code/detail and rejected
+request field. Do not retry until that is known.
+
 ## Latest production evidence check — 2026-11-05 13:02 UTC
 
 Read-only GETs to `/api/evidence?file=routing-production.json` and

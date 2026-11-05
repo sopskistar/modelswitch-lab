@@ -12,6 +12,8 @@
     "test:browser": "playwright test",
     "otari:verify": "node --conditions=react-server --env-file=.env.local --import tsx scripts/verify-otari.ts",
     "otari:inspect": "node --conditions=react-server --env-file=.env.local --import tsx scripts/inspect-otari.ts",
+    "otari:request": "node --conditions=react-server --env-file=.env.local --import tsx scripts/inspect-request.ts",
+    "production:switch-smoke": "node --import tsx scripts/live-model-switch-smoke.ts",
     "format": "prettier --write src tests e2e scripts/*.ts scripts/*.mjs *.ts *.mjs *.json .env.example",
     "format:check": "prettier --check src tests e2e scripts/*.ts scripts/*.mjs *.ts *.mjs *.json"
   },
