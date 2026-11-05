@@ -115,12 +115,12 @@ DeepWiki tool result respectively. Details and request IDs are in
 [`production-observation.json`](../evidence/production-observation.json). No
 additional inference calls were sent to recreate evidence.
 
-The production MCP evidence route returned HTTP 200 but served the old
-`implemented_unverified` record. After commit `b3449f0` was pushed to both
-branches, `/api/evidence?file=routing-production.json` returned HTTP 404
-`Unknown evidence file.` at `2026-11-05T12:05:51Z` (Vercel request
-`fra1::iad1::mjbz6-1793880350804-aa7d66f909de`). The updated evidence bundle is
-not deployed, and exact Vercel source SHA remains unavailable.
+Historical rollout checks returned an old `implemented_unverified` MCP record
+and then HTTP 404 for the routing receipt. Those results were superseded on
+2026-11-05 at 12:29–12:35 UTC: both evidence routes returned HTTP 200, and the
+MCP route served `verified_live`, request
+`d9283ac4-3aec-4ee3-8151-08937bb08554`. The production evidence records do not
+expose the exact Vercel source SHA.
 
 A fresh read-only catalog request on 2026-11-05 returned HTTP 200 and Vercel request ID
 `fra1::iad1::2jdth-1793875276299-dde473d35888`; the homepage also returned HTTP
@@ -137,12 +137,13 @@ they do not show a live Otari MCP execution.
 The production browser check is acceptance inspection, not the intercepted
 Playwright test suite. No fixtures were presented as live production output.
 
-The first final local browser attempt could not connect because the sandbox
-denied the Next server's `0.0.0.0:3011` bind (`EPERM`). Starting the same built
-server with host permission resolved the environment issue; the complete
-desktop/mobile suite then passed 16/16. The initial production URL request was
-also blocked by sandbox DNS; the same read-only request outside the sandbox
-returned HTTP 200. Neither was an application test failure.
+On 2026-11-05, `npm run typecheck`, `npm run lint`, `npm test` (107 tests),
+`npm run format:check`, `npm run build`, and `npm run test:browser` (16 tests)
+passed. The browser suite was pointed at the existing ModelSwitch Lab dev
+server on port 3002; the default port 3000 belonged to a different project.
+The browser suite covered desktop/mobile interaction, fixture-intercepted
+benchmark runs, export, theme, navigation, and axe checks. Those intercepted
+responses are test-only and are not production inference evidence.
 
 `npm run otari:inspect` performs model/tool/profile discovery and read-only
 management-authority checks. `npm run otari:verify` makes at most seven bounded

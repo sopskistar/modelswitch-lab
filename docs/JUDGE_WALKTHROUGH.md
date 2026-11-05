@@ -68,10 +68,9 @@ DeepInfra provider, request ID, latency, reported cost, one attempt, and
 `fallback=false`. This proves real policy resolution; no failover was observed.
 The MCP row links the redacted production proof of one real Otari-managed
 DeepWiki MCP call, its successful result, request ID, Qwen/DeepInfra identity,
-and one attempt. The source has the corrected event parser and production
-evidence, but the last production read still returned the earlier unverified
-MCP record; do not claim the new evidence screen is deployed until Vercel
-serves it. See [`routing-production.json`](../evidence/routing-production.json),
+and one attempt. The production evidence routes now serve the verified records
+(HTTP 200 on 2026-11-05). This confirms the receipts are deployed, not the exact
+Vercel Git SHA. See [`routing-production.json`](../evidence/routing-production.json),
 [`mcp-status.json`](../evidence/mcp-status.json), and [the capability matrix](RUBRIC_EVIDENCE.md).
 
 ## Operator-only evidence
@@ -83,12 +82,14 @@ actions:
   fallback event is yet proven. Do not alter the production policy to force it.
 - Budget: two operator-reported $1 monthly ceilings exist; no gateway refusal
   or usage-record proof is available, and neither ceiling was exhausted.
-- Web search/fetch and inference guardrails: unavailable in the current hosted
-  workspace discovery.
+- Web search/fetch: currently `workspace_disabled`. An Otari workspace
+  owner/admin must enable Web access with a narrow allowlist; then tool
+  discovery will show whether the hosted fetch/search backend is configured.
+- Inference guardrails: the latest recorded profile discovery found no
+  configured guardrail service; no model-only substitute is claimed.
 - Per-user budgets: no service-key/user-budget workflow has been executed.
 
 The selected production `/api/catalog` and evidence routes are reachable, but
-the exact Vercel source commit is not independently known. The current live
-MCP transaction is recorded in the redacted evidence files; do not claim a
-newly committed verifier is deployed until the evidence route serves the
-updated record.
+the exact Vercel source commit is not independently known. The budget ceilings
+are operator-reported only; no spend/refusal evidence is available. The live
+MCP transaction is recorded in the redacted evidence files.

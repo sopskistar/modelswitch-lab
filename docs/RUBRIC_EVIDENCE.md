@@ -16,12 +16,12 @@ remain unverified or unavailable.
 | Second open-weight role       | 10              | `/api/execute` analyst action, signed receipts     | **Yes**                      | `verification.json`, Llama analyst `bd24f101-ff53-452a-97a6-27016e8e8600`; primary license links in integration guide                            | Complete evaluator cases, inspect separate analyst request and serving identity                              | **Verified live**                       | Diagnostic text supports deterministic scores                      |
 | Model routing and fallbacks   | 10              | `/api/execute` routing action                      | **Yes: policy resolution**    | [`routing-production.json`](../evidence/routing-production.json), production Otari request `5f2cc001-a521-435e-8b51-df0f91452dc5`; policy → Qwen/DeepInfra, attempt=1, fallback=false | Open Otari Capabilities and inspect the receipt; **Check routing** sends one fixed synthetic task through the named policy | **Routing verified live; fallback unverified** | No failure was induced and no fallback occurred; `fallback=false` is preserved |
 | MCP integrations              | 10              | `/api/execute` fixed repository MCP action; streamed Otari Messages adapter | **Yes**                        | [`mcp-status.json`](../evidence/mcp-status.json), Otari request `d9283ac4-3aec-4ee3-8151-08937bb08554`; one `read_wiki_structure` use and successful result | Open Otari Capabilities and inspect the committed production proof; for a fresh demonstration, run **Inspect repository** once and inspect returned Otari request/activity | **Verified live** | Gateway result block omits use ID/name; this request exposed exactly one allowlisted tool, and the complete stream contained one successful result after its use; reported cost unavailable |
-| Web search or fetch           | 10              | `/api/execute` web action; exact source allowlist  | Discovery only               | Latest `discovery.json`: `workspace_disabled`                                                                                                    | Enable workspace tool/domain restriction; Fetch through Otari; inspect completed tool call                   | Unavailable on hosted account           | Model summary alone cannot prove retrieval                         |
+| Web search or fetch           | 10              | `/api/execute` web action; exact source allowlist  | No                            | Latest production catalog: `workspace_disabled`; see hosted-policy explanation in `OTARI_PROOF.md`                                              | Owner enables Web access policy; recheck tool discovery; execute one curated Otari fetch and inspect tool event | Blocked by workspace policy; backend unknown | Workspace policy cannot enable a missing backend                    |
 | Code execution                | 10              | `/api/execute` code action; typed verifier         | **Yes**                      | `verification.json`, `732c1ded-aba4-4210-8cd7-1251027e367c`; exit 0, correct=4, total=5, accuracy=.8                                             | `npm run otari:verify -- --capabilities-only` or Check sandbox                                               | **Verified live**                       | Fixed control vectors; cost unreported                             |
 | Budgets/spending limits       | 10              | Otari key spending ceilings; denial normalization | No gateway refusal observed | [`budget-operator-report.json`](../evidence/budget-operator-report.json): participant reports separate $1 monthly ceilings on production and test keys; management reads had 401 | Inspect Otari owner-visible spend-ceiling and usage records; use a gateway `budget_exceeded` refusal only if a safe boundary can be configured | Unverified; no enforcement evidence | Current spend/remaining is not readable; dashboard has no request-limit field; do not equate spend or `insufficient_funds` with a budget refusal |
 | Multiple distinct model roles | 10              | Evaluator scoring then separate analyst action     | **Yes**                      | Typed verifier and `browser-smoke.json` record distinct role requests and real providers                                                         | Run benchmark, inspect analyst event and request IDs/models                                                  | **Verified live**                       | Comparison calls alone are not the distinct-role proof             |
-| Inference guardrails          | 10              | `/api/execute` guardrail fixture                   | Fail-closed refusal observed | `verification.json`, 502, `ef371ed6-bad2-4631-9e63-26f4c452509f`; no service configured                                                          | Configure actual service; inspect evaluated verdict or violation                                             | Unavailable on hosted account           | Service outage is not a guardrail evaluation                       |
-| Per-user budgets              | 10              | None                                               | No                           | None                                                                                                                                             | Requires actual service key and end-user budgets                                                             | Not implemented                         | No local label is counted                                          |
+| Inference guardrails          | 10              | `/api/execute` guardrail fixture                   | No gateway verdict            | `verification.json`, 502, `ef371ed6-bad2-4631-9e63-26f4c452509f`; latest recorded profile discovery found no configured service                   | Otari owner configures an actual hosted guardrail service; run harmless fixture once and inspect gateway decision | Unavailable: no guardrail service configured | Fail-closed service error is not a guardrail verdict                  |
+| Per-user budgets              | 10              | None                                               | No                           | None; no authorized service/admin key available; see exact hosted configuration blocker in `OTARI_PROOF.md`                                    | Owner provisions a dedicated scoped service key and two end-user budget IDs; run fixed synthetic identities  | Blocked pending hosted owner setup      | No local label or shared $1 key ceiling is counted                  |
 | Working real use case         | 5               | Five views, 15 fixtures, scorer and recommendation | **Yes**                      | `browser-smoke.json`, run `365aae24-b64e-43ec-ba02-3c5e9a7d8739`: 10 cases + analyst, no request failures                                        | Select five classification cases and both models; Run; inspect/export                                        | **Verified live**                       | Qwen 5/5, Llama 4/5 only on these cases                            |
 | Recorded Otari demonstration  | 5               | `docs/DEMO_SCRIPT.md`                              | Not recorded                 | Script only                                                                                                                                      | Participant personally records actual screen and narrates                                                    | Awaiting participant                    | No synthetic narration or fabricated recording                     |
 
@@ -59,10 +59,11 @@ one Qwen evaluator and a separate Llama analyst for $0.000384 reported total.
 This confirms the current routes still execute through Otari; it is not a new
 rubric point or a comparative benchmark.
 
-The refreshed read-only discovery still reports web fetch/search as
-`workspace_disabled`, no guardrail service, and authentication for routing and
-budget-management reads with the inference key. Detailed request IDs and current
-tool statuses are linked in [OTARI_PROOF.md](OTARI_PROOF.md).
+The latest read-only production catalog still reports web fetch/search as
+`workspace_disabled`; no hosted guardrail service was configured in the latest
+profile discovery. Hosted docs identify workspace web policy as an owner/admin
+setting and distinguish policy from deployment/provider availability. Detailed
+request IDs and the 2026-11-05 live check are in [OTARI_PROOF.md](OTARI_PROOF.md).
 
 Otari's current budget documentation and generated OpenAPI support both
 `max_budget` (USD) and `request_limit` (requests per budget period). Read-only
@@ -86,6 +87,22 @@ change capability verification or rubric coverage. The older
 [`production-acceptance.json`](../evidence/production-acceptance.json) is a
 historical capture of the other state/domain; consult the newer
 [`production-observation.json`](../evidence/production-observation.json).
+
+### Hosted capability refresh — 2026-11-05
+
+The selected production host returned HTTP 200 for both
+`/api/evidence?file=routing-production.json` and
+`/api/evidence?file=mcp-status.json`. The latter served the `verified_live`
+record with successful `read_wiki_structure` execution and Otari request
+`d9283ac4-3aec-4ee3-8151-08937bb08554`. This supersedes earlier 404/old-record
+observations in the history below; the exact Vercel source commit remains
+unknown. A fresh public catalog check still reports web fetch and search as
+`workspace_disabled`. No authorized service/admin credential is present for
+creating per-user budgets; no budget mutation or inference test was attempted.
+The previously recorded hosted guardrail discovery found no configured
+guardrail service, so no further guardrail probe was made. No safe fallback
+test was available without changing policy configuration; the existing policy
+receipt correctly records one attempt and `fallback=false`.
 
 ## MCP tool execution (verified live)
 

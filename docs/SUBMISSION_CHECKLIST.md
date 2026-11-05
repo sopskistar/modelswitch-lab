@@ -25,7 +25,8 @@
 - [ ] Production run corroborated with Otari request IDs, trace and saved receipt; participant-reported results are recorded separately.
 - [ ] Exact deployed Git commit: not independently confirmed. Inspect the selected `modelswitch-lab` Vercel project, not the similarly named duplicate.
 - [ ] Verify durable Upstash behavior and the current Otari spending boundary before another live run.
-- [ ] The production MCP evidence route returned the old unverified record; after `b3449f0`, `/api/evidence?file=routing-production.json` returned HTTP 404 at 2026-11-05 12:05:51Z. Confirm the selected `modelswitch-lab` project is deploying `main`, redeploy if needed, and inspect its exact SHA.
+- [x] On 2026-11-05 12:29–12:35 UTC, the selected production host returned HTTP 200 for both routing and MCP evidence routes; the MCP route served `verified_live` with request ID `d9283ac4-3aec-4ee3-8151-08937bb08554`.
+- [ ] Confirm the exact deployed Git SHA in the selected `modelswitch-lab` Vercel project; public evidence-route availability does not identify the deployment commit.
 - [ ] Verify production result trace/receipt if accessible; do not repeat inference solely to replace missing historical metadata.
 
 ## Final repository state

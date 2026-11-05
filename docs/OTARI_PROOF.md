@@ -1,5 +1,45 @@
 # Hosted Otari proof
 
+## Latest production evidence check — 2026-11-05 12:35 UTC
+
+Read-only GETs to `/api/evidence?file=routing-production.json` and
+`/api/evidence?file=mcp-status.json` both returned HTTP 200 from the selected
+production URL. The MCP route served `recordVersion: 2`, `status:
+verified_live`, and the redacted successful record for Otari request
+`d9283ac4-3aec-4ee3-8151-08937bb08554` (Qwen/DeepInfra, one successful
+`read_wiki_structure` call, no reported cost). The routing receipt contains
+request `5f2cc001-a521-435e-8b51-df0f91452dc5`, policy `modelswitch-fallback`,
+Qwen/DeepInfra, attempts=1, fallback=false. Vercel request ID for the MCP
+evidence read: `fra1::iad1::q4b8q-1793882113463-a0b1cbd754cc`.
+
+These checks confirm the static receipts are served by production, not a
+particular Vercel Git SHA. The public catalog still reports web fetch/search as
+`workspace_disabled`. Otari's current [tools documentation](https://github.com/mozilla-ai/otari/blob/main/docs/tools.md)
+identifies Web access as an owner/admin workspace policy. The next authorized
+step is to enable that policy in the Otari dashboard with a narrow domain
+allowlist, then recheck tool discovery. If discovery changes to
+`not_configured`, the hosted deployment operator must configure the web fetch
+backend and, for search, a search provider. The current public response does
+not disclose whether those backends exist; the confirmed blocker today is the
+workspace policy, and enabling policy alone cannot provide a missing backend.
+No web inference request was sent.
+
+The current [budget](https://github.com/mozilla-ai/otari/blob/main/docs/budgets.md),
+[configuration](https://github.com/mozilla-ai/otari/blob/main/docs/configuration.md),
+and [API reference](https://github.com/mozilla-ai/otari/blob/main/docs/api-reference.md)
+describe user-scoped budgets and service-key scoping. No authorized service or
+admin key is available here; prior organization reads with the inference key
+returned HTTP 401. The two $1 monthly ceilings are not per-user budget proof
+and were not modified. Next action: an Otari organization owner must provision
+a dedicated service key limited to two synthetic end-user budget IDs and
+configure individual safe limits. Then the app can send one bounded request
+per fixed identity and record separate gateway usage/refusal evidence. No
+management mutation or test inference was attempted.
+
+The latest recorded guardrail-profile discovery says no guardrail service is
+configured. No further guardrail call was made; an ordinary safety-model call
+would not prove gateway guardrail enforcement.
+
 ## Selected production domain and reported run — 2026-11-05
 
 The selected demo is [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app)
@@ -28,14 +68,12 @@ workspace. A live Chromium navigation attempt from this environment ended with
 `ERR_NETWORK_CHANGED`; no inference was sent and no production browser
 accessibility result is claimed.
 
-Source commit `67a4624e83dde54b3f19067a0182d85e1bbf5551` was pushed to both
-`main` and `hackathon/mozfest-otari-2026`. After that push, the production
-evidence route `/api/evidence?file=mcp-status.json` still returned HTTP 404
-`Unknown evidence file.` This shows the selected host does not yet serve the
-new route, but cannot identify its deployed source commit. No MCP inference call
-was sent. Vercel CLI, project link, deployment token, and project/org IDs are
-absent in this workspace; the selected Vercel project's deployment status needs
-owner-side inspection.
+Historical rollout check: after source commit
+`67a4624e83dde54b3f19067a0182d85e1bbf5551` was pushed, an earlier production
+evidence request returned HTTP 404. That result was superseded by the successful
+HTTP 200 checks documented at the top of this file. Vercel CLI, project link,
+deployment token, and project/org IDs remain absent here, so the selected
+project's exact source commit cannot be identified.
 
 The older [production acceptance record](../evidence/production-acceptance.json)
 captured the earlier non-hyphenated domain with inference disabled. It is retained
@@ -71,18 +109,12 @@ requires one allowed use, one successful result after it, a completed stream,
 and the Otari request ID. This production request satisfies that evidence rule.
 The fixed evidence record is in [`mcp-status.json`](../evidence/mcp-status.json).
 
-The production `/api/evidence?file=mcp-status.json` route returned HTTP 200 at
-`2026-11-05T11:11:45Z`, but served the prior `implemented_unverified` record.
-After commit `b3449f0fd8331417014af48d8b864fb0fd598f57` was pushed to both
-branches, a read at `2026-11-05T12:05:51Z` to
-`/api/evidence?file=routing-production.json` returned HTTP 404 `Unknown
-evidence file.` Vercel request ID:
-`fra1::iad1::mjbz6-1793880350804-aa7d66f909de`. The final evidence bundle is
-therefore **not deployed**. No Vercel connector, CLI, or project deployment
-metadata is available here to inspect the selected project's source SHA or
-trigger a deployment. The live MCP and routing executions themselves are
-corroborated by captured production responses and Otari headers; see their
-individual evidence records.
+Earlier rollout checks (HTTP 200 serving an old MCP record, then HTTP 404 for
+the routing receipt) are retained as historical observations. The newer checks
+at the top supersede those route-status findings: both receipts now return HTTP
+200. This still does not establish the deployed source SHA. The live MCP and
+routing executions are corroborated by captured production responses and Otari
+headers; see their individual evidence records.
 
 ## Spending ceilings — operator-reported, no enforcement proof
 

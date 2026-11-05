@@ -15,12 +15,12 @@ and durable Upstash limiter still apply before demonstrating inference.
 | 0:30–1:30 | A small live invoice run, if enabled; stop after one run | Real hosted Otari inference; deterministic scoring. Say whether values are live UI observations, participant-reported, or independently inspectable gateway evidence. |
 | 1:30–2:00 | Comparison and objective weights                                                   | Tradeoffs measured only on tested cases; missing costs remain unknown                                                                                          |
 | 2:00–2:35 | Separate analyst request in trace                                                  | Evaluator executes the task; another open-weight family diagnoses verified metrics                                                                             |
-| 2:35–3:40 | Capabilities; inspect the routing and repository evidence records | Routing request `5f2cc001-a521-435e-8b51-df0f91452dc5` resolved the policy to Qwen/DeepInfra (`fallback=false`); MCP request `d9283ac4-3aec-4ee3-8151-08937bb08554` returned a successful DeepWiki tool result. Do not induce failure or rerun solely to recreate evidence. The selected host still serves the earlier unverified MCP record. |
+| 2:35–3:40 | Capabilities; inspect the routing and repository evidence records | Routing request `5f2cc001-a521-435e-8b51-df0f91452dc5` resolved the policy to Qwen/DeepInfra (`fallback=false`); MCP request `d9283ac4-3aec-4ee3-8151-08937bb08554` returned a successful DeepWiki tool result. Both redacted records are now served by the selected host (HTTP 200); exact deployed SHA remains unknown. Do not induce failure or rerun solely to recreate evidence. |
 | 3:40–4:20 | Trace, JSON benchmark receipt, and reproduction guide                              | Separate gateway metadata from application events; inspect request IDs, effective models, providers, reported usage, tools, and fallback fields where returned |
 | 4:20–4:45 | Known limitations                                                                  | Tiny datasets, missing hosted setup, exact verified scope                                                                                                      |
 
 If the account becomes unfunded again: show the real 402 credit refusal, real working Python
-sandbox, disabled web tools, and fail-closed unavailable guardrail. Say plainly
+sandbox, `workspace_disabled` web tools, and the recorded unavailable guardrail. Say plainly
 that the evidence-supported assessment is 75/100 potential; fallback, budgets,
 web retrieval, guardrails, and the personal video remain outstanding. This is
 an honest progress demonstration, not a 100-point completion claim.
