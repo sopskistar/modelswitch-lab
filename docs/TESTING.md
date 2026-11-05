@@ -93,6 +93,13 @@ not accessible from this workspace. See
 The production browser check is acceptance inspection, not the intercepted
 Playwright test suite. No fixtures were presented as live production output.
 
+The first final local browser attempt could not connect because the sandbox
+denied the Next server's `0.0.0.0:3011` bind (`EPERM`). Starting the same built
+server with host permission resolved the environment issue; the complete
+desktop/mobile suite then passed 16/16. The initial production URL request was
+also blocked by sandbox DNS; the same read-only request outside the sandbox
+returned HTTP 200. Neither was an application test failure.
+
 `npm run otari:inspect` performs model/tool/profile discovery and read-only
 management-authority checks. `npm run otari:verify` makes at most seven bounded
 execution calls and writes `evidence/verification.json`; attach a hard gateway
