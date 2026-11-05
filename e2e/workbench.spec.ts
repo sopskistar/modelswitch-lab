@@ -356,7 +356,7 @@ test('network interruption retains partial results and allows navigation', async
   await page.goto('/app');
   await page.getByRole('button', { name: 'Run benchmark' }).click();
   await expect(page.getByRole('main').getByRole('alert')).toContainText(
-    'browser lost the response',
+    'browser connection was interrupted',
   );
   await page
     .getByRole('navigation', { name: 'Workbench views' })

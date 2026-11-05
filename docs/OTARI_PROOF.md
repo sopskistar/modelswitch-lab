@@ -46,6 +46,32 @@ The focused branch's Playwright tests verify the UI payload contract using
 intercepted fixtures; those fixtures are not hosted inference evidence. No
 deployment SHA is inferred from the API response.
 
+### Qwen timeout diagnosis — 2026-11-05
+
+The saved Qwen case returned HTTP 200 from the application route with an inner
+504 error, no Otari request ID, no gateway metadata, and no reported usage. The
+saved message exactly matches the `OtariClient` local-abort path. Repository
+configuration sets that abort at 22,000 ms, while `vercel.json` and the route
+set the function maximum to 30 seconds. This is evidence of the application's
+own wait deadline, not an observed Otari gateway timeout or Vercel function
+timeout. The 22,422 ms gap before the next recorded call is consistent with
+that deadline but is not an exact duration measurement. Network interruption
+is also not indicated because the application returned its structured result.
+
+The underlying Otari/provider outcome remains unknown: the app stopped waiting
+without a gateway request ID, so provider completion and billing cannot be
+correlated. Vercel runtime logs and the exact deployed SHA were unavailable for
+inspection. No repeat Qwen request was made because the prior billing outcome
+and remaining spend boundary could not be independently checked. See the
+redacted [`qwen-timeout-diagnosis.json`](../evidence/qwen-timeout-diagnosis.json).
+
+The adapter now reports its own abort as `application_timeout`, distinguishing
+it from an Otari HTTP 408/504 (`gateway_timeout`) and preserving gateway request
+ID/provider metadata when Otari returns one. Browser wait expiration and an
+application endpoint HTTP 504 also receive distinct statuses. No timeout was
+increased and no automatic retry was added. This fixes attribution and display;
+it does not establish why the upstream Qwen request exceeded the app deadline.
+
 ## Web-fetch diagnostic refresh — 2026-11-05 13:33 UTC
 
 After workspace web access was enabled, authenticated catalog discovery on the

@@ -39,7 +39,7 @@ export function normalizeError(
                       : status === 403
                         ? 'forbidden'
                         : status === 408 || status === 504
-                          ? 'timeout'
+                          ? 'gateway_timeout'
                           : 'gateway_error';
   const messages: Record<string, string> = {
     budget_exceeded:
@@ -54,8 +54,8 @@ export function normalizeError(
     not_found: 'Otari could not find this model, policy, or endpoint. Refresh discovery.',
     tool_unavailable: 'The hosted Otari tool is unavailable or disabled for this workspace.',
     forbidden: 'The Otari key is not permitted to perform this request.',
-    timeout:
-      'The Otari request timed out. It may still have incurred usage; inspect its request ID before retrying.',
+    gateway_timeout:
+      'Otari returned a gateway timeout. The request may have incurred usage; inspect its request ID before retrying.',
     gateway_error: 'Otari could not complete this request. Inspect the request ID in the gateway.',
   };
   return {
@@ -265,9 +265,9 @@ export class OtariClient {
     } catch (err) {
       if (err instanceof OtariError) throw err;
       throw new OtariError({
-        code: controller.signal.aborted ? 'timeout' : 'network_error',
+        code: controller.signal.aborted ? 'application_timeout' : 'network_error',
         message: controller.signal.aborted
-          ? 'Otari timed out. Do not automatically retry: the request may be billed.'
+          ? `The application stopped waiting for Otari after ${this.timeoutMs} ms. No gateway response was received; completion and billing are unknown. Check Otari usage before retrying.`
           : 'Could not reach hosted Otari. Check network connectivity and region.',
         status: controller.signal.aborted ? 504 : 502,
         retryAfter: null,
@@ -520,9 +520,9 @@ export class OtariClient {
     } catch (err) {
       if (err instanceof OtariError) throw err;
       throw new OtariError({
-        code: controller.signal.aborted ? 'timeout' : 'network_error',
+        code: controller.signal.aborted ? 'application_timeout' : 'network_error',
         message: controller.signal.aborted
-          ? 'Otari timed out. Do not automatically retry: MCP may already have run.'
+          ? `The application stopped waiting for Otari after ${this.timeoutMs} ms. No complete gateway response was received; tool execution and billing are unknown. Check Otari usage before retrying.`
           : 'Could not complete the hosted Otari MCP request. Inspect its request ID before retrying.',
         status: controller.signal.aborted ? 504 : 502,
         retryAfter: null,

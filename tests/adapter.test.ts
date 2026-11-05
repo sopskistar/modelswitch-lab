@@ -287,7 +287,7 @@ describe('hosted adapter', () => {
     );
     const client = new OtariClient('key', undefined, 5, mock as typeof fetch);
     await expect(client.complete({ model: 'm', messages: [] })).rejects.toMatchObject({
-      safe: { code: 'timeout' },
+      safe: { code: 'application_timeout' },
     });
     expect(mock).toHaveBeenCalledTimes(1);
   });
@@ -317,6 +317,39 @@ describe('hosted adapter', () => {
     );
     await expect(client.models()).rejects.toMatchObject({ safe: { code: 'network_error' } });
   });
+  it('labels its own abort as an application deadline, not an Otari timeout', async () => {
+    const fetcher = vi.fn(
+      (_url: string | URL | Request, options?: RequestInit) =>
+        new Promise<Response>((_resolve, reject) => {
+          options?.signal?.addEventListener('abort', () => reject(new DOMException('aborted')));
+        }),
+    );
+    const client = new OtariClient('key', undefined, 5, fetcher as typeof fetch);
+    await expect(client.models()).rejects.toMatchObject({
+      safe: {
+        code: 'application_timeout',
+        status: 504,
+        requestId: null,
+        message: expect.stringContaining('completion and billing are unknown'),
+      },
+      metadata: undefined,
+    });
+  });
+  it('retains the Otari request identity for an actual gateway timeout', async () => {
+    const fetcher = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ error: { code: 'provider_timeout' } }), {
+        status: 504,
+        headers: { 'Otari-Request-ID': 'gateway-timeout-id', 'Otari-Provider': 'deepinfra' },
+      }),
+    );
+    const client = new OtariClient('key', undefined, 100, fetcher);
+    await expect(
+      client.complete({ model: 'qwen', messages: [{ role: 'user', content: 'x' }] }),
+    ).rejects.toMatchObject({
+      safe: { code: 'gateway_timeout', requestId: 'gateway-timeout-id' },
+      metadata: { requestId: 'gateway-timeout-id', provider: 'deepinfra' },
+    });
+  });
 });
 describe('safe error normalization', () => {
   it.each([
@@ -325,7 +358,7 @@ describe('safe error normalization', () => {
     [402, 'insufficient_credit'],
     [429, 'rate_limit'],
     [404, 'not_found'],
-    [504, 'timeout'],
+    [504, 'gateway_timeout'],
   ])('maps HTTP %s to %s', (status, code) =>
     expect(normalizeError(Number(status)).code).toBe(code),
   );

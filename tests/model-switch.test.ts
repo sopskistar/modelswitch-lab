@@ -92,13 +92,26 @@ describe('Model Switch', () => {
         model: 'qwen',
         caseId: 'inv-01',
         error: {
-          code: 'timeout',
+          code: 'application_timeout',
           message: 'Timeout',
           status: 504,
           retryAfter: null,
           requestId: null,
         },
       }),
-    ).toBe('Request timed out or was interrupted');
+    ).toBe('Application wait deadline reached; gateway outcome unknown');
+    expect(
+      switchResultStatus({
+        model: 'qwen',
+        caseId: 'inv-01',
+        error: {
+          code: 'gateway_timeout',
+          message: 'Gateway timeout',
+          status: 504,
+          retryAfter: null,
+          requestId: 'gateway-timeout-id',
+        },
+      }),
+    ).toBe('Otari gateway timed out');
   });
 });

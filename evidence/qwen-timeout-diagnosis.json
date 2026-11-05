@@ -1,0 +1,39 @@
+{
+  "recordVersion": 1,
+  "capturedAt": "2026-11-05T14:18:03.321Z",
+  "source": "Saved unmocked production model-switch response plus checked repository timeout configuration",
+  "productionUrl": "https://modelswitch-lab.vercel.app",
+  "qwenRequest": {
+    "runId": "2f74ef5f-d550-4c4f-b607-5495f8c497cc",
+    "caseId": "inv-01",
+    "requestedModel": "alibaba/qwen3.8-27b",
+    "applicationHttpStatus": 200,
+    "applicationResultCode": "timeout",
+    "applicationResultStatus": 504,
+    "otariRequestId": null,
+    "effectiveModel": null,
+    "provider": null,
+    "usage": null,
+    "reportedCostUsd": null,
+    "billingOutcome": "unknown"
+  },
+  "repositoryConfiguration": {
+    "otariClientTimeoutMs": 22000,
+    "executeFunctionMaxDurationSeconds": 30,
+    "browserWaitTimeoutMs": 29000,
+    "automaticPaidRetries": false
+  },
+  "diagnosis": {
+    "applicationDeadline": "confirmed by the saved response message matching the OtariClient local-abort path and the configured 22000ms timeout",
+    "vercelFunctionTimeout": "not indicated by the observed HTTP 200 JSON response; Vercel logs are unavailable here",
+    "gatewayTimeout": "not evidenced: no Otari request ID or gateway response metadata was returned",
+    "networkFailure": "not evidenced: the route returned its structured application-level error",
+    "upstreamProviderOutcome": "unknown; the gateway may have continued processing after the application stopped waiting",
+    "limitations": [
+      "The exact production deployment SHA and Vercel runtime logs could not be inspected.",
+      "No Otari request ID exists in the saved result to correlate with hosted activity.",
+      "The interval to the next recorded request is 22422ms, consistent with the configured deadline but not an exact measured request duration.",
+      "No repeat inference was made because billing for this request and remaining budget could not be independently verified."
+    ]
+  }
+}

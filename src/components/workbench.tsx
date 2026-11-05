@@ -74,6 +74,20 @@ const fallbackError = (message: string): SafeError => ({
   retryAfter: null,
   requestId: null,
 });
+const interruptedError = (error: unknown): SafeError => {
+  if (error instanceof DOMException && error.name === 'TimeoutError')
+    return {
+      code: 'browser_wait_timeout',
+      message:
+        'The browser stopped waiting for the application. The server or gateway may still be processing; check the trace or Otari usage before retrying.',
+      status: 0,
+      retryAfter: null,
+      requestId: null,
+    };
+  return fallbackError(
+    'The browser connection was interrupted. The request outcome is unknown; inspect the trace and Otari usage before retrying.',
+  );
+};
 function Json({ value }: { value: unknown }) {
   return <pre className="json">{JSON.stringify(value, null, 2)}</pre>;
 }
@@ -254,7 +268,23 @@ export function Workbench() {
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(29000),
     });
-    const data = await response.json();
+    let data: { error?: SafeError; [key: string]: unknown };
+    try {
+      data = await response.json();
+    } catch {
+      const gatewayTimeout = response.status === 504;
+      data = {
+        error: {
+          code: gatewayTimeout ? 'function_timeout' : 'endpoint_error',
+          message: gatewayTimeout
+            ? 'The application endpoint returned HTTP 504 without an Otari response. The gateway outcome and billing are unknown; inspect Otari usage before retrying.'
+            : `The application endpoint returned HTTP ${response.status} without a readable result. The gateway outcome may be unknown.`,
+          status: response.status,
+          retryAfter: null,
+          requestId: null,
+        },
+      };
+    }
     return { response, data };
   }
   async function startRun() {
@@ -328,9 +358,9 @@ export function Workbench() {
             publish();
             continue;
           }
-          const result: CaseResult = data.result;
+          const result = data.result as CaseResult;
           next.cases.push(result);
-          if (data.receipt) receipts.push(data.receipt);
+          if (typeof data.receipt === 'string') receipts.push(data.receipt);
           if (result.metadata)
             add('gateway', result.error ? 'Gateway refusal' : 'Gateway response', {
               caseId: fixture.id,
@@ -356,10 +386,8 @@ export function Workbench() {
               caseId: fixture.id,
               ...result.evaluation,
             });
-        } catch {
-          const error = fallbackError(
-            'The browser lost the response. This request may still have incurred usage. Inspect Otari before repeating.',
-          );
+        } catch (cause) {
+          const error = interruptedError(cause);
           next.cases.push({ model, caseId: fixture.id, error });
           add('application', 'Response interrupted', error);
           blocked = error;
@@ -466,12 +494,8 @@ export function Workbench() {
         result: data.result as CaseResult,
       };
       setSwitchTests((current) => [record, ...current].slice(0, 8));
-    } catch {
-      setSwitchError(
-        fallbackError(
-          'The browser lost the response. Inspect Otari before repeating this request.',
-        ),
-      );
+    } catch (cause) {
+      setSwitchError(interruptedError(cause));
     } finally {
       setSwitchBusy(false);
     }

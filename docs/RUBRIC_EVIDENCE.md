@@ -151,3 +151,16 @@ production response was returned with `verified: false`. The corrected verifier
 requires a complete stream, request ID, exactly one allowed use, and exactly
 one successful result following it. It now matches the actual documented
 gateway event shape. This project record is not signed or externally attested.
+
+## Model Switch timeout reliability note — 2026-11-05
+
+The later one-case production attempt did not complete for Qwen: the
+application returned an HTTP 200 envelope containing a local-deadline error,
+without an Otari request ID or usage. The paired Llama case completed (6/6,
+Bedrock, 929 ms, reported $0.000170), but these results do not form a
+successful paired comparison. The app now separates its local wait deadline
+from an Otari HTTP 504 and browser/network interruption. This diagnostic fix
+adds no rubric points and does not resolve the unknown upstream Qwen or
+billing outcome. See
+[`qwen-timeout-diagnosis.json`](../evidence/qwen-timeout-diagnosis.json) and
+[`OTARI_PROOF.md`](OTARI_PROOF.md).

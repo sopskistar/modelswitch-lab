@@ -38,8 +38,15 @@ export function switchRecommendation(results: CaseResult[]): CaseResult | undefi
 export function switchResultStatus(result: CaseResult): string {
   if (result.skipped) return 'Not sent';
   if (result.error) {
-    if (result.error.code === 'timeout' || result.error.code === 'network_interrupted')
-      return 'Request timed out or was interrupted';
+    if (result.error.code === 'application_timeout')
+      return 'Application wait deadline reached; gateway outcome unknown';
+    if (result.error.code === 'gateway_timeout') return 'Otari gateway timed out';
+    if (result.error.code === 'function_timeout')
+      return 'Application endpoint returned HTTP 504; Otari outcome unknown';
+    if (result.error.code === 'browser_wait_timeout')
+      return 'Browser stopped waiting; request outcome unknown';
+    if (result.error.code === 'network_error' || result.error.code === 'network_interrupted')
+      return 'Network connection interrupted; request outcome unknown';
     if (result.error.code === 'budget_exceeded') return 'Otari budget refused the request';
     if (result.error.code === 'insufficient_credit') return 'Otari account has insufficient funds';
     if (result.error.code === 'rate_limit' || result.error.code === 'demo_limit')
