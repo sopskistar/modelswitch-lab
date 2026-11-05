@@ -43,31 +43,81 @@ The composite `demoEnabled: false` does not disclose whether
 production environment values were not accessible or read. The public catalog
 lists model metadata and tool availability only; it returns no API credentials.
 
-## Dedicated budget-key attempt — 2026-11-05
+## Dedicated budget-key management investigation — 2026-11-05
 
-The current local `.env.local` environment contains the Qwen evaluator setting
-(`alibaba/qwen3.8-27b`), but `OTARI_BUDGET_TEST_KEY` is not available as an
-active environment assignment. I did not substitute another key. The probe
-stopped before making any HTTP request, so there is no test-key
-model-access result, observed budget configuration, response status, error code,
-request ID, or spend. The budget boundary and request-count-versus-dollar
-configuration on the named key remain unknown.
+The test credential was confirmed present in `.env.local` as
+`OTARI_BUDGET_TEST_KEY` without printing its value. It was used only for
+read-only checks. `GET /models` returned HTTP 200 with 162 accessible model
+entries and included configured evaluator `alibaba/qwen3.8-27b`, confirming
+that the dedicated test key can access Qwen. No completion or other billable
+inference was sent.
+
+Read-only management requests with that same credential returned HTTP 401 and
+`Invalid master key` for `GET /organizations/me`,
+`GET /organizations/me/budgets`, and `GET /organizations/me/keys?limit=100`.
+These responses had no Otari request ID or budget scope. Therefore this
+inference credential does not provide the management authority needed to
+inspect or update the named budget. It does not establish whether the human
+account owner has sufficient dashboard-session authority.
 
 Current [Otari budget docs](https://github.com/mozilla-ai/otari/blob/main/docs/budgets.md)
-support `max_budget` in USD, `token_limit`, `request_limit` per period, and
-per-user `rpm_limit`/`tpm_limit`. A budget record alone enforces nothing until
-it is attached as a key budget/ceiling. The docs describe setting an existing
-budget or custom amount on a key; inspect the authorized account UI/API to see
-the actual boundary attached to this specific key.
+define `request_limit` as a request count over a budget period, independently
+of the existing USD `max_budget`. The generated
+[OpenAPI specification](https://github.com/mozilla-ai/otari/blob/main/docs/public/openapi.json)
+defines `PATCH /api/v1/organizations/me/budgets/{budget_id}` with
+`OrganizationBudgetUpdate`; `request_limit` is an optional integer (or null),
+and omitted fields remain unchanged. The organization-budget API is owner/admin
+scoped. The separate scoped-ceiling API describes a ceiling as referring to a
+budget and reports the scope, including `api_token`; changing a budget can
+therefore affect every ceiling that references it. The dashboard docs state
+that owners/admins can manage their organization budgets and key spending
+ceilings, while the account's budget editor currently exposes only Name,
+Limit (USD), and Resets.
 
-For a genuine request-count test, the operator should make the test key
-available as `OTARI_BUDGET_TEST_KEY` locally and confirm (without copying the
-secret into logs) that its attached budget has `request_limit: 1`. Then verify
-Qwen access, make one short completion, and make exactly one more. Capture both
-statuses and the second request's `Otari-Error-Code`, `Otari-Budget-Scope`,
-`Retry-After`, and request ID if returned. A dollar-only `max_budget` is not
-evidence of a request-count limit, and this work did not attempt to spend one
-down.
+The current docs support organization owner/admin management: the generated
+OpenAPI marks `GET /api/v1/organizations/me/spend-ceilings` as owner/admin only,
+and the dashboard guide says owners/admins manage their organization's budgets
+and ceilings. To inspect the association, an authorized owner/admin reads that
+endpoint and identifies the test key's ceiling by its `scope_type: "api_token"`
+and the test key's ID; the response includes `budget_id`, `request_limit`,
+`max_budget`, reset fields, and `manageable`. Then the supported update is
+`PATCH /api/v1/organizations/me/budgets/{budget_id}` with
+`{"request_limit":1}`. `OrganizationBudgetUpdate` treats omitted fields as
+unchanged, so that body preserves the target budget's existing name, $1
+`max_budget`, and monthly reset. Do not include nulls, since explicit null
+clears a field. This patch changes the budget itself, so it is safe only after
+the owner confirms the budget is attached only to the test-key ceiling; never
+patch the Setup guide budget.
+
+The documentation establishes this owner/admin API capability, but this run
+could not exercise it: the dedicated inference key received HTTP 401
+`Invalid master key`, and no separate authorized management channel was
+provided. The UI editor the operator inspected exposes only Name, Limit (USD),
+and Resets. Do not extract a dashboard session credential or try another
+unauthorized credential. The precise human action is to ask Mozilla Otari for
+an approved way to invoke the organization-owner API operation on the hosted
+account (or expose the request limit in its dashboard editor), then:
+
+1. Read `GET /api/v1/organizations/me/spend-ceilings`; verify the test
+   `api_token` scope and that it is the only ceiling referencing the target
+   budget.
+2. Read `GET /api/v1/organizations/me/budgets`; select the matching budget ID
+   and confirm the existing $1 monthly boundary.
+3. PATCH only that budget ID with `{"request_limit":1}` and read it back to
+   confirm both `request_limit: 1` and unchanged `max_budget: 1` / monthly
+   reset.
+
+Until those reads and the owner-authorized patch are possible, keep both $1
+monthly ceilings unchanged and do not consume the test budget. Consequently
+there is no observed request-limit configuration, `budget_exceeded` refusal,
+inference request ID, or budget enforcement proof. The budget rubric remains
+unverified.
+
+The relevant API calls made here were read-only metadata checks, not inference:
+`GET /models` (200; no request ID), `GET /organizations/me` (401),
+`GET /organizations/me/budgets` (401), and
+`GET /organizations/me/keys?limit=100` (401). The three 401 responses had no
+Otari request ID, `Otari-Error-Code`, or budget scope header.
 
 Keep refusal types separate: Otari documents `budget_exceeded` as HTTP 403
 with `Otari-Budget-Scope` (and `Retry-After` when a reset will make it admissible);

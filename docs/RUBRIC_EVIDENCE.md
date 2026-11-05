@@ -14,7 +14,7 @@ This is an evidence assessment, not a judge's official awarded score.
 | MCP integrations              | 10              | None                                               | No                           | No execution evidence                                                                                                                            | Configure safe read-only stored MCP through authorized workspace admin; add bounded action                   | Not implemented                         | No enabled integration established                                 |
 | Web search or fetch           | 10              | `/api/execute` web action; exact source allowlist  | Discovery only               | Latest `discovery.json`: `workspace_disabled`                                                                                                    | Enable workspace tool/domain restriction; Fetch through Otari; inspect completed tool call                   | Unavailable on hosted account           | Model summary alone cannot prove retrieval                         |
 | Code execution                | 10              | `/api/execute` code action; typed verifier         | **Yes**                      | `verification.json`, `732c1ded-aba4-4210-8cd7-1251027e367c`; exit 0, correct=4, total=5, accuracy=.8                                             | `npm run otari:verify -- --capabilities-only` or Check sandbox                                               | **Verified live**                       | Fixed control vectors; cost unreported                             |
-| Budgets/spending limits       | 10              | Denial normalization; setup/boundary guide         | No; no test-key request sent | Primary-key management read was unauthorized; `OTARI_BUDGET_TEST_KEY` is absent from the active local environment; prior $0 balance refusal only | Make dedicated key available locally; confirm attached budget `request_limit=1`; send two tiny Qwen requests | Unverified; no new enforcement evidence | Dollar-only caps are not request-count proof; no test key was used |
+| Budgets/spending limits       | 10              | Denial normalization; setup/boundary guide         | No; no inference sent        | Test key loaded; `GET /models` returned 200 and included Qwen; organization management reads returned 401 `Invalid master key`; OpenAPI supports `request_limit` on organization budget updates | An authorized organization management channel must verify the test-key ceiling and set `request_limit=1` without changing `max_budget`; then run at most two tiny Qwen requests | Unverified; no enforcement evidence | Dashboard editor exposes only name/USD limit/reset; test inference key has no observed management access; no request was sent |
 | Multiple distinct model roles | 10              | Evaluator scoring then separate analyst action     | **Yes**                      | Typed verifier and `browser-smoke.json` record distinct role requests and real providers                                                         | Run benchmark, inspect analyst event and request IDs/models                                                  | **Verified live**                       | Comparison calls alone are not the distinct-role proof             |
 | Inference guardrails          | 10              | `/api/execute` guardrail fixture                   | Fail-closed refusal observed | `verification.json`, 502, `ef371ed6-bad2-4631-9e63-26f4c452509f`; no service configured                                                          | Configure actual service; inspect evaluated verdict or violation                                             | Unavailable on hosted account           | Service outage is not a guardrail evaluation                       |
 | Per-user budgets              | 10              | None                                               | No                           | None                                                                                                                                             | Requires actual service key and end-user budgets                                                             | Not implemented                         | No local label is counted                                          |
@@ -57,11 +57,14 @@ The refreshed read-only discovery still reports web fetch/search as
 budget-management reads with the inference key. Detailed request IDs and current
 tool statuses are linked in [OTARI_PROOF.md](OTARI_PROOF.md).
 
-Otari's current budget documentation supports both `max_budget` (USD) and
-`request_limit` (requests per budget period), but the exact `modelswitch-budget-proof`
-key attachment could not be read or tested in this run. No new budget point is
-verified; total evidence remains **55/100 potential**. See the attempt record in
-[`OTARI_PROOF.md`](OTARI_PROOF.md).
+Otari's current budget documentation and generated OpenAPI support both
+`max_budget` (USD) and `request_limit` (requests per budget period). Read-only
+checks with the dedicated test inference key confirmed access to the Qwen model
+catalog but returned HTTP 401 `Invalid master key` for organization context,
+organization budgets, and owned keys. The specific test-key ceiling attachment
+could not be inspected, and no budget mutation or inference request was made.
+No new budget point is verified; total evidence remains **55/100 potential**.
+See the attempt record in [`OTARI_PROOF.md`](OTARI_PROOF.md).
 
 Production acceptance on 2026-11-05 did not change the **55/100 potential**
 evidence assessment: it verified the live site and its safe disabled state, not
