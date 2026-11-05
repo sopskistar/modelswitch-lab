@@ -71,13 +71,15 @@ requires one allowed use, one successful result after it, a completed stream,
 and the Otari request ID. This production request satisfies that evidence rule.
 The fixed evidence record is in [`mcp-status.json`](../evidence/mcp-status.json).
 
-The production `/api/evidence?file=mcp-status.json` route is currently present
-(HTTP 200), but a fresh read still served the prior unverified JSON, so the
-updated evidence record and corrected verifier have not yet been confirmed on
-the deployment. The exact production source SHA remains unavailable without
-authorized Vercel deployment metadata. The live run itself is corroborated by
-the production `/api/execute` response and Otari headers captured during this
-work; cost remains unknown rather than zero.
+The production `/api/evidence?file=mcp-status.json` route is present (HTTP 200),
+but a read at `2026-11-05T11:11:45Z` still served the prior
+`implemented_unverified` record, after commits `accb1b2` and `6ae88ef` were
+pushed to both branches. The updated evidence record and corrected verifier
+have therefore **not** been confirmed on production. No Vercel connector, CLI,
+or project deployment metadata is available here to identify the production
+SHA or trigger/inspect the selected project's deployment. The live MCP run
+itself is corroborated by the production `/api/execute` response and Otari
+headers captured during this work; cost remains unknown rather than zero.
 
 ## Spending ceilings — operator-reported, no enforcement proof
 

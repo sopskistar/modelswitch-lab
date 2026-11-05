@@ -108,6 +108,15 @@
       "servedStatus": "implemented_unverified",
       "observation": "After source commit accb1b2 was pushed to both main and hackathon branches, the route still served the previous record. This check does not confirm that accb1b2 is deployed; exact Vercel source SHA remains unknown."
     },
+    "finalAfterPushCheck": {
+      "checkedAt": "2026-11-05T11:11:45Z",
+      "path": "/api/evidence?file=mcp-status.json",
+      "httpStatus": 200,
+      "vercelRequestId": "fra1::iad1::gmmpw-1793877104828-644bf2532966",
+      "servedStatus": "implemented_unverified",
+      "servedRequestId": null,
+      "observation": "After commits accb1b2 and 6ae88ef were pushed to main and hackathon branches, the official host continued serving the previous evidence record. Deployment source SHA cannot be confirmed without access to the selected Vercel project metadata."
+    },
     "limitations": [
       "The route returned a genuine completed tool result, but its then-current application-level verified flag was false due to a parser mismatch.",
       "The gateway reported no cost; this value is unknown, not zero.",
