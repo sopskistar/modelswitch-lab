@@ -7,6 +7,7 @@ import budgetReport from '../../../../evidence/budget-operator-report.json';
 import routingProduction from '../../../../evidence/routing-production.json';
 import webFetchDiagnosis from '../../../../evidence/web-fetch-diagnosis.json';
 import modelSwitchProduction from '../../../../evidence/model-switch-production.json';
+import productionDeploymentCheck from '../../../../evidence/production-deployment-check.json';
 export function GET(request: Request) {
   const file = new URL(request.url).searchParams.get('file');
   return file === 'discovery.json'
@@ -23,7 +24,9 @@ export function GET(request: Request) {
               ? NextResponse.json(webFetchDiagnosis)
               : file === 'model-switch-production.json'
                 ? NextResponse.json(modelSwitchProduction)
-                : file === 'budget-operator-report.json'
-                  ? NextResponse.json(budgetReport)
-                  : NextResponse.json({ error: 'Unknown evidence file.' }, { status: 404 });
+                : file === 'production-deployment-check.json'
+                  ? NextResponse.json(productionDeploymentCheck)
+                  : file === 'budget-operator-report.json'
+                    ? NextResponse.json(budgetReport)
+                    : NextResponse.json({ error: 'Unknown evidence file.' }, { status: 404 });
 }

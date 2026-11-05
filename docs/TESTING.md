@@ -24,6 +24,14 @@ cause remains unknown. See
 [`web-fetch-diagnosis.json`](../evidence/web-fetch-diagnosis.json). No repeat
 request was made after the latest failure.
 
+After pushing the release commit, read-only HTTP checks found the official
+production root still rendered the old “Put a model to the test” workspace and
+`/app?view=model-switch` returned 404. This confirms the new UI is not yet
+deployed. The repository commit is `1e74ef764d9b2642a3a655c9e6217572c857a55b`;
+no Vercel CLI, project link, or token is available to inspect or trigger that
+project's deployment. See
+[`production-deployment-check.json`](../evidence/production-deployment-check.json).
+
 Use Node 22 and `npm ci` (lockfile + `.npmrc` preserve legacy peer resolution).
 The first npm 10 install crashed resolving optional Vitest peers; no application
 feature depends on that workaround. Production uses standard Next.js webpack

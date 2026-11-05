@@ -1,6 +1,6 @@
 # Judge walkthrough
 
-Start at the selected public demo: [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app). The local application now opens on a landing page; the benchmark workbench is `/app`. Public production UI version and deployed Git SHA have not yet been independently confirmed, so use the committed evidence files if the new Model Switch view is not present.
+Start at the selected public demo: [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app). **Deployment status checked Nov 5, 2026:** the domain still serves the previous workspace at `/` and returns 404 for `/app?view=model-switch`; this commit has not reached production. The walkthrough below describes the verified local build. Until the existing `modelswitch-lab` Vercel project deploys commit `1e74ef7`, judges should inspect the committed receipts and follow the prior production capabilities page. See [`production-deployment-check.json`](../evidence/production-deployment-check.json) for Vercel request IDs and the operator action.
 
 ## Seven checkpoints
 

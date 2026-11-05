@@ -6,6 +6,8 @@
 
 **Live demo:** [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app) · **[Judge walkthrough](docs/JUDGE_WALKTHROUGH.md)** · [GitHub](https://github.com/sopskistar/modelswitch-lab)
 
+**Deployment note (Nov 5, 2026):** GitHub `main` is at `1e74ef7`, but the official Vercel site still serves the previous workspace and `/app` returns 404. The new landing and Model Switch workflow are ready in the repository; see the [deployment check](evidence/production-deployment-check.json) for the exact Vercel action needed.
+
 ![ModelSwitch Lab Model Switch workspace](docs/screenshots/model-switch-desktop.png)
 
 ## Why it is useful
