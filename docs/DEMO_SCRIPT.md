@@ -11,7 +11,7 @@ Rehearse only after funding the account and validating each claimed capability.
 | 1:30–2:00 | Comparison and objective weights | Tradeoffs measured only on tested cases; missing costs remain unknown |
 | 2:00–2:35 | Separate analyst request in trace | Evaluator executes the task; another open-weight family diagnoses verified metrics |
 | 2:35–3:40 | Capabilities and exported evidence | Show actual executed features and gateway request IDs. Code and distinct roles have evidence now. Only show six as verified after all six really pass. |
-| 3:40–4:20 | Trace, export, and reproduction guide | Separate gateway metadata from application events; judges can reproduce and inspect |
+| 3:40–4:20 | Trace, JSON benchmark receipt, and reproduction guide | Separate gateway metadata from application events; inspect request IDs, effective models, providers, reported usage, tools, and fallback fields where returned |
 | 4:20–4:45 | Known limitations | Tiny datasets, missing hosted setup, exact verified scope |
 
 If the account becomes unfunded again: show the real 402 credit refusal, real working Python

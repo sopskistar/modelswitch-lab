@@ -1,6 +1,6 @@
 [
   {
-    "at": "2026-11-04T16:09:43.429Z",
+    "at": "2026-11-04T23:15:18.251Z",
     "path": "/models",
     "status": 200,
     "data": {
@@ -16,7 +16,7 @@
             "output_price_per_million": 1,
             "cache_read_price_per_million": 0.05,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -51,7 +51,7 @@
             "output_price_per_million": 3,
             "cache_read_price_per_million": 0.22,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -85,7 +85,7 @@
             "input_price_per_million": 0,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "type": "image",
@@ -100,7 +100,7 @@
             "input_price_per_million": 1.01,
             "output_price_per_million": 1.01,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "deployment_managed": false
@@ -114,7 +114,7 @@
             "input_price_per_million": 0.09,
             "output_price_per_million": 0.55,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -145,7 +145,7 @@
             "input_price_per_million": 0.12,
             "output_price_per_million": 0.5,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 40960,
@@ -177,7 +177,7 @@
             "input_price_per_million": 0.1,
             "output_price_per_million": 0.3,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -208,7 +208,7 @@
             "input_price_per_million": 0.08,
             "output_price_per_million": 0.28,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 40960,
@@ -240,7 +240,7 @@
             "input_price_per_million": 0.15,
             "output_price_per_million": 0.6,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -271,7 +271,7 @@
             "input_price_per_million": 0.45,
             "output_price_per_million": 1.8,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 131072,
@@ -303,7 +303,7 @@
             "output_price_per_million": 1,
             "cache_read_price_per_million": 0.1,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -334,7 +334,7 @@
             "input_price_per_million": 0.01,
             "output_price_per_million": 0.01,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 32768,
@@ -350,7 +350,7 @@
             "input_price_per_million": 0.01,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "type": "embedding",
@@ -365,7 +365,7 @@
             "input_price_per_million": 0.01,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 40960,
@@ -391,7 +391,7 @@
             "input_price_per_million": 0.09,
             "output_price_per_million": 1.1,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -422,7 +422,7 @@
             "input_price_per_million": 0.2,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "deployment_managed": false
@@ -437,7 +437,7 @@
             "output_price_per_million": 0.88,
             "cache_read_price_per_million": 0.11,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -469,7 +469,7 @@
             "input_price_per_million": 0.15,
             "output_price_per_million": 0.6,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -501,7 +501,7 @@
             "input_price_per_million": 0.26,
             "output_price_per_million": 2.6,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -535,7 +535,7 @@
             "input_price_per_million": 0.1,
             "output_price_per_million": 0.15,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -569,7 +569,7 @@
             "input_price_per_million": 0.32,
             "output_price_per_million": 3.2,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -604,7 +604,7 @@
             "output_price_per_million": 0.95,
             "cache_read_price_per_million": 0.1,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -652,7 +652,7 @@
                 "cache_read_price_per_million": 1.25
               }
             ],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 256000,
@@ -684,7 +684,7 @@
             "output_price_per_million": 6,
             "cache_read_price_per_million": 0.25,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -717,7 +717,7 @@
             "output_price_per_million": 2.5,
             "cache_read_price_per_million": 0.05,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -752,7 +752,7 @@
             "output_price_per_million": 0.382,
             "cache_read_price_per_million": 0.0141,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1000000,
@@ -786,7 +786,7 @@
             "output_price_per_million": 4.951,
             "cache_read_price_per_million": 0.206,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 256000,
@@ -820,7 +820,7 @@
             "input_price_per_million": 0,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 32000,
@@ -835,7 +835,7 @@
             "input_price_per_million": 0,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 32000,
@@ -850,7 +850,7 @@
             "input_price_per_million": 0,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "type": "embedding",
@@ -865,7 +865,7 @@
             "input_price_per_million": 0.009,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "type": "embedding",
@@ -882,7 +882,7 @@
             "cache_read_price_per_million": 0.075,
             "cache_write_price_per_million": 0.3,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1000000,
@@ -918,7 +918,7 @@
             "cache_read_price_per_million": 0.015,
             "cache_write_price_per_million": 0.06,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 300000,
@@ -953,7 +953,7 @@
             "cache_read_price_per_million": 0.00875,
             "cache_write_price_per_million": 0.035,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 128000,
@@ -985,7 +985,7 @@
             "cache_read_price_per_million": 0.2,
             "cache_write_price_per_million": 0.8,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 300000,
@@ -1018,7 +1018,7 @@
             "input_price_per_million": 0.1,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "deployment_managed": false
@@ -1032,7 +1032,7 @@
             "input_price_per_million": 10,
             "output_price_per_million": 50,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1000000,
@@ -1066,7 +1066,7 @@
             "input_price_per_million": 0,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "type": "embedding",
@@ -1081,7 +1081,7 @@
             "input_price_per_million": 0.11215,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 8191,
@@ -1105,7 +1105,7 @@
                 "cache_read_price_per_million": 0.05
               }
             ],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 256000,
@@ -1129,7 +1129,7 @@
                 "cache_read_price_per_million": 0.2
               }
             ],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 256000,
@@ -1170,7 +1170,7 @@
                 "cache_read_price_per_million": 0.2
               }
             ],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 256000,
@@ -1211,7 +1211,7 @@
                 "cache_read_price_per_million": 0.2
               }
             ],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 256000,
@@ -1244,7 +1244,7 @@
             "input_price_per_million": 1.35,
             "output_price_per_million": 5.4,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 128000,
@@ -1274,7 +1274,7 @@
             "output_price_per_million": 2.15,
             "cache_read_price_per_million": 0.35,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 163840,
@@ -1306,7 +1306,7 @@
             "input_price_per_million": 0.32,
             "output_price_per_million": 0.89,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 163840,
@@ -1338,7 +1338,7 @@
             "output_price_per_million": 0.95,
             "cache_read_price_per_million": 0.13,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 163840,
@@ -1370,7 +1370,7 @@
             "input_price_per_million": 0.62,
             "output_price_per_million": 1.85,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 163840,
@@ -1404,7 +1404,7 @@
             "cache_read_price_per_million": 0.018,
             "cache_write_price_per_million": 0.1125,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -1437,7 +1437,7 @@
             "output_price_per_million": 0.18,
             "cache_read_price_per_million": 0.015,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -1470,7 +1470,7 @@
             "output_price_per_million": 1.32,
             "cache_read_price_per_million": 0.014,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -1504,7 +1504,7 @@
             "output_price_per_million": 2.6,
             "cache_read_price_per_million": 0.1,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -1537,7 +1537,7 @@
             "output_price_per_million": 2.6,
             "cache_read_price_per_million": 0.1,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -1570,7 +1570,7 @@
             "output_price_per_million": 0.6,
             "cache_read_price_per_million": 0.006,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -1604,7 +1604,7 @@
             "output_price_per_million": 0.294,
             "cache_read_price_per_million": 0.003,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -1638,7 +1638,7 @@
             "output_price_per_million": 0.84,
             "cache_read_price_per_million": 0.0042,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1000000,
@@ -1672,7 +1672,7 @@
             "output_price_per_million": 0.84,
             "cache_read_price_per_million": 0.0042,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1000000,
@@ -1705,7 +1705,7 @@
             "input_price_per_million": 0.02,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "type": "embedding",
@@ -1721,7 +1721,7 @@
             "output_price_per_million": 15,
             "cache_read_price_per_million": 0.3,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -1754,7 +1754,7 @@
             "input_price_per_million": 0,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "type": "image",
@@ -1769,7 +1769,7 @@
             "input_price_per_million": 0,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "type": "image",
@@ -1784,7 +1784,7 @@
             "input_price_per_million": 0.09,
             "output_price_per_million": 0.29,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 131072,
@@ -1814,7 +1814,7 @@
             "input_price_per_million": 0.1,
             "output_price_per_million": 0.3,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 110000,
@@ -1846,7 +1846,7 @@
             "input_price_per_million": 0.04,
             "output_price_per_million": 0.08,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 131072,
@@ -1866,22 +1866,6 @@
           "deployment_managed": false
         },
         {
-          "id": "google/gemma-4-e2b-it",
-          "object": "model",
-          "created": 1793283428,
-          "owned_by": "google",
-          "pricing": {
-            "input_price_per_million": 0.04,
-            "output_price_per_million": 0.08,
-            "pricing_tiers": [],
-            "unit": "tokens"
-          },
-          "pricing_source": "configured",
-          "context_window": 131072,
-          "type": "chat",
-          "deployment_managed": false
-        },
-        {
           "id": "granite-4.2-8b",
           "object": "model",
           "created": 1793283428,
@@ -1891,7 +1875,7 @@
             "output_price_per_million": 0.15,
             "cache_read_price_per_million": 0.015,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 131072,
@@ -1908,7 +1892,7 @@
             "output_price_per_million": 0.357,
             "cache_read_price_per_million": 0.153,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 20480,
@@ -1924,7 +1908,7 @@
             "input_price_per_million": 0.72,
             "output_price_per_million": 0.72,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 128000,
@@ -1954,7 +1938,7 @@
             "input_price_per_million": 0.22,
             "output_price_per_million": 0.22,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 128000,
@@ -1984,7 +1968,7 @@
             "input_price_per_million": 0.72,
             "output_price_per_million": 0.72,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 128000,
@@ -2014,7 +1998,7 @@
             "input_price_per_million": 0.24,
             "output_price_per_million": 0.97,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1000000,
@@ -2045,7 +2029,7 @@
             "input_price_per_million": 0.1,
             "output_price_per_million": 0.3,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 327680,
@@ -2077,7 +2061,7 @@
             "input_price_per_million": 0.17,
             "output_price_per_million": 0.66,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 10000000,
@@ -2108,7 +2092,7 @@
             "input_price_per_million": 0.18,
             "output_price_per_million": 0.18,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 163840,
@@ -2137,7 +2121,7 @@
             "output_price_per_million": 4.25,
             "cache_read_price_per_million": 0.15,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -2170,7 +2154,7 @@
             "input_price_per_million": 0.07,
             "output_price_per_million": 0.14,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "type": "chat",
@@ -2185,7 +2169,7 @@
             "input_price_per_million": 0.3,
             "output_price_per_million": 1.2,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 204608,
@@ -2217,7 +2201,7 @@
             "input_price_per_million": 0.3,
             "output_price_per_million": 1.2,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 196608,
@@ -2249,7 +2233,7 @@
             "input_price_per_million": 0.3,
             "output_price_per_million": 1.2,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 196608,
@@ -2282,7 +2266,7 @@
             "output_price_per_million": 1.1,
             "cache_read_price_per_million": 0.056,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 524288,
@@ -2317,7 +2301,7 @@
             "output_price_per_million": 0.6,
             "cache_read_price_per_million": 0.015,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1000000,
@@ -2351,7 +2335,7 @@
             "output_price_per_million": 0.9,
             "cache_read_price_per_million": 0.03,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 256000,
@@ -2383,7 +2367,7 @@
             "input_price_per_million": 0.15,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 8192,
@@ -2411,7 +2395,7 @@
             "output_price_per_million": 0.9,
             "cache_read_price_per_million": 0.03,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 256000,
@@ -2443,7 +2427,7 @@
             "input_price_per_million": 0.4,
             "output_price_per_million": 2,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -2474,7 +2458,7 @@
             "input_price_per_million": 2,
             "output_price_per_million": 5,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -2506,7 +2490,7 @@
             "input_price_per_million": 0.5,
             "output_price_per_million": 1.5,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 128000,
@@ -2539,7 +2523,7 @@
             "input_price_per_million": 0.5,
             "output_price_per_million": 1.5,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "deployment_managed": false
@@ -2553,7 +2537,7 @@
             "input_price_per_million": 0.2,
             "output_price_per_million": 0.2,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 128000,
@@ -2586,7 +2570,7 @@
             "output_price_per_million": 0.2,
             "cache_read_price_per_million": 0.02,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -2620,7 +2604,7 @@
             "output_price_per_million": 0.1,
             "cache_read_price_per_million": 0.01,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 131072,
@@ -2654,7 +2638,7 @@
             "output_price_per_million": 0.15,
             "cache_read_price_per_million": 0.015,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -2688,7 +2672,7 @@
             "output_price_per_million": 0.1,
             "cache_read_price_per_million": 0.01,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 131072,
@@ -2722,7 +2706,7 @@
             "output_price_per_million": 0.15,
             "cache_read_price_per_million": 0.015,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -2756,7 +2740,7 @@
             "output_price_per_million": 0.9,
             "cache_read_price_per_million": 0.15,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 256000,
@@ -2771,7 +2755,7 @@
             "input_price_per_million": 0.1,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 8000,
@@ -2799,7 +2783,7 @@
             "output_price_per_million": 1.5,
             "cache_read_price_per_million": 0.05,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -2833,7 +2817,7 @@
             "output_price_per_million": 2.1,
             "cache_read_price_per_million": 0.07,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -2868,7 +2852,7 @@
             "output_price_per_million": 2.1,
             "cache_read_price_per_million": 0.07,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1000000,
@@ -2884,7 +2868,7 @@
             "output_price_per_million": 1.5,
             "cache_read_price_per_million": 0.05,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -2919,7 +2903,7 @@
             "cache_read_price_per_million": 0.4,
             "cache_write_price_per_million": 0.4,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "deployment_managed": false
@@ -2934,7 +2918,7 @@
             "output_price_per_million": 7.5,
             "cache_read_price_per_million": 0.15,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "deployment_managed": false
@@ -2949,7 +2933,7 @@
             "output_price_per_million": 7.5,
             "cache_read_price_per_million": 0.15,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -2984,7 +2968,7 @@
             "output_price_per_million": 7.5,
             "cache_read_price_per_million": 0.15,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -3018,7 +3002,7 @@
             "input_price_per_million": 0,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 131072,
@@ -3044,7 +3028,7 @@
             "input_price_per_million": 0.14,
             "output_price_per_million": 0.14,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "deployment_managed": false
@@ -3058,7 +3042,7 @@
             "input_price_per_million": 0.05,
             "output_price_per_million": 0.08,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 32768,
@@ -3087,7 +3071,7 @@
             "input_price_per_million": 0.1,
             "output_price_per_million": 0.31,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "deployment_managed": false
@@ -3102,7 +3086,7 @@
             "output_price_per_million": 0.6,
             "cache_read_price_per_million": 0.015,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -3137,7 +3121,7 @@
             "output_price_per_million": 0.6,
             "cache_read_price_per_million": 0.015,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -3171,7 +3155,7 @@
             "input_price_per_million": 2,
             "output_price_per_million": 6,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 128000,
@@ -3202,7 +3186,7 @@
             "input_price_per_million": 0.04,
             "output_price_per_million": 0.04,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 32768,
@@ -3234,7 +3218,7 @@
             "input_price_per_million": 0.1,
             "output_price_per_million": 0.4,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 32768,
@@ -3267,7 +3251,7 @@
             "input_price_per_million": 0.1,
             "output_price_per_million": 0.3,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 32768,
@@ -3299,7 +3283,7 @@
             "input_price_per_million": 0.1,
             "output_price_per_million": 0.4,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 32768,
@@ -3333,7 +3317,7 @@
             "output_price_per_million": 2.5,
             "cache_read_price_per_million": 0.05,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -3366,7 +3350,7 @@
             "input_price_per_million": 0.6,
             "output_price_per_million": 2.5,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -3398,7 +3382,7 @@
             "input_price_per_million": 0.6,
             "output_price_per_million": 3,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -3432,7 +3416,7 @@
             "output_price_per_million": 3.5,
             "cache_read_price_per_million": 0.15,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -3466,7 +3450,7 @@
             "input_price_per_million": 0.95,
             "output_price_per_million": 4,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -3500,7 +3484,7 @@
             "cache_read_price_per_million": 0.285,
             "cache_write_price_per_million": 3.5625,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -3534,7 +3518,7 @@
             "output_price_per_million": 10.5,
             "cache_read_price_per_million": 0.21,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -3559,6 +3543,22 @@
           "deployment_managed": false
         },
         {
+          "id": "moonshotai/kimi-k3.1-pro",
+          "object": "model",
+          "created": 1793811758,
+          "owned_by": "moonshotai",
+          "pricing": {
+            "input_price_per_million": 2,
+            "output_price_per_million": 10,
+            "cache_read_price_per_million": 0.2,
+            "pricing_tiers": [],
+            "unit": "token"
+          },
+          "pricing_source": "configured",
+          "type": "chat",
+          "deployment_managed": false
+        },
+        {
           "id": "multi-qa-mpnet-base-dot-v1",
           "object": "model",
           "created": 1793283428,
@@ -3567,7 +3567,7 @@
             "input_price_per_million": 0.009,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "type": "embedding",
@@ -3582,7 +3582,7 @@
             "input_price_per_million": 1,
             "output_price_per_million": 1,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "deployment_managed": false
@@ -3596,7 +3596,7 @@
             "input_price_per_million": 1,
             "output_price_per_million": 3,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 131072,
@@ -3628,7 +3628,7 @@
             "input_price_per_million": 0,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "type": "embedding",
@@ -3643,7 +3643,7 @@
             "input_price_per_million": 0.06,
             "output_price_per_million": 0.24,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -3658,7 +3658,7 @@
             "input_price_per_million": 0.15,
             "output_price_per_million": 0.65,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -3691,7 +3691,7 @@
             "output_price_per_million": 2.4,
             "cache_read_price_per_million": 0.12,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -3724,7 +3724,7 @@
             "output_price_per_million": 0.2,
             "cache_read_price_per_million": 0.01,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -3757,7 +3757,7 @@
             "output_price_per_million": 0.5,
             "cache_read_price_per_million": 0.02,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -3774,7 +3774,7 @@
             "output_price_per_million": 0.5,
             "cache_read_price_per_million": 0.02,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -3808,7 +3808,7 @@
             "input_price_per_million": 0.2,
             "output_price_per_million": 0.6,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 131072,
@@ -3840,7 +3840,7 @@
             "input_price_per_million": 0.06,
             "output_price_per_million": 0.24,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -3872,7 +3872,7 @@
             "input_price_per_million": 0.06,
             "output_price_per_million": 0.23,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 131072,
@@ -3903,7 +3903,7 @@
             "input_price_per_million": 0.037,
             "output_price_per_million": 0.17,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 131072,
@@ -3935,7 +3935,7 @@
             "input_price_per_million": 0.03,
             "output_price_per_million": 0.14,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 131072,
@@ -3967,7 +3967,7 @@
             "input_price_per_million": 0.15,
             "output_price_per_million": 0.6,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 128000,
@@ -3999,7 +3999,7 @@
             "input_price_per_million": 0.658,
             "output_price_per_million": 1.11,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "deployment_managed": false
@@ -4014,7 +4014,7 @@
             "output_price_per_million": 1,
             "cache_read_price_per_million": 0.05,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -4047,7 +4047,7 @@
             "output_price_per_million": 2.7,
             "cache_read_price_per_million": 0.1,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -4082,7 +4082,7 @@
             "output_price_per_million": 0,
             "cache_read_price_per_million": 0.0084,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 262144,
@@ -4109,7 +4109,7 @@
             "output_price_per_million": 2.501,
             "cache_read_price_per_million": 0.042,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -4141,7 +4141,7 @@
             "input_price_per_million": 0.04,
             "output_price_per_million": 0,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "type": "chat",
@@ -4157,7 +4157,7 @@
             "output_price_per_million": 4.05,
             "cache_read_price_per_million": 0.17,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -4191,7 +4191,7 @@
             "output_price_per_million": 1.2,
             "cache_read_price_per_million": 0.1,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 524288,
@@ -4225,7 +4225,7 @@
             "input_price_per_million": 2.5,
             "output_price_per_million": 10,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 122880,
@@ -4256,7 +4256,7 @@
             "input_price_per_million": 0.6,
             "output_price_per_million": 6,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1040000,
@@ -4288,7 +4288,7 @@
             "output_price_per_million": 6,
             "cache_read_price_per_million": 0.5,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 500000,
@@ -4321,7 +4321,7 @@
             "output_price_per_million": 6,
             "cache_read_price_per_million": 0.5,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 500000,
@@ -4356,7 +4356,7 @@
             "output_price_per_million": 0.28,
             "cache_read_price_per_million": 0.0028,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -4392,7 +4392,7 @@
             "output_price_per_million": 0.87,
             "cache_read_price_per_million": 0.0036,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -4428,7 +4428,7 @@
             "output_price_per_million": 2,
             "cache_read_price_per_million": 0.1,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 202752,
@@ -4461,7 +4461,7 @@
             "output_price_per_million": 1.75,
             "cache_read_price_per_million": 0.08,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 202752,
@@ -4493,7 +4493,7 @@
             "input_price_per_million": 0.07,
             "output_price_per_million": 0.4,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 202752,
@@ -4525,7 +4525,7 @@
             "input_price_per_million": 1,
             "output_price_per_million": 3.2,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 202752,
@@ -4557,7 +4557,7 @@
             "input_price_per_million": 1.4,
             "output_price_per_million": 4.4,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "deployment_managed": false
@@ -4573,7 +4573,7 @@
             "cache_read_price_per_million": 0.14,
             "cache_write_price_per_million": 0.9375,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -4606,7 +4606,7 @@
             "output_price_per_million": 4.4,
             "cache_read_price_per_million": 0.26,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048573,
@@ -4639,7 +4639,7 @@
             "output_price_per_million": 6.6,
             "cache_read_price_per_million": 0.39,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048572,
@@ -4672,7 +4672,7 @@
             "output_price_per_million": 0.5,
             "cache_read_price_per_million": 0.03,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048576,
@@ -4708,7 +4708,7 @@
             "output_price_per_million": 3.08,
             "cache_read_price_per_million": 0.182,
             "pricing_tiers": [],
-            "unit": "tokens"
+            "unit": "token"
           },
           "pricing_source": "configured",
           "context_window": 1048573,
@@ -4735,7 +4735,7 @@
     }
   },
   {
-    "at": "2026-11-04T16:09:44.123Z",
+    "at": "2026-11-04T23:15:18.932Z",
     "path": "/tools",
     "status": 200,
     "data": {
@@ -4824,7 +4824,7 @@
     }
   },
   {
-    "at": "2026-11-04T16:09:44.355Z",
+    "at": "2026-11-04T23:15:19.188Z",
     "path": "/tool-settings/guardrails/profiles",
     "status": 200,
     "data": {
@@ -4834,7 +4834,7 @@
     }
   },
   {
-    "at": "2026-11-04T16:09:44.592Z",
+    "at": "2026-11-04T23:15:19.455Z",
     "path": "/routing/policies",
     "error": {
       "code": "authentication",
@@ -4845,7 +4845,7 @@
     }
   },
   {
-    "at": "2026-11-04T16:09:44.823Z",
+    "at": "2026-11-04T23:15:19.698Z",
     "path": "/budgets",
     "error": {
       "code": "authentication",

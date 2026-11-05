@@ -1,6 +1,6 @@
 # Rubric evidence
 
-Recorded 2026-11-04. Target ceiling: 100. Evidence supports **55/100 possible
+Recorded and refreshed 2026-11-04 at 23:15 UTC. Target ceiling: 100. Evidence supports **55/100 possible
 points**: 30 for two meaningful open-weight roles, 20 for verified advanced
 features (code + distinct roles), and 5 for the working use case. Four more
 advanced targets and the personally recorded video remain unverified (45 points).
@@ -45,3 +45,14 @@ refusals), `verification.json`, and unmocked `browser-smoke.json`, all under
 measured latency, reported usage, output and scoring. Secrets, personal data,
 management bodies and signed browser receipts are omitted. Test-only intercepted
 HTTP responses never count as live evidence.
+
+The final polish pass also recorded a separate one-case unmocked smoke at
+`2026-11-04T23:41:17.457Z` in `evidence/polish-live-smoke.json`. It completed
+one Qwen evaluator and a separate Llama analyst for $0.000384 reported total.
+This confirms the current routes still execute through Otari; it is not a new
+rubric point or a comparative benchmark.
+
+The refreshed read-only discovery still reports web fetch/search as
+`workspace_disabled`, no guardrail service, and authentication for routing and
+budget-management reads with the inference key. Detailed request IDs and current
+tool statuses are linked in [OTARI_PROOF.md](OTARI_PROOF.md).

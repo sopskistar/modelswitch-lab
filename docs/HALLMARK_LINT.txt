@@ -1,1 +1,12 @@
-sloplint: clean. 0 FAIL, 0 REFLEX, 0 WARN across 3 file(s) and 1 URL(s).
+Command:
+
+```sh
+CHROME_PATH=/home/sopski/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome \
+  node /home/sopski/.agents/skills/hallmark/scripts/sloplint.mjs \
+  src/app/globals.css src/components --scope app --genre modern-minimal \
+  --render --url http://localhost:3010
+```
+
+Result: clean, 0 FAIL, 0 REFLEX, 0 WARN across 3 source files and 1 rendered
+URL. The rendered audit wrote five screenshots at 1280×800, 1440×900,
+1920×1080, full desktop, and full mobile.

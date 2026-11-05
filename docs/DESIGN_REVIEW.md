@@ -13,7 +13,8 @@ three reference pictures were inspected. Console was chosen for its measured
 records and developer workbench material. Its graphite and paper colorways are
 paired with Host Grotesk and Atkinson Hyperlegible Mono, self-hosted with OFL
 licenses in `public/fonts`. Amber marks actions and selection; instrument
-evidence uses cool text. The custom abstract mark belongs to this application.
+evidence uses cool text. The uploaded ModelSwitch PNG mark is used without
+geometry changes; light mode inverts the white mark while dark mode preserves it.
 
 Signature: a ledger of versioned benchmark cases with known expected outputs,
 followed by the request timeline. The product itself is the visual material.
@@ -27,13 +28,13 @@ with a reduced-motion fallback.
 Ran the installed command against source and the live application:
 
 ```sh
-CHROME_PATH=/path/to/chrome node ~/.agents/skills/hallmark/scripts/sloplint.mjs \
+CHROME_PATH=/home/sopski/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome node ~/.agents/skills/hallmark/scripts/sloplint.mjs \
   src/app/globals.css src/components --scope app --genre modern-minimal \
-  --render --url http://localhost:3005
+  --render --url http://localhost:3010
 ```
 
 `docs/HALLMARK_LINT.txt` records **0 FAIL, 0 REFLEX, 0 WARN** on that source
-revision. The final source/render confirmation also passed on port 3007. The render tier actually ran and wrote five screenshots: 1280×800,
+revision. The final source/render confirmation passed on port 3010. The render tier actually ran and wrote five screenshots: 1280×800,
 1440×900, 1920×1080, full 1440, and full 375. Retained captures are in
 `.hallmark/shots/`; unmocked light/dark product captures are in
 `docs/screenshots/*-live.png`. Final result captures replay the exact saved
@@ -44,6 +45,16 @@ The first static audit found a copy dash and an active-state rule the scanner
 misread as a disabled state. Both were changed and the audit rerun. Browser
 startup initially failed under the sandbox; approved execution was used rather
 than claiming the render tier had run.
+
+## Polish pass
+
+The merged `main` included `modelswitch-icon (1).png`; no uploaded SVG logo was
+present. The PNG now supplies the desktop/mobile header, footer, favicon, app
+icon, Open Graph image, and README identity. The existing wordmark type remains.
+The homepage now ends in a current-browser run summary and a responsive four
+group footer. Empty state, footer navigation, icon contrast in light/dark mode,
+and receipt export are covered by the expanded Playwright suite. The final audit
+result is recorded in `HALLMARK_LINT.txt`.
 
 ## In-thread finish review
 

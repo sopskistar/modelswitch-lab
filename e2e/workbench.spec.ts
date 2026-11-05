@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { readFile } from 'node:fs/promises';
 import { fixtures } from '../src/lib/fixtures';
 const catalog = {
   configured: true,
@@ -109,13 +110,27 @@ test('real run UI contract, loading, results, trace, and export', async ({ page 
   await expect(page.getByRole('cell', { name: /100%$/ })).toHaveCount(2);
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export JSON' }).click();
-  expect((await download).suggestedFilename()).toMatch(/^modelswitch-.*\.json$/);
-  await page.getByRole('link', { name: 'Request trace', exact: true }).click();
+  const exported = await download;
+  expect(exported.suggestedFilename()).toMatch(/^modelswitch-.*\.json$/);
+  const receipt = JSON.parse(await readFile((await exported.path())!, 'utf8'));
+  expect(receipt).toMatchObject({
+    receiptVersion: 1,
+    scenario: 'extraction',
+    datasetVersion: 1,
+    executionStatus: 'complete',
+  });
+  expect(receipt.cases[0].request.requestId).toMatch(/^fixture-/);
+  await page
+    .getByRole('navigation', { name: 'Workbench views' })
+    .getByRole('link', { name: 'Request trace', exact: true })
+    .click();
   await expect(page.getByText('Deterministic scoring', { exact: true })).toHaveCount(3);
   await expect(page.getByText('Analyst response', { exact: true })).toBeVisible();
   expect(calls).toBe(4);
   await page.reload();
   await expect(page.getByText('Analyst response', { exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Latest run' })).toBeVisible();
+  await expect(page.locator('.latest-run')).toContainText('Invoice extraction');
 });
 test('credit failure is honest and remaining cases are skipped', async ({ page }) => {
   let calls = 0;
@@ -214,6 +229,37 @@ test('network interruption retains partial results and allows navigation', async
   await expect(page.getByRole('main').getByRole('alert')).toContainText(
     'browser lost the response',
   );
-  await page.getByRole('link', { name: 'Request trace', exact: true }).click();
+  await page
+    .getByRole('navigation', { name: 'Workbench views' })
+    .getByRole('link', { name: 'Request trace', exact: true })
+    .click();
   await expect(page.getByText('Response interrupted', { exact: true })).toBeVisible();
+});
+test('brand marks, latest-run empty state, and footer navigation', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: 'Latest run' })).toBeVisible();
+  await expect(page.getByText('No run is saved in this browser yet.')).toBeVisible();
+  const marks = page.locator('.brand-mark');
+  await expect(marks).toHaveCount(2);
+  await expect(marks.first()).toHaveAttribute('src', '/modelswitch-icon.png');
+  await page.locator('html').evaluate((el) => el.setAttribute('data-mode', 'light'));
+  await expect(marks.first()).toHaveCSS('filter', 'invert(1)');
+  await page.locator('html').evaluate((el) => el.setAttribute('data-mode', 'dark'));
+  await expect(marks.first()).toHaveCSS('filter', 'none');
+  const footer = page.locator('footer');
+  await expect(footer.getByRole('navigation', { name: 'Explore' }).getByRole('link')).toHaveCount(
+    4,
+  );
+  await expect(footer.getByRole('navigation', { name: 'Resources' }).getByRole('link')).toHaveCount(
+    4,
+  );
+  await expect(footer.getByRole('link', { name: 'MIT License' })).toHaveAttribute(
+    'href',
+    /blob\/main\/LICENSE$/,
+  );
+  await footer.getByRole('link', { name: 'Results', exact: true }).click();
+  await expect(page).toHaveURL(/view=results/);
+  await expect(page.getByRole('heading', { name: 'No benchmark results yet' })).toBeVisible();
+  await footer.getByRole('link', { name: 'Workspace', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Put a model to the test.' })).toBeVisible();
 });

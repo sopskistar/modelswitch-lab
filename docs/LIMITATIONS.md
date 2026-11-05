@@ -13,6 +13,7 @@
 - **No Vercel deployment:** no CLI, token/session, linked project or production
   URL is available. `vercel.json` and the successful production build are ready
   for an authenticated owner deployment. The local production runtime is tested.
+  The README intentionally has no fabricated live URL.
 - **Small sample:** five cases per scenario cannot establish statistical
   superiority. Synthetic fixtures intentionally include easy and edge cases;
   they are not a representative real-world workload.
@@ -43,3 +44,7 @@
   Turbopack's CSS worker port. npm legacy peer resolution is pinned in `.npmrc`
   after npm 10's resolver crashed. Production dependency audit is clean; remaining
   development-only moderate advisories are recorded in the testing guide.
+- **Brand asset:** the uploaded repository contains `modelswitch-icon (1).png`;
+  it does not contain `modelswitch-mark.svg`. The provided PNG is used for the
+  header, footer, favicon, app icon, metadata, and README. The existing wordmark
+  type remains unchanged.

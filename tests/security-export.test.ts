@@ -90,7 +90,16 @@ describe('bounded inputs and receipts', () => {
 describe('exports', () => {
   it('exports reproducible metadata without secrets', () => {
     const json = exportJson(run);
-    expect(JSON.parse(json)).toMatchObject({ version: 1, id: 'run', scenario: 'classification' });
+    expect(JSON.parse(json)).toMatchObject({
+      receiptVersion: 1,
+      executedAt: '2026-11-04',
+      runId: 'run',
+      scenario: 'classification',
+      datasetVersion: 1,
+      executionStatus: 'interrupted',
+      modelIds: ['model'],
+    });
+    expect(JSON.parse(json).limitations[2]).toContain('not a cryptographic signature');
     expect(json).not.toContain('test-secret');
   });
   it('escapes CSV formula cells and quotes', () => {

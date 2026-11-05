@@ -1,9 +1,8 @@
 'use client';
 /* eslint-disable react-hooks/set-state-in-effect -- URL and browser storage are external state restored after server rendering. */
-import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { fixtures, scenarios } from '@/lib/fixtures';
-import { summarize, weights } from '@/lib/scoring';
+import { recommendation, summarize, weights } from '@/lib/scoring';
 import { exportCsv, exportJson } from '@/lib/export';
 import { capabilities, advancedVerifiedPoints } from '@/lib/capabilities';
 import { sources } from '@/lib/security';
@@ -45,6 +44,16 @@ const money = (n: number | null | undefined) => (n == null ? 'Not reported' : `$
 const percent = (n: number) => `${(n * 100).toFixed(0)}%`;
 const duration = (n: number | null | undefined) =>
   n == null ? 'Not reported' : n >= 1000 ? `${(n / 1000).toFixed(2)} s` : `${Math.round(n)} ms`;
+const timestamp = (value: string) =>
+  new Intl.DateTimeFormat(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZoneName: 'short',
+  }).format(new Date(value));
 const shortModel = (id: string) => id.split('/').pop() || id;
 const fallbackError = (message: string): SafeError => ({
   code: 'network_interrupted',
@@ -94,6 +103,21 @@ export function Workbench() {
     url.searchParams.set('view', next);
     history.pushState({}, '', url);
     navigating.current = true;
+  }
+  function viewAnchor(next: View, children: React.ReactNode, className?: string, label?: string) {
+    return (
+      <a
+        href={`/?view=${next}`}
+        className={className}
+        aria-label={label}
+        onClick={(event) => {
+          event.preventDefault();
+          navigate(next);
+        }}
+      >
+        {children}
+      </a>
+    );
   }
   async function loadCatalog() {
     setCatalogError('');
@@ -367,7 +391,12 @@ export function Workbench() {
     catalog?.configured && catalog.demoEnabled && !catalog.error && selected.length,
   );
   const error = run?.cases.find((c) => c.error)?.error;
-  const recommend = run?.summaries.find((s) => s.score > 0);
+  const decision = run ? recommendation(run.summaries) : undefined;
+  const recommend = decision?.winner;
+  const reportedCostsComplete =
+    !!run &&
+    run.summaries.every((row) => row.costUsd !== null) &&
+    (run.analyst ? run.analyst.metadata.costUsd !== null : !run.analystError);
   return (
     <>
       <a href="#main" className="skip">
@@ -375,12 +404,17 @@ export function Workbench() {
       </a>
       <header className="topbar">
         <div className="shell topbar-inner">
-          <Link className="brand" href="/?view=workspace" aria-label="ModelSwitch Lab workspace">
-            <Mark />
-            <span>
-              ModelSwitch <span className="brand-lab">Lab</span>
-            </span>
-          </Link>
+          {viewAnchor(
+            'workspace',
+            <>
+              <Mark />
+              <span>
+                ModelSwitch <span className="brand-lab">Lab</span>
+              </span>
+            </>,
+            'brand',
+            'ModelSwitch Lab workspace',
+          )}
           <div className="top-actions">
             <a
               href="https://github.com/sopskistar/modelswitch-lab"
@@ -759,8 +793,23 @@ export function Workbench() {
                   <p>
                     {run.models.length === 1
                       ? 'One model was evaluated; a comparative recommendation needs a second model.'
-                      : `Highest deterministic score for the ${run.objective} objective.`}{' '}
-                    Results describe these tested cases, not general model superiority.
+                      : `${shortModel(recommend.model)} ranks first because it has the highest deterministic score for the ${run.objective} objective (${recommend.score.toFixed(1)} / 100).`}{' '}
+                    {decision?.moreAccurate.length ? (
+                      <>
+                        {shortModel(decision.moreAccurate[0].model)} was more accurate (
+                        {percent(decision.moreAccurate[0].accuracy)} vs.{' '}
+                        {percent(recommend.accuracy)}).{' '}
+                      </>
+                    ) : null}
+                    {decision?.cheaper.length ? (
+                      <>
+                        {shortModel(decision.cheaper[0].model)} had a lower complete reported cost (
+                        {money(decision.cheaper[0].costUsd)} vs. {money(recommend.costUsd)}).{' '}
+                      </>
+                    ) : null}
+                    The score follows the selected weights, includes only these {run.caseCount}-case
+                    synthetic sample{run.caseCount === 1 ? '' : 's'}, and cannot establish universal
+                    model superiority.
                   </p>
                 </section>
               )}
@@ -1037,12 +1086,111 @@ export function Workbench() {
         )}
         {view === 'guide' && <Guide onStart={() => navigate('workspace')} />}
       </main>
+      <section className="shell latest-run" aria-labelledby="latest-run-title">
+        <div className="latest-run-head">
+          <h2 id="latest-run-title">Latest run</h2>
+          <span className="subtle">This browser only</span>
+        </div>
+        {run ? (
+          <div className="latest-run-content">
+            <div className="latest-run-facts">
+              <div>
+                <span>Scenario</span>
+                <strong>{scenarios[run.scenario].name}</strong>
+              </div>
+              <div>
+                <span>Models</span>
+                <strong>{run.models.map(shortModel).join(', ')}</strong>
+              </div>
+              <div>
+                <span>Accuracy / pass rate</span>
+                <strong>
+                  {run.summaries
+                    .map(
+                      (row) =>
+                        `${shortModel(row.model)} ${percent(row.accuracy)} / ${percent(row.passRate)}`,
+                    )
+                    .join('; ')}
+                </strong>
+              </div>
+              <div>
+                <span>Reported cost</span>
+                <strong>
+                  {reportedCostsComplete
+                    ? money(
+                        run.summaries.reduce((sum, row) => sum + (row.costUsd ?? 0), 0) +
+                          (run.analyst?.metadata.costUsd ?? 0),
+                      )
+                    : 'Incomplete'}
+                </strong>
+              </div>
+              <div>
+                <span>Execution</span>
+                <strong>{run.state === 'complete' ? 'Complete' : 'Interrupted or partial'}</strong>
+              </div>
+              <div>
+                <span>Started</span>
+                <strong>{timestamp(run.startedAt)}</strong>
+              </div>
+            </div>
+            <div className="latest-run-links">
+              {viewAnchor('results', 'Detailed results')}
+              {viewAnchor('trace', 'Request trace')}
+            </div>
+          </div>
+        ) : (
+          <div className="latest-run-empty">
+            <p>No run is saved in this browser yet.</p>
+            <button className="text-button" type="button" onClick={() => navigate('workspace')}>
+              Set up a benchmark
+            </button>
+          </div>
+        )}
+      </section>
       <footer className="shell footer">
-        <span>ModelSwitch Lab</span>
-        <span>MozFest Developers Wilding Online 2026</span>
-        <a href="https://github.com/mozilla-ai/otari" target="_blank" rel="noreferrer">
-          Powered by hosted Otari
-        </a>
+        <section className="footer-group footer-product">
+          {viewAnchor(
+            'workspace',
+            <>
+              <Mark size={24} />
+              <span>
+                ModelSwitch <span className="brand-lab">Lab</span>
+              </span>
+            </>,
+            'footer-brand',
+            'ModelSwitch Lab workspace',
+          )}
+          <p>Compare real hosted model runs against small, reproducible tests.</p>
+        </section>
+        <nav className="footer-group" aria-label="Explore">
+          <h2>Explore</h2>
+          {viewAnchor('workspace', 'Workspace')}
+          {viewAnchor('results', 'Results')}
+          {viewAnchor('trace', 'Request trace')}
+          {viewAnchor('capabilities', 'Otari capabilities')}
+        </nav>
+        <nav className="footer-group" aria-label="Resources">
+          <h2>Resources</h2>
+          <a href="https://github.com/sopskistar/modelswitch-lab/blob/main/docs/JUDGE_WALKTHROUGH.md">
+            Judge walkthrough
+          </a>
+          <a href="https://github.com/sopskistar/modelswitch-lab/blob/main/docs/ARCHITECTURE.md">
+            Architecture
+          </a>
+          <a href="https://github.com/sopskistar/modelswitch-lab/blob/main/docs/TESTING.md">
+            Testing
+          </a>
+          <a href="https://github.com/sopskistar/modelswitch-lab">GitHub repository</a>
+        </nav>
+        <section className="footer-group">
+          <h2>About</h2>
+          <span>MozFest Developers Wilding Online 2026</span>
+          <a href="https://github.com/mozilla-ai/otari">Powered by Mozilla Otari</a>
+          <a href="https://github.com/sopskistar/modelswitch-lab/blob/main/LICENSE">MIT License</a>
+          <a href="https://github.com/sopskistar/modelswitch-lab/blob/main/docs/RUBRIC_EVIDENCE.md">
+            Verified rubric evidence
+          </a>
+        </section>
       </footer>
     </>
   );

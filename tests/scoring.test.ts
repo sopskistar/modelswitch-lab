@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { evaluate, normalize, parseOutput, summarize, weights } from '@/lib/scoring';
+import {
+  evaluate,
+  normalize,
+  parseOutput,
+  recommendation,
+  summarize,
+  weights,
+} from '@/lib/scoring';
 import { fixtures } from '@/lib/fixtures';
 import type { CaseResult, GatewayMetadata, Objective, ScenarioId } from '@/lib/types';
 const metadata = (latencyMs: number, costUsd: number | null) =>
@@ -104,6 +111,23 @@ describe('recommendation', () => {
       'speed',
     );
     expect(rows[0].model).toBe('b');
+  });
+  it('explains accuracy and complete reported cost tradeoffs', () => {
+    const rows = summarize(
+      ['fast', 'accurate'],
+      [result('fast', 0.8, 10, 0.0001), result('accurate', 1, 100, 0.01)],
+      'speed',
+    );
+    const decision = recommendation(rows);
+    expect(decision?.winner.model).toBe('fast');
+    expect(decision?.moreAccurate.map((row) => row.model)).toEqual(['accurate']);
+    expect(decision?.moreExpensive.map((row) => row.model)).toEqual(['accurate']);
+    expect(
+      recommendation([
+        { ...rows[0], score: 0 },
+        { ...rows[1], score: 0 },
+      ]),
+    ).toBeUndefined();
   });
   it('never rewards missing costs as free', () => {
     const rows = summarize(

@@ -1,0 +1,343 @@
+{
+  "at": "2026-11-04T23:41:23.344Z",
+  "base": "http://localhost:3010",
+  "errors": [],
+  "cases": [
+    {
+      "status": 200,
+      "result": {
+        "model": "alibaba/qwen3.8-27b",
+        "caseId": "sup-01",
+        "output": "\n\n{\"category\":\"billing\"}",
+        "metadata": {
+          "requestId": "39b2e17c-39dc-48da-b9e1-7625045435a4",
+          "responseId": "chatcmpl-Rz6tFwlrjhLkMHGz9Yq5u1ng",
+          "requestedModel": "alibaba/qwen3.8-27b",
+          "responseModel": "alibaba/qwen3.8-27b",
+          "effectiveModel": "Qwen/Qwen3.8-27B",
+          "provider": "deepinfra",
+          "attempts": 1,
+          "fallback": false,
+          "gatewayDurationMs": 2021,
+          "latencyMs": 2146,
+          "promptTokens": 147,
+          "completionTokens": 55,
+          "totalTokens": 202,
+          "costUsd": 0.000167,
+          "pricingSource": "deployment",
+          "toolCalls": [],
+          "guardrails": null,
+          "headers": {
+            "otari-request-id": "39b2e17c-39dc-48da-b9e1-7625045435a4",
+            "otari-provider": "deepinfra",
+            "otari-model": "Qwen/Qwen3.8-27B",
+            "otari-attempt-count": "1",
+            "otari-fallback": "false",
+            "otari-response-duration-ms": "2021",
+            "server-timing": "otari;dur=68.2;desc=\"Otari before the provider\", upstream;dur=1952.9;desc=\"Provider until its answer or first chunk\", total;dur=2021.1;desc=\"Otari and the provider\""
+          }
+        },
+        "evaluation": {
+          "valid": true,
+          "accuracy": 1,
+          "passed": true,
+          "missing": 0,
+          "fields": [
+            {
+              "field": "category",
+              "expected": "billing",
+              "actual": "billing",
+              "match": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "status": 200,
+      "analyst": {
+        "content": "Based on the provided data, the recommended model is alibaba/qwen3.8-27b with a score of 100. However, the sample size is tiny and there may be missing data, so this recommendation should be treated with caution. The model's performance metrics, such as accuracy and pass rate, are perfect, but this may not be representative of real-world performance.",
+        "metadata": {
+          "requestId": "074fe482-0097-4385-aef4-7795ed966cb2",
+          "responseId": "",
+          "requestedModel": "meta/llama-3.3-70b-instruct",
+          "responseModel": "meta/llama-3.3-70b-instruct",
+          "effectiveModel": "meta.llama3-3-70b-instruct-v1:0",
+          "provider": "bedrock",
+          "attempts": 1,
+          "fallback": false,
+          "gatewayDurationMs": 1670,
+          "latencyMs": 1930,
+          "promptTokens": 223,
+          "completionTokens": 78,
+          "totalTokens": 301,
+          "costUsd": 0.000217,
+          "pricingSource": "deployment",
+          "toolCalls": [],
+          "guardrails": null,
+          "headers": {
+            "otari-request-id": "074fe482-0097-4385-aef4-7795ed966cb2",
+            "otari-provider": "bedrock",
+            "otari-model": "meta.llama3-3-70b-instruct-v1:0",
+            "otari-attempt-count": "1",
+            "otari-fallback": "false",
+            "otari-response-duration-ms": "1670",
+            "server-timing": "otari;dur=92.4;desc=\"Otari before the provider\", upstream;dur=1577.6;desc=\"Provider until its answer or first chunk\", total;dur=1670.0;desc=\"Otari and the provider\""
+          }
+        }
+      }
+    }
+  ],
+  "run": {
+    "version": 1,
+    "id": "446a0659-a6db-4081-86bd-497942b33bf0",
+    "startedAt": "2026-11-04T23:41:17.457Z",
+    "scenario": "classification",
+    "objective": "balanced",
+    "models": [
+      "alibaba/qwen3.8-27b"
+    ],
+    "caseCount": 1,
+    "cases": [
+      {
+        "model": "alibaba/qwen3.8-27b",
+        "caseId": "sup-01",
+        "output": "\n\n{\"category\":\"billing\"}",
+        "metadata": {
+          "requestId": "39b2e17c-39dc-48da-b9e1-7625045435a4",
+          "responseId": "chatcmpl-Rz6tFwlrjhLkMHGz9Yq5u1ng",
+          "requestedModel": "alibaba/qwen3.8-27b",
+          "responseModel": "alibaba/qwen3.8-27b",
+          "effectiveModel": "Qwen/Qwen3.8-27B",
+          "provider": "deepinfra",
+          "attempts": 1,
+          "fallback": false,
+          "gatewayDurationMs": 2021,
+          "latencyMs": 2146,
+          "promptTokens": 147,
+          "completionTokens": 55,
+          "totalTokens": 202,
+          "costUsd": 0.000167,
+          "pricingSource": "deployment",
+          "toolCalls": [],
+          "guardrails": null,
+          "headers": {
+            "otari-request-id": "39b2e17c-39dc-48da-b9e1-7625045435a4",
+            "otari-provider": "deepinfra",
+            "otari-model": "Qwen/Qwen3.8-27B",
+            "otari-attempt-count": "1",
+            "otari-fallback": "false",
+            "otari-response-duration-ms": "2021",
+            "server-timing": "otari;dur=68.2;desc=\"Otari before the provider\", upstream;dur=1952.9;desc=\"Provider until its answer or first chunk\", total;dur=2021.1;desc=\"Otari and the provider\""
+          }
+        },
+        "evaluation": {
+          "valid": true,
+          "accuracy": 1,
+          "passed": true,
+          "missing": 0,
+          "fields": [
+            {
+              "field": "category",
+              "expected": "billing",
+              "actual": "billing",
+              "match": true
+            }
+          ]
+        }
+      }
+    ],
+    "trace": [
+      {
+        "at": "2026-11-04T23:41:17.457Z",
+        "source": "application",
+        "label": "Benchmark started",
+        "detail": {
+          "scenario": "classification",
+          "models": [
+            "alibaba/qwen3.8-27b"
+          ],
+          "caseCount": 1,
+          "objective": "balanced",
+          "fixtureVersion": 1
+        }
+      },
+      {
+        "at": "2026-11-04T23:41:17.458Z",
+        "source": "application",
+        "label": "Otari request started",
+        "detail": {
+          "role": "evaluator",
+          "requestedModel": "alibaba/qwen3.8-27b",
+          "caseId": "sup-01"
+        }
+      },
+      {
+        "at": "2026-11-04T23:41:19.636Z",
+        "source": "gateway",
+        "label": "Gateway response",
+        "detail": {
+          "caseId": "sup-01",
+          "role": "evaluator",
+          "requestId": "39b2e17c-39dc-48da-b9e1-7625045435a4",
+          "responseId": "chatcmpl-Rz6tFwlrjhLkMHGz9Yq5u1ng",
+          "requestedModel": "alibaba/qwen3.8-27b",
+          "responseModel": "alibaba/qwen3.8-27b",
+          "effectiveModel": "Qwen/Qwen3.8-27B",
+          "provider": "deepinfra",
+          "attempts": 1,
+          "fallback": false,
+          "gatewayDurationMs": 2021,
+          "latencyMs": 2146,
+          "promptTokens": 147,
+          "completionTokens": 55,
+          "totalTokens": 202,
+          "costUsd": 0.000167,
+          "pricingSource": "deployment",
+          "toolCalls": [],
+          "guardrails": null,
+          "headers": {
+            "otari-request-id": "39b2e17c-39dc-48da-b9e1-7625045435a4",
+            "otari-provider": "deepinfra",
+            "otari-model": "Qwen/Qwen3.8-27B",
+            "otari-attempt-count": "1",
+            "otari-fallback": "false",
+            "otari-response-duration-ms": "2021",
+            "server-timing": "otari;dur=68.2;desc=\"Otari before the provider\", upstream;dur=1952.9;desc=\"Provider until its answer or first chunk\", total;dur=2021.1;desc=\"Otari and the provider\""
+          }
+        }
+      },
+      {
+        "at": "2026-11-04T23:41:19.636Z",
+        "source": "application",
+        "label": "Deterministic scoring",
+        "detail": {
+          "caseId": "sup-01",
+          "valid": true,
+          "accuracy": 1,
+          "passed": true,
+          "missing": 0,
+          "fields": [
+            {
+              "field": "category",
+              "expected": "billing",
+              "actual": "billing",
+              "match": true
+            }
+          ]
+        }
+      },
+      {
+        "at": "2026-11-04T23:41:19.637Z",
+        "source": "application",
+        "label": "Analyst request started",
+        "detail": {
+          "role": "analyst",
+          "model": "meta/llama-3.3-70b-instruct",
+          "receipts": 1
+        }
+      },
+      {
+        "at": "2026-11-04T23:41:21.591Z",
+        "source": "gateway",
+        "label": "Analyst response",
+        "detail": {
+          "requestId": "074fe482-0097-4385-aef4-7795ed966cb2",
+          "responseId": "",
+          "requestedModel": "meta/llama-3.3-70b-instruct",
+          "responseModel": "meta/llama-3.3-70b-instruct",
+          "effectiveModel": "meta.llama3-3-70b-instruct-v1:0",
+          "provider": "bedrock",
+          "attempts": 1,
+          "fallback": false,
+          "gatewayDurationMs": 1670,
+          "latencyMs": 1930,
+          "promptTokens": 223,
+          "completionTokens": 78,
+          "totalTokens": 301,
+          "costUsd": 0.000217,
+          "pricingSource": "deployment",
+          "toolCalls": [],
+          "guardrails": null,
+          "headers": {
+            "otari-request-id": "074fe482-0097-4385-aef4-7795ed966cb2",
+            "otari-provider": "bedrock",
+            "otari-model": "meta.llama3-3-70b-instruct-v1:0",
+            "otari-attempt-count": "1",
+            "otari-fallback": "false",
+            "otari-response-duration-ms": "1670",
+            "server-timing": "otari;dur=92.4;desc=\"Otari before the provider\", upstream;dur=1577.6;desc=\"Provider until its answer or first chunk\", total;dur=1670.0;desc=\"Otari and the provider\""
+          }
+        }
+      },
+      {
+        "at": "2026-11-04T23:41:21.591Z",
+        "source": "application",
+        "label": "Benchmark finished",
+        "detail": {
+          "state": "complete",
+          "completed": 1,
+          "failed": 0,
+          "skipped": 0
+        }
+      }
+    ],
+    "summaries": [
+      {
+        "model": "alibaba/qwen3.8-27b",
+        "accuracy": 1,
+        "passRate": 1,
+        "schemaRate": 1,
+        "failures": 0,
+        "skipped": 0,
+        "failureRate": 0,
+        "meanLatencyMs": 2146,
+        "costUsd": 0.000167,
+        "reportedCostUsd": 0.000167,
+        "costsComplete": true,
+        "tokens": 202,
+        "missingFieldRate": 0,
+        "score": 100,
+        "weights": [
+          0.55,
+          0.2,
+          0.15,
+          0.1
+        ]
+      }
+    ],
+    "state": "complete",
+    "analyst": {
+      "content": "Based on the provided data, the recommended model is alibaba/qwen3.8-27b with a score of 100. However, the sample size is tiny and there may be missing data, so this recommendation should be treated with caution. The model's performance metrics, such as accuracy and pass rate, are perfect, but this may not be representative of real-world performance.",
+      "metadata": {
+        "requestId": "074fe482-0097-4385-aef4-7795ed966cb2",
+        "responseId": "",
+        "requestedModel": "meta/llama-3.3-70b-instruct",
+        "responseModel": "meta/llama-3.3-70b-instruct",
+        "effectiveModel": "meta.llama3-3-70b-instruct-v1:0",
+        "provider": "bedrock",
+        "attempts": 1,
+        "fallback": false,
+        "gatewayDurationMs": 1670,
+        "latencyMs": 1930,
+        "promptTokens": 223,
+        "completionTokens": 78,
+        "totalTokens": 301,
+        "costUsd": 0.000217,
+        "pricingSource": "deployment",
+        "toolCalls": [],
+        "guardrails": null,
+        "headers": {
+          "otari-request-id": "074fe482-0097-4385-aef4-7795ed966cb2",
+          "otari-provider": "bedrock",
+          "otari-model": "meta.llama3-3-70b-instruct-v1:0",
+          "otari-attempt-count": "1",
+          "otari-fallback": "false",
+          "otari-response-duration-ms": "1670",
+          "server-timing": "otari;dur=92.4;desc=\"Otari before the provider\", upstream;dur=1577.6;desc=\"Provider until its answer or first chunk\", total;dur=1670.0;desc=\"Otari and the provider\""
+        }
+      }
+    }
+  },
+  "notes": "Unmocked production browser run. No synthetic model responses; receipts omitted."
+}

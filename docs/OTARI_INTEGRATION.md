@@ -9,8 +9,8 @@ API is used. Reviewed on 2026-11-04:
 - [Routing](https://github.com/mozilla-ai/otari/blob/main/docs/routing.md)
 - [Tools](https://github.com/mozilla-ai/otari/blob/main/docs/tools.md)
 - [Guardrails](https://github.com/mozilla-ai/otari/blob/main/docs/guardrails.md)
-- [Budgets](https://github.com/mozilla-ai/otari/blob/main/docs/budgets.md)
-- [End users](https://github.com/mozilla-ai/otari/blob/main/docs/end-users.md)
+- [Dashboard, budgets, and per-key spending limits](https://github.com/mozilla-ai/otari/blob/main/docs/dashboard.md)
+- [MCP tools](https://github.com/mozilla-ai/otari/blob/main/docs/mcp.md)
 - [Access control](https://github.com/mozilla-ai/otari/blob/main/docs/access-control.md)
 
 First genuine integration commit:
@@ -45,12 +45,14 @@ Review generated JSON before publishing it. Scripts require `.env.local` and
 Node 22; `--conditions=react-server` enables the server-only import in these CLI
 programs. Do not use that condition for ordinary test or browser tooling.
 
-Observed hosted account: US; initially 163 catalog entries, 162 on the final refresh; both configured model IDs and
-`modelswitch-fallback` discoverable. Code execution advertised available; web
-fetch/search `workspace_disabled`; no configured guardrails service. Routing and
-budget management reads return 401 with the inference key. We did not request
-or expose a management token. Discovery does not prove a model can complete a
-paid request.
+Observed hosted account: US; refreshed read-only on 2026-11-04 at
+23:15:18 UTC. `/models` returned 162 entries. `otari_code_execution` is
+available; web fetch and search both report `workspace_disabled`; no guardrail
+service is configured. Routing and budget management reads return
+authentication errors with the inference key. We did not request or expose a
+management token. See the current [discovery record](../evidence/discovery.json)
+and [Otari proof](OTARI_PROOF.md). Discovery alone does not prove a paid model
+request or budget boundary.
 
 ## Open-weight roles and licensing
 
@@ -99,8 +101,17 @@ unverified. No such test policy was created in this session.
 
 ## Web document check
 
-An authorized workspace admin must enable web fetch under Tools and restrict the
-workspace's allowed domains to `www.mozilla.org` and `raw.githubusercontent.com`.
+Current hosted account evidence says both built-in web tools are
+`workspace_disabled`. The inference key cannot change this. An authorized
+workspace owner/admin should open **Tools → Web search** in the Otari dashboard,
+enable the workspace web-access policy, and set the allowed-domain list to
+`www.mozilla.org` and `raw.githubusercontent.com`. Then refresh discovery. If
+the tools still report unavailable, an authorized deployment operator must
+configure/enable the deployment search/fetch backend: a workspace policy cannot
+enable a missing backend or override operator restrictions. The exact current
+policy and backend split is in Otari's [tools guide](https://github.com/mozilla-ai/otari/blob/main/docs/tools.md)
+and [dashboard guide](https://github.com/mozilla-ai/otari/blob/main/docs/dashboard.md).
+No such account changes were made here.
 The UI exposes only two exact HTTPS document URLs; custom URLs, credentials,
 ports, queries, fragments, private destinations, and host lookalikes are rejected.
 Otari must also enforce redirect and DNS/network safety. A fetch declaration can
@@ -124,8 +135,12 @@ is accepted. The endpoint returned no inline cost; cost stays unknown.
 
 ## Real budget setup and boundary test
 
-In Otari, add a small USD budget, then attach it to this API key or create a
-workspace spend ceiling. A budget record alone enforces nothing until attached.
+An Otari organization owner/admin or deployment operator must create a small
+test budget under **Organization → Spend and budgets**, then attach it to a
+dedicated test API key. The current [dashboard guide](https://github.com/mozilla-ai/otari/blob/main/docs/dashboard.md)
+also describes setting an existing budget or a custom spend amount/reset on an
+API key's create/edit form. A budget record alone enforces nothing until
+attached.
 For a safe boundary demonstration, use a separate operator-created test key
 with a request limit of 1 and a small dollar cap. Admit one tiny call, then send
 one more. Record the actual refusal code `budget_exceeded`, request ID,
@@ -136,6 +151,9 @@ route. Do not attach a zero budget to the only working demonstration key.
 The observed 402 `insufficient_funds` balance refusal is **not** a budget-limit
 test. Management credentials are unavailable, so no budget was created or changed.
 No live budget value is displayed without an authorized gateway response.
+The current recheck again returned authentication for `/budgets`. No isolated
+test credential or budget was created, and the configured inference key's
+balance is not represented as an enforced spending ceiling.
 
 ## Guardrails, MCP, and per-user budgets
 
@@ -149,3 +167,20 @@ MCP and per-user budgets are not implemented: no supported account integration
 or service-key end-user setup was available. Do not put arbitrary browser user
 labels in Otari's `user` field; ordinary keys bill their own user, and real
 per-user budgets require a service key and configured end-user budgets.
+
+## Vercel and public inference
+
+Production must set `OTARI_API_KEY`, `OTARI_BASE_URL`,
+`OTARI_EVALUATOR_MODEL`, and `OTARI_ANALYST_MODEL`. `OTARI_FALLBACK_POLICY` is
+optional and is used only for the routing check. `PUBLIC_DEMO_ENABLED` must
+remain `false` until a small Otari-side hard budget and durable limiter are
+configured. To enable, set it to `true` and provide both
+`UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`; production refuses
+execution without these values. The Redis limiter applies 120 global attempted
+operations per UTC day and 12 per client per minute. This is not a substitute
+for the Otari spending boundary.
+
+`OTARI_SAFETY_MODEL` is not consumed by this application and should not be
+configured as a claim of hosted guardrails. A discovered safety model is not
+proof that Otari invokes it through an inference guardrail service. The hosted
+profile endpoint currently reports no guardrail service.

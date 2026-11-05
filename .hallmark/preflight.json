@@ -16,5 +16,20 @@
     "Console app screen tokens",
     "case ledger",
     "execution timeline"
-  ]
+  ],
+  "polishReview": {
+    "scanned": "2026-11-04",
+    "branch": "polish/judge-readiness from fetched origin/main e77ba8f",
+    "preserve": [
+      "merged application, benchmark routes and Otari integration",
+      "dark workbench, accent, view navigation, wordmark typography",
+      "existing live evidence and branch history"
+    ],
+    "introduce": [
+      "uploaded modelswitch-icon (1).png in app metadata and header",
+      "latest saved run summary and four-group footer",
+      "structured JSON benchmark receipt and clearer deterministic recommendation",
+      "short judge-first README and current hosted capability evidence"
+    ]
+  }
 }

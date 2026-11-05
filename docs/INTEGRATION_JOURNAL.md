@@ -26,3 +26,15 @@ lockfile for reproducibility. This is local tooling friction, not an Otari bug.
 2026-11-04 16:10 UTC: fresh discovery lists 162 models. Web tools are still workspace_disabled; no guardrail service exists. The typed verifier completed all three evaluator scenarios (one case each), Llama analyst through Bedrock, routing policy, and Python. All three scored cases passed. Policy headers report one attempt, fallback false; actual failover remains unverified. Those five completion calls report $0.001480 combined. Sandbox cost is unreported. Management routes remain unauthorized. Reviewed official MCP and API-key docs: stored MCP setup requires workspace/admin context and per-user budgets require service-key setup. No management mutation was attempted.
 
 2026-11-04: the unmocked production check found the Origin comparison used Next's internal bind address. Fixed against public Host/protocol, added a regression, and repeated successfully. This was an application defect, not an Otari error. Final live browser run 365aae24-b64e-43ec-ba02-3c5e9a7d8739 completed ten evaluator cases plus one analyst call. Qwen 5/5; Llama 4/5. Llama was faster/cheaper and won the balance objective (89 vs about 85). Reported total including analyst: $0.001741. Browser errors: zero. Full evidence retains actual outputs and omits signing receipts.
+
+2026-11-04 23:15Z: refreshed read-only hosted discovery. The account still exposes
+162 models and code execution, but web search/fetch is workspace-disabled,
+guardrails have no configured service, and inference-key access to policy and
+budget management is unauthorized. No setting was changed.
+
+2026-11-04 23:41Z: one-case post-polish live smoke completed through hosted Otari:
+Qwen evaluator and separate Llama analyst, both with actual request IDs and
+reported cost. The browser had zero errors. Browser review caught a footer
+navigation issue caused by using Next Link with the existing view state; that
+was corrected. The tablet footer wrap was also corrected after Hallmark review.
+Latest captures replay this saved run and do not incur additional inference.

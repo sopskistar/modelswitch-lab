@@ -1,23 +1,42 @@
 [
- {
-  "scope": "app",
-  "shape": "app screen",
-  "theme": "console",
-  "axes": "light+dark/grotesk-sans/chromatic-amber",
-  "nav": "top bar and view tabs",
-  "footer": "single ruled line",
-  "imagery": "working product",
-  "signature": "benchmark case ledger",
-  "sections": [
-   "workspace",
-   "results",
-   "request trace",
-   "capabilities",
-   "guide"
-  ],
-  "waived": [],
-  "prompt": "ModelSwitch Lab, a reproducible hosted Otari evaluation workbench",
-  "date": "2026-11-04",
-  "mode": "build"
- }
+  {
+    "scope": "app",
+    "shape": "app screen polish",
+    "theme": "console",
+    "axes": "light+dark/uploaded-white-mark/amber",
+    "nav": "existing top bar and view tabs",
+    "footer": "four group directory with recent run summary",
+    "imagery": "user supplied icon and real application captures",
+    "signature": "versioned benchmark case ledger",
+    "sections": [
+      "workspace",
+      "latest run",
+      "four group footer"
+    ],
+    "waived": [],
+    "prompt": "Polish the existing ModelSwitch Lab for MozFest judges without changing navigation or benchmark behavior",
+    "date": "2026-11-04",
+    "mode": "polish"
+  },
+  {
+    "scope": "app",
+    "shape": "app screen",
+    "theme": "console",
+    "axes": "light+dark/grotesk-sans/chromatic-amber",
+    "nav": "top bar and view tabs",
+    "footer": "single ruled line",
+    "imagery": "working product",
+    "signature": "benchmark case ledger",
+    "sections": [
+      "workspace",
+      "results",
+      "request trace",
+      "capabilities",
+      "guide"
+    ],
+    "waived": [],
+    "prompt": "ModelSwitch Lab, a reproducible hosted Otari evaluation workbench",
+    "date": "2026-11-04",
+    "mode": "build"
+  }
 ]

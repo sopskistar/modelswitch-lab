@@ -87,6 +87,25 @@ export const weights: Record<Objective, number[]> = {
   speed: [0.35, 0.15, 0.45, 0.05],
   cost: [0.4, 0.15, 0.05, 0.4],
 };
+export function recommendation(summaries: ModelSummary[]) {
+  const winner = summaries.reduce<ModelSummary | undefined>(
+    (best, row) => (row.score > 0 && (!best || row.score > best.score) ? row : best),
+    undefined,
+  );
+  if (!winner) return undefined;
+  const comparisons = summaries.filter((row) => row.model !== winner.model);
+  return {
+    winner,
+    moreAccurate: comparisons.filter((row) => row.accuracy > winner.accuracy),
+    lessAccurate: comparisons.filter((row) => row.accuracy < winner.accuracy),
+    cheaper: comparisons.filter(
+      (row) => row.costUsd !== null && winner.costUsd !== null && row.costUsd < winner.costUsd,
+    ),
+    moreExpensive: comparisons.filter(
+      (row) => row.costUsd !== null && winner.costUsd !== null && row.costUsd > winner.costUsd,
+    ),
+  };
+}
 export function summarize(
   models: string[],
   cases: CaseResult[],

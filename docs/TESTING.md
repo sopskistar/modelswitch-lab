@@ -24,13 +24,14 @@ for development; `127.0.0.1` is also explicitly allowed in Next's dev origins.
 ## Results observed
 
 - TypeScript, ESLint, production build: passed on the implemented application.
-- Vitest: **99 tests in 4 files**, including the final public-Host regression.
-- Playwright: **14 tests**, 7 in desktop Chromium and 7 in mobile Chromium
-  (iPhone 13 emulation), **all passed against the corrected production build**.
+- Vitest: **100 tests in 4 files**, all passed on the final source.
+- Playwright: **16 tests**, 8 in desktop Chromium and 8 in mobile Chromium
+  (iPhone 13 emulation), **all passed against the final production build**.
 - Axe: automated checks in the theme/responsive tests; no violations on checked
   workspace screens. Both light and dark are included in the final test revision.
-- Hallmark: real static and rendered audit, 0 FAIL / 0 REFLEX / 0 WARN on the
-  inspected UI. See `HALLMARK_LINT.txt`, captures, and `DESIGN_REVIEW.md`.
+- Hallmark: final static and rendered audit passed with 0 FAIL, 0 REFLEX,
+  0 WARN; five viewport renders completed. See `HALLMARK_LINT.txt`, captures,
+  and `DESIGN_REVIEW.md`.
 - Production browser bundle scanned for the configured Otari key: no match.
 - `npm audit --omit=dev`: **0 vulnerabilities** after updating Zod.
 - Full dependency audit: **13 moderate**, all development lint-chain findings
@@ -89,6 +90,8 @@ captures desktop/mobile themes, and writes `evidence/browser-smoke.json` with
 receipts omitted. Run only after reviewing its small spending scope. Its browser
 console error count is recorded; HTTP refusals remain explicit outcomes.
 
+Post-polish live smoke at `2026-11-04T23:41:17Z` completed one real evaluator
+case and one separate analyst request; see `evidence/polish-live-smoke.json`.
 Successful two-model execution is recorded. Web tools, actual fallback,
 gateway budget boundaries, MCP and per-user budgets
 require additional hosted-account setup; they are not implied by mocked tests.
