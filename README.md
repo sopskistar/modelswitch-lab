@@ -4,10 +4,12 @@
 
 Run reproducible model evaluations through Mozilla's hosted Otari gateway and inspect the answers, usage, and routing evidence.
 
-**Live demo:** Not deployed yet. A production URL will be added after owner deployment and verification.<br />
+**Live demo:** [modelswitchlab.vercel.app](https://modelswitchlab.vercel.app) · public inference is currently disabled.<br />
 **Judge? Start here:** [Seven checkpoint walkthrough](docs/JUDGE_WALKTHROUGH.md) · [three minute demo outline](docs/DEMO_SCRIPT.md)
 
-![ModelSwitch Lab workspace in dark mode](docs/screenshots/desktop-dark-workspace-live.png)
+![Production workspace showing the intentionally disabled inference state](docs/screenshots/production-desktop-workspace.png)
+
+[Production desktop capture](docs/screenshots/production-desktop-workspace.png) · [mobile capture](docs/screenshots/production-mobile-workspace.png)
 
 ## Why this is useful
 
@@ -36,7 +38,7 @@ The analyst can explain a result but cannot change deterministic scores. A recor
 
 ## Verified rubric coverage
 
-Evidence currently supports **55 of 100 possible points**: 30 for two distinct open-weight roles, 20 for distinct model roles and hosted code execution, and 5 for a working real use case. This is our evidence assessment, not an official judge score. The Otari evidence was refreshed on 2026-11-04; fallback, gateway budget enforcement, web tools, guardrails, and the personally recorded demo remain unverified or unavailable. See the [matrix](docs/RUBRIC_EVIDENCE.md) for limits and reproduction details.
+Evidence supports **55 of 100 potential points** from prior real Otari execution: 30 for two distinct open-weight roles, 20 for distinct model roles and hosted code execution, and 5 for the working use case. This is our evidence assessment, not an official judge score. Production currently loads with inference disabled, so the historical live requests are not presented as current production runs. Fallback, gateway budget enforcement, web tools, guardrails, and the personally recorded demo remain unverified or unavailable. See the [matrix](docs/RUBRIC_EVIDENCE.md) and [production acceptance record](evidence/production-acceptance.json).
 
 ## Architecture
 
@@ -66,7 +68,7 @@ Open the local URL printed by Next.js. Without credentials, the workspace shows 
 | `UPSTASH_REDIS_REST_URL`   | Durable production request limiter                             |
 | `UPSTASH_REDIS_REST_TOKEN` | Server-only limiter token                                      |
 
-On Vercel, public inference requires both the explicit switch and durable Redis limits. It also requires an Otari-side hard spending boundary. The deployment has not yet been configured or tested; no production URL is claimed. See [deployment and safety requirements](docs/OTARI_INTEGRATION.md#vercel-and-public-inference).
+On Vercel, public inference requires both the explicit switch and durable Redis limits. It also requires an Otari-side hard spending boundary. Production is live but its configuration is not available in this workspace; the public catalog reports inference disabled. See [deployment and safety requirements](docs/OTARI_INTEGRATION.md#vercel-and-public-inference).
 
 ## Tests
 

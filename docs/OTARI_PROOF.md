@@ -1,9 +1,47 @@
 # Hosted Otari proof
 
-All request evidence below is redacted, checked into the repository, and linked
-to its machine-readable record. Request IDs can be checked against the Otari
-account's request/usage history by an authorized owner. The records contain no
-API key. They describe requests made on 2026-11-04, not current service health.
+Historical request evidence below is redacted, checked into the repository, and
+linked to its machine-readable record. Request IDs can be checked against the
+Otari account's request/usage history by an authorized owner. Those requests
+were made on 2026-11-04; they are not production runs or current service health.
+
+## Production acceptance — 2026-11-05
+
+The deployed site [modelswitchlab.vercel.app](https://modelswitchlab.vercel.app)
+returned HTTP 200 from Vercel. The read-only production catalog returned HTTP
+200, `configured: true`, US region, 162 accessible catalog models, and the
+Qwen3.8 evaluator plus Llama 3.3 analyst IDs. This confirms server-side Otari
+model discovery authentication; it does not prove a completion request.
+
+The catalog reports `demoEnabled: false`. One empty JSON POST to `/api/execute`
+returned HTTP 503 with `demo_disabled`. The route checks this flag before
+reading the body, invoking the rate limiter, or constructing an Otari client;
+the request therefore generated no model call, request ID, or cost. A live
+production benchmark, result trace, and export receipt were not run. This was
+intentional because Upstash credentials and an Otari hard spend limit could not
+be verified from the public site.
+
+Desktop and iPhone 13 browser checks found no page errors, no axe violations,
+no horizontal overflow, and working theme persistence and view navigation.
+The workspace scenario controls and empty Results/Trace states load. The run
+button remains disabled. Captures: [desktop](screenshots/production-desktop-workspace.png)
+and [mobile](screenshots/production-mobile-workspace.png). Full machine-readable
+observations are in [`production-acceptance.json`](../evidence/production-acceptance.json).
+
+Vercel CLI/authentication and a linked `.vercel` project are absent from this
+workspace; GitHub's public deployments API returned no records. The exact
+deployed commit therefore remains **unverified**. The requested source commit
+is `53671da73606e5e619e8224224a8647ee21cdae1`, but it cannot be asserted as the
+deployed SHA without Vercel project access. The live catalog's policy field is
+`=modelswitch-fallback` and is not one of the listed model IDs. The operator
+must inspect that Vercel environment value and actual Otari policy name before
+trying the application's policy check. Do not change the production policy to
+force fallback.
+
+The composite `demoEnabled: false` does not disclose whether
+`PUBLIC_DEMO_ENABLED` is false, Upstash URL/token are missing, or both. Vercel
+production environment values were not accessible or read. The public catalog
+lists model metadata and tool availability only; it returns no API credentials.
 
 ## Real model roles
 

@@ -71,6 +71,28 @@ ordinary test suite. Test artifacts go under ignored `test-results` and
 
 ## Live hosted checks
 
+### Production acceptance (2026-11-05)
+
+The deployed site returned HTTP 200. Desktop (1440px) and mobile (iPhone 13,
+390px) were inspected with Playwright. Both loaded the workspace, three
+synthetic scenario choices, Otari model metadata, theme toggle/persistence,
+footer links, and empty Results/Trace views. There were zero page errors, zero
+axe violations, and no horizontal overflow. Screenshots are
+`screenshots/production-desktop-workspace.png` and
+`screenshots/production-mobile-workspace.png`.
+
+The production catalog reports `configured: true` and `demoEnabled: false`.
+One empty JSON POST returned the safe `503 demo_disabled` response, which the
+route returns before parsing, rate limiting, or starting an Otari request. No
+live model inference was attempted. Consequently, production result export and
+durable rate-limit enforcement could not be tested; the UI has no production
+run to export. The Vercel deployment SHA and private env-variable presence are
+not accessible from this workspace. See
+[`production-acceptance.json`](../evidence/production-acceptance.json).
+
+The production browser check is acceptance inspection, not the intercepted
+Playwright test suite. No fixtures were presented as live production output.
+
 `npm run otari:inspect` performs model/tool/profile discovery and read-only
 management-authority checks. `npm run otari:verify` makes at most seven bounded
 execution calls and writes `evidence/verification.json`; attach a hard gateway
