@@ -10,6 +10,9 @@ import modelSwitchProduction from '../../../../evidence/model-switch-production.
 import qwenTimeoutDiagnosis from '../../../../evidence/qwen-timeout-diagnosis.json';
 import finalLiveValidation from '../../../../evidence/final-live-validation.json';
 import productionDeploymentCheck from '../../../../evidence/production-deployment-check.json';
+import budgetEnforcement from '../../../../evidence/budget-enforcement-test.json';
+import fallbackTestReadiness from '../../../../evidence/fallback-test-readiness.json';
+import guardrailProfileCheck from '../../../../evidence/guardrail-profile-check.json';
 export function GET(request: Request) {
   const file = new URL(request.url).searchParams.get('file');
   return file === 'discovery.json'
@@ -34,5 +37,14 @@ export function GET(request: Request) {
                       ? NextResponse.json(finalLiveValidation)
                       : file === 'budget-operator-report.json'
                         ? NextResponse.json(budgetReport)
-                        : NextResponse.json({ error: 'Unknown evidence file.' }, { status: 404 });
+                        : file === 'budget-enforcement-test.json'
+                          ? NextResponse.json(budgetEnforcement)
+                          : file === 'fallback-test-readiness.json'
+                            ? NextResponse.json(fallbackTestReadiness)
+                            : file === 'guardrail-profile-check.json'
+                              ? NextResponse.json(guardrailProfileCheck)
+                              : NextResponse.json(
+                                  { error: 'Unknown evidence file.' },
+                                  { status: 404 },
+                                );
 }

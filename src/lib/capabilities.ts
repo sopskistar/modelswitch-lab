@@ -3,6 +3,7 @@ import verification from '../../evidence/verification.json';
 import mcpProof from '../../evidence/mcp-status.json';
 import routingProof from '../../evidence/routing-production.json';
 import webFetchDiagnosis from '../../evidence/web-fetch-diagnosis.json';
+import budgetEnforcement from '../../evidence/budget-enforcement-test.json';
 interface EvidenceRecord {
   role: string;
   status: string;
@@ -46,8 +47,19 @@ export const routingVerified =
   );
 export const mcpVerified =
   mcpProof.liveExecution.verified === true && Boolean(mcpProof.liveExecution.requestId);
+export const budgetEnforcementVerified =
+  budgetEnforcement.classification.requestLimitEnforcement === 'confirmed' &&
+  budgetEnforcement.requests.length === 2 &&
+  budgetEnforcement.requests[0]?.httpStatus === 200 &&
+  budgetEnforcement.requests[0]?.usageLookup.status === 'success' &&
+  budgetEnforcement.requests[1]?.httpStatus === 403 &&
+  budgetEnforcement.requests[1]?.gatewayErrorCode === 'budget_exceeded' &&
+  budgetEnforcement.requests[1]?.budgetScope === 'api_token';
 export const advancedVerifiedPoints =
-  10 * [codeVerified, rolesVerified, routingVerified, mcpVerified].filter(Boolean).length;
+  10 *
+  [codeVerified, rolesVerified, routingVerified, mcpVerified, budgetEnforcementVerified].filter(
+    Boolean,
+  ).length;
 export type CapabilityStatus =
   | 'Verified live'
   | 'Verified live this session'
@@ -92,7 +104,7 @@ export function capabilities(
       points: 10,
       status: routingVerified ? 'Verified live' : 'Implemented, unverified',
       detail: routingVerified
-        ? `Otari routed ${routingProof.gateway.requestedPolicy} to ${routingProof.gateway.effectiveModel} through ${routingProof.gateway.provider}; attempt ${routingProof.gateway.attempts}, fallback ${routingProof.gateway.fallback}. Failover itself remains unverified.`
+        ? `Otari routed ${routingProof.gateway.requestedPolicy} to ${routingProof.gateway.effectiveModel} through ${routingProof.gateway.provider}; attempt ${routingProof.gateway.attempts}, fallback ${routingProof.gateway.fallback}. The test-workspace fallback attempt is not ready: its own API key and explicit provider pin are not verified.`
         : fallbackVerified
           ? 'Actual gateway fallback recorded in serving headers.'
           : 'The routing policy has not been verified with a live request and effective model/provider metadata.',
@@ -141,10 +153,13 @@ export function capabilities(
       id: 'budgets',
       name: 'Budgets and spending limits',
       points: 10,
-      status: 'Implemented, unverified',
-      detail:
-        'Participant reports separate $1 monthly ceilings on the production and test keys. Current spend, remaining balance, and a gateway budget refusal are not independently available.',
-      file: 'budget-operator-report.json',
+      status: budgetEnforcementVerified ? 'Verified live' : 'Implemented, unverified',
+      detail: budgetEnforcementVerified
+        ? `Otari admitted Qwen request ${budgetEnforcement.requests[0].requestId} at $${budgetEnforcement.requests[0].costUsd}, then refused ${budgetEnforcement.requests[1].requestId} with HTTP 403 budget_exceeded for scope api_token. The first answer content was empty; this proves enforcement, not answer quality.`
+        : 'A real Otari key-scoped request-count refusal has not been verified.',
+      file: budgetEnforcementVerified
+        ? 'budget-enforcement-test.json'
+        : 'budget-operator-report.json',
     },
     {
       id: 'roles',
@@ -160,10 +175,10 @@ export function capabilities(
       id: 'guardrail',
       name: 'Inference guardrails',
       points: 10,
-      status: 'Unavailable on account',
+      status: 'Implemented, unverified',
       detail:
-        'Hosted profile discovery reports no guardrails service. The safe fixture fails closed.',
-      file: 'discovery.json',
+        'The latest read-only profile check returned available=false because no guardrails service is configured for this inference context. An organization owner may still configure a workspace-scoped mandate; no verdict was tested.',
+      file: 'guardrail-profile-check.json',
     },
     {
       id: 'users',

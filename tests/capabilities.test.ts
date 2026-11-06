@@ -1,13 +1,24 @@
 import { describe, expect, it } from 'vitest';
 import { capabilities } from '@/lib/capabilities';
-import { advancedVerifiedPoints } from '@/lib/capabilities';
+import { advancedVerifiedPoints, budgetEnforcementVerified } from '@/lib/capabilities';
 
 describe('routing evidence state', () => {
   it('counts an executed Otari policy resolution while explicitly showing no failover', () => {
     const route = capabilities().find((cap) => cap.id === 'routing');
     expect(route).toMatchObject({ status: 'Verified live', file: 'routing-production.json' });
     expect(route?.detail).toContain('fallback false');
-    expect(advancedVerifiedPoints).toBe(40);
+    expect(budgetEnforcementVerified).toBe(true);
+    expect(advancedVerifiedPoints).toBe(50);
+  });
+});
+
+describe('budget capability evidence', () => {
+  it('shows the actual gateway refusal and its redacted receipt', () => {
+    expect(capabilities().find((cap) => cap.id === 'budgets')).toMatchObject({
+      status: 'Verified live',
+      file: 'budget-enforcement-test.json',
+      detail: expect.stringContaining('budget_exceeded'),
+    });
   });
 });
 

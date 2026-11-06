@@ -216,7 +216,50 @@ at the top supersede those route-status findings: both receipts now return HTTP
 routing executions are corroborated by captured production responses and Otari
 headers; see their individual evidence records.
 
-## Spending ceilings — operator-reported, no enforcement proof
+## Verified request-count budget enforcement — 2026-11-06
+
+The isolated `modelswitch-budget-proof` API-key budget was configured by the
+operator with a $5 ceiling and `request_limit: 1`; its production counterpart
+was left unchanged. Using only the dedicated test key, one tiny Qwen request
+was admitted (HTTP 200, request `7d25171f-beee-4533-acce-753ad1d78256`,
+DeepInfra, settled reported cost `$0.000095`). The next request was denied by
+Otari with HTTP 403, `budget_exceeded`, scope `api_token`, request
+`35e28010-c697-43bc-b278-cc039b2279b0`; it had no tokens or cost. This is a
+gateway request-count refusal, distinct from insufficient funds, 429 rate
+limiting, or the app's Redis limiter. The first response had empty answer
+content, so this receipt proves enforcement, not useful answer quality.
+Redacted record: [`budget-enforcement-test.json`](../evidence/budget-enforcement-test.json).
+
+## Fallback and guardrail readiness — 2026-11-06
+
+No fallback request was sent. Operator observations show the intentionally
+invalid DeepInfra credential `fallback-test` enabled in the isolated `ModelSwitch
+Fallback Test` workspace and disabled in Default. That does not establish that
+the workspace preference is **Always use this key**. The local environment
+does not contain an inference key bound to the test workspace. Otari's access
+control docs state an API key binds to one workspace and the caller cannot
+switch workspaces by request header. Routing policies are also workspace
+scoped. See [fallback-test-readiness.json](../evidence/fallback-test-readiness.json).
+
+To make exactly one safe test possible, the operator must create a restricted
+API key from inside `ModelSwitch Fallback Test`, set its local secret as
+`OTARI_FALLBACK_TEST_KEY`, explicitly pin `fallback-test` using **Always use
+this key**, and create/confirm an isolated policy there with Qwen/DeepInfra as
+primary and the eligible Llama/Bedrock route as backup. Confirm the backup is
+funded and eligible. Then a single tiny request can be made. Restore the test
+workspace preference to **Follow the organization** afterwards. Do not enable
+the invalid credential in Default or change the production policy.
+
+The read-only `GET /api/v1/tool-settings/guardrails/profiles` returned HTTP 200
+with `available=false`, no profiles, and the explanation that no guardrails
+service is configured for the checked inference context. No inference or
+organization mandate was changed. An owner may check Organization → Guardrails
+→ Configure guardrail and scope a real mandate only to the test workspace; do
+not enable an organization-wide mandate for this experiment. Record both a
+harmless adversarial fixture and a legitimate control only after the gateway
+returns real decisions. Receipt: [guardrail-profile-check.json](../evidence/guardrail-profile-check.json).
+
+## Historical tool availability
 
 ### Request-count enforcement — live verified 2026-11-06
 
@@ -290,19 +333,13 @@ Earlier paragraphs in this section and the 2026-11-05 investigation below are
 historical snapshots. The 2026-11-06 live test above supersedes their report
 that no request-count configuration or enforcement evidence was available.
 
-The participant reports two separate $1 monthly ceilings attached in Otari:
-the `Setup guide` production key and `modelswitch-budget-proof` test key. These
-were not changed. The inference credential cannot read organization spending
-records; past organization management reads returned HTTP 401 `Invalid master
-key`. Current spend, remaining dollars, reset state, and the exact key-budget
-association therefore are not fetched by the application. No `budget_exceeded`
-response was observed. The redacted provenance record is
+Historical operator-report snapshot from before the bounded test: two separate
+$1 monthly ceilings were reported, and the inference credential could not
+read organization spending records. Those statements are superseded by the
+verified request-count test above for the dedicated test key. The application
+still does not fetch current spend, remaining dollars, or reset state, and the
+production Setup guide budget was not changed. See the historical
 [`budget-operator-report.json`](../evidence/budget-operator-report.json).
-
-Previously observed model costs are usage reports, not proof that the boundary
-was enforced. The existing $1 ceilings must not be exhausted to establish the
-point. Budget capability remains unverified pending a safe, gateway-recorded
-refusal or independently inspectable Otari usage/enforcement evidence.
 
 Historical request evidence below is redacted, checked into the repository, and
 linked to its machine-readable record. Request IDs can be checked against the

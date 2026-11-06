@@ -1,15 +1,14 @@
 # Rubric evidence
 
-Recorded 2026-11-04; refreshed 2026-11-06. Target ceiling: 100. Current
-evidence supports **up to 85/100 potential points**: 30 for two meaningful
-open-weight roles, 50 for five verified advanced capabilities (policy routing,
-code execution, distinct roles, hosted MCP, and key-scoped request-count
-budget enforcement), and 5 for the working use case. Routing points depend on
-judges accepting verified policy resolution without an observed failover. This
-is our evidence assessment, not an official judge score. The separately
-reported production invoice run remains participant-reported. Actual routing
-fallback, web retrieval, guardrails, per-user budgets and the personal demo
-remain unverified or unavailable.
+Refreshed 2026-11-06. Target ceiling: 100. Current evidence supports **up to
+85/100 potential points**: 30 for two meaningful open-weight roles, 50 for five
+verified advanced capabilities (policy routing, code execution, distinct
+roles, hosted MCP, and key-scoped request-count budget enforcement), and 5 for
+the working use case. Routing points depend on judges accepting verified
+policy resolution without an observed failover. This is our evidence
+assessment, not an official judge score. The latest production invoice run is
+participant-reported. A genuine fallback and a sixth advanced capability are
+not verified; the personal demo video has not been recorded.
 
 | Rubric feature                | Possible points | Implementation location                            | Tested live?                 | Evidence                                                                                                                                         | Reproduction steps                                                                                           | Status                                  | Known limitations                                                  |
 | ----------------------------- | --------------- | -------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------- | ------------------------------------------------------------------ |
@@ -21,7 +20,7 @@ remain unverified or unavailable.
 | Code execution                | 10              | `/api/execute` code action; typed verifier         | **Yes**                      | `verification.json`, `732c1ded-aba4-4210-8cd7-1251027e367c`; exit 0, correct=4, total=5, accuracy=.8                                             | `npm run otari:verify -- --capabilities-only` or Check sandbox                                               | **Verified live**                       | Fixed control vectors; cost unreported                             |
 | Budgets/spending limits       | 10              | Otari key spending ceilings; denial normalization | **Yes: hosted request and refusal** | [`budget-enforcement-test.json`](../evidence/budget-enforcement-test.json): Qwen request `7d25171f-beee-4533-acce-753ad1d78256` admitted at $0.000095; second request `35e28010-c697-43bc-b278-cc039b2279b0` returned 403 `budget_exceeded`, scope `api_token` | Operator sets one-request test-key budget; send one tiny request, then at most one follow-up; inspect response headers and usage records | **Verified live** | First request had empty answer content; production budget untouched; no arbitrary refusal or repeated exhaustion |
 | Multiple distinct model roles | 10              | Evaluator scoring then separate analyst action     | **Yes**                      | Typed verifier and `browser-smoke.json` record distinct role requests and real providers                                                         | Run benchmark, inspect analyst event and request IDs/models                                                  | **Verified live**                       | Comparison calls alone are not the distinct-role proof             |
-| Inference guardrails          | 10              | `/api/execute` guardrail fixture                   | No gateway verdict            | `verification.json`, 502, `ef371ed6-bad2-4631-9e63-26f4c452509f`; latest recorded profile discovery found no configured service                   | Otari owner configures an actual hosted guardrail service; run harmless fixture once and inspect gateway decision | Unavailable: no guardrail service configured | Fail-closed service error is not a guardrail verdict                  |
+| Inference guardrails          | 10              | `/api/execute` guardrail fixture                   | No gateway verdict            | [`guardrail-profile-check.json`](../evidence/guardrail-profile-check.json): HTTP 200, `available=false`, no profiles; no inference sent          | Owner configures and scopes a real guardrail to a test workspace, then run one harmless adversarial and one control prompt | **Not verified** | Current profile check does not rule out an owner-configured workspace mandate; no org-wide change made |
 | Per-user budgets              | 10              | None                                               | No                           | None; no authorized service/admin key available; see exact hosted configuration blocker in `OTARI_PROOF.md`                                    | Owner provisions a dedicated scoped service key and two end-user budget IDs; run fixed synthetic identities  | Blocked pending hosted owner setup      | No local label or shared $1 key ceiling is counted                  |
 | Working real use case         | 5               | Five views, 15 fixtures, scorer and recommendation | **Yes**                      | `browser-smoke.json`, run `365aae24-b64e-43ec-ba02-3c5e9a7d8739`: 10 cases + analyst, no request failures                                        | Select five classification cases and both models; Run; inspect/export                                        | **Verified live**                       | Qwen 5/5, Llama 4/5 only on these cases                            |
 | Recorded Otari demonstration  | 5               | `docs/DEMO_SCRIPT.md`                              | Not recorded                 | Script only                                                                                                                                      | Participant personally records actual screen and narrates                                                    | Awaiting participant                    | No synthetic narration or fabricated recording                     |
@@ -29,10 +28,30 @@ remain unverified or unavailable.
 Only six of eight advanced targets can count, capped at 60. Five categories
 are evidenced: policy routing (without an observed failover), distinct model
 roles, code execution, MCP, and key-scoped request-count budget enforcement.
-Do not count local equivalents. Web retrieval, guardrails and per-user budgets
-remain unavailable or unverified. Routing/fallback scoring remains conditional
-on judging interpretation, and the personal recording is still required for
-the final five project/demo points.
+No sixth advanced feature has been demonstrated. Do not count local
+equivalents. Web retrieval failed without a tool event; guardrails have no
+configured service in the checked inference context; per-user budgets remain
+unavailable. Routing/fallback scoring is conditional on judging
+interpretation. The participant's recording is still required for the final
+five project/demo points.
+
+### 2026-11-06 fallback and guardrail readiness refresh
+
+The operator reports that the deliberately invalid DeepInfra credential is
+enabled in the isolated `ModelSwitch Fallback Test` workspace, with Bedrock
+available there; it remains disabled in Default. Otari documentation says
+provider-key selection has a separate **Always use this key** preference,
+that API keys are bound to one workspace, and routing policies are
+workspace-scoped. The local environment contains no key for the test workspace
+and cannot prove the provider preference. No fallback request was sent. The
+production `modelswitch-fallback` policy and Default workspace were not
+changed. Readiness record: [`fallback-test-readiness.json`](../evidence/fallback-test-readiness.json).
+
+A read-only guardrail profile query returned HTTP 200 but `available=false`
+with no profiles for the current inference context. No mandate was changed and
+no guardrail request was sent. The current evidence does not establish whether
+the owner dashboard can scope a mandate to the test workspace. See
+[`guardrail-profile-check.json`](../evidence/guardrail-profile-check.json).
 
 Live comparison under the balance objective:
 

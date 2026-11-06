@@ -63,3 +63,14 @@
 - [ ] Check Vercel source revision for commits after `ff915c5`; this environment has no linked project or CLI. Do not claim the new diagnostic/evidence commits deployed until their production revision is confirmed.
 
 Redacted check: [`final-live-validation.json`](../evidence/final-live-validation.json).
+
+## Final rubric and readiness refresh — 2026-11-06
+
+- [x] Request-count budget enforcement verified: admitted test-key request followed by gateway HTTP 403 `budget_exceeded`; production budget was not used or changed.
+- [x] Capability matrix and capability page now derive budget status from that redacted receipt; current advanced verified count is five (50/60 potential advanced points).
+- [x] Fallback readiness reviewed against Otari docs. No test inference was sent because this checkout has no API key bound to `ModelSwitch Fallback Test`, and **Always use this key** is not confirmed. See [`fallback-test-readiness.json`](../evidence/fallback-test-readiness.json).
+- [x] Guardrail profiles queried read-only: HTTP 200, `available=false`, no profiles. No guardrail claim is made; see [`guardrail-profile-check.json`](../evidence/guardrail-profile-check.json).
+- [ ] Sixth advanced feature: actual fallback, an Otari guardrail verdict, web tool result, or per-user budget enforcement.
+- [ ] Synchronize and push final release commits to both `main` and `hackathon/mozfest-otari-2026`.
+- [ ] Verify the deployed source SHA in the existing `modelswitch-lab` Vercel project. Public endpoints do not reveal the SHA; no Vercel CLI/project access is present here.
+- [ ] Participant personally records and narrates the four-minute demo. No video is claimed.

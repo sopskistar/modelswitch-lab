@@ -25,11 +25,11 @@ Application quotas supplement gateway budgets and do not replace them.
 
 ## 3. Would we continue if optional?
 
-Provisionally yes for a tool that needs one boundary for model identity, usage,
-routing and execution tools. Model discovery, real inference through two
-providers, reported costs, policy resolution, and the Python sandbox were useful.
-Actual failover and budget enforcement still need validation; continued use
-depends on those tests and the required hosted feature availability.
+Yes, based on observed model discovery, inference through two providers,
+reported costs, policy resolution, the Python sandbox, managed MCP execution,
+and the separately verified request-count budget refusal. Actual provider
+failover remains unverified; continued use would depend on an isolated,
+reproducible fallback configuration.
 
 ## 4. What worked well
 
@@ -49,18 +49,20 @@ scoring independent of model opinion.
 Initially evaluator and analyst requests could not execute because the hosted
 account had no funds. Later calls succeeded. This was an account prerequisite,
 not evidence of a gateway defect.
-Web fetch/search were disabled for the workspace, and no guardrails service was
-configured. Routing/budget management reads were unauthorized with the inference
-key, which is an appropriate separation of authority. These states still prevent
-the six-feature demonstration, but do not establish broken implementations of those
-features. No undocumented provider bug is alleged.
+Web fetch/search were disabled at first and later became discoverable, but
+bounded web requests returned HTTP 400 without tool results. No guardrails
+service was configured in the checked inference context. Routing/budget
+management reads were unauthorized with the inference key, which is an
+appropriate separation of authority. A dedicated test-key budget refusal was
+later verified. These observations do not establish an undocumented provider
+bug.
 
 ## 6. What was missing
 
 The code endpoint returned no inline cost or pricing source in its successful
-response, so our UI must retain an unknown cost. We still need real gateway
-fallback and a controlled budget boundary, plus enabled web/guardrail services
-or executed substitutions to reach six advanced features.
+response, so our UI must retain an unknown cost. A real fallback event and a
+sixth advanced feature remain to be demonstrated. The request-count budget
+boundary is now verified.
 A supported hosted fallback fault-injection/test action and a single hosted
 capability/permissions/funding readiness view would shorten setup.
 

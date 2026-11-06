@@ -255,5 +255,28 @@ it verified when a gateway fetch event is present. These are mocked tests, not
 hosted web or inference evidence. Full local verification after the final
 code changes: typecheck, lint, format check, unit tests (117), production
 build, and desktop/mobile Playwright (20) pass. The live Otari Qwen/Llama pair
-and web tool remain untested in this pass because the spend ceiling/current
-balance were not confirmed and the prior Qwen billing outcome is unresolved.
+and web tool were not tested in that pass because the prior Qwen billing
+outcome was unresolved.
+
+## Final evidence refresh — 2026-11-06
+
+The isolated request-count budget test is complete and recorded in
+[`budget-enforcement-test.json`](../evidence/budget-enforcement-test.json):
+one request admitted at HTTP 200 and one refused at HTTP 403
+`budget_exceeded`, scope `api_token`. The production budget was not used.
+Capability logic tests now assert this evidence contributes one verified
+advanced category.
+
+The latest read-only guardrail profile query returned HTTP 200 with
+`available=false` and no profiles. No inference was sent. No fallback request
+was sent because this environment lacks an API key bound to the isolated
+fallback workspace and the explicit provider-key preference was not confirmed;
+see [`fallback-test-readiness.json`](../evidence/fallback-test-readiness.json).
+No paid production request was made.
+
+Production static route checks during this pass showed existing routing and
+MCP evidence routes available but the newly added budget receipt route returned
+HTTP 404. The deployed site is therefore behind this source revision at least
+for that route; the exact deployment SHA remains unavailable. Deploy the
+synchronized `main` revision through the existing `modelswitch-lab` Vercel
+project, then verify the budget evidence route.

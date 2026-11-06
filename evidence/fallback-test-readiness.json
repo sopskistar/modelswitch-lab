@@ -1,0 +1,42 @@
+{
+  "recordVersion": 1,
+  "checkedAt": "2026-11-06T09:12:22Z",
+  "status": "not_ready_for_live_test",
+  "operatorReported": {
+    "workspace": "ModelSwitch Fallback Test",
+    "provider": "DeepInfra",
+    "credentialName": "fallback-test",
+    "credentialContainsDeliberatelyInvalidValue": true,
+    "credentialEnabledInTestWorkspace": true,
+    "bedrockEnabledInTestWorkspace": true,
+    "hostedDeepInfraEnabledInTestWorkspace": true,
+    "invalidCredentialDisabledInDefaultWorkspace": true
+  },
+  "verifiedFromOfficialDocumentation": {
+    "apiKeyBindsToSingleWorkspace": true,
+    "callerCanSelectWorkspaceWithHeader": false,
+    "workspaceProviderPreferenceIsSeparateFromCredentialEnabledState": true,
+    "routingPolicyIsWorkspaceScoped": true
+  },
+  "localEnvironment": {
+    "fallbackTestWorkspaceApiKeyPresent": false,
+    "existingBudgetTestKeyPresent": true,
+    "existingBudgetTestKeyWorkspaceVerified": false,
+    "existingBudgetTestKeyRequestLimitAlreadyReached": true,
+    "productionKeyUsedForTest": false
+  },
+  "requiredBeforeOneRequest": [
+    "Create a restricted inference API key from inside ModelSwitch Fallback Test; the key is bound to that workspace.",
+    "Confirm the workspace's DeepInfra provider preference explicitly says Always use this key for fallback-test, not merely that the key is enabled.",
+    "Create or confirm a fallback policy in ModelSwitch Fallback Test with Qwen/DeepInfra as primary and the eligible Llama/Bedrock route as backup.",
+    "Confirm the test key is permitted to invoke that policy and that the Bedrock backup is enabled and has available account budget."
+  ],
+  "inferenceRequestsSent": 0,
+  "productionPolicyModified": false,
+  "defaultWorkspaceModified": false,
+  "limitations": [
+    "No workspace API key for ModelSwitch Fallback Test is present locally; Otari documentation says the existing key cannot select a different workspace.",
+    "The operator's enabled-provider observations do not establish the explicit Always use this key preference.",
+    "No Otari API request was sent, so this is setup readiness evidence and not fallback execution proof."
+  ]
+}

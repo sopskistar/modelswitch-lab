@@ -1,0 +1,14 @@
+{
+  "recordVersion": 1,
+  "checkedAt": "2026-11-06T09:12:22Z",
+  "endpoint": "GET /api/v1/tool-settings/guardrails/profiles",
+  "credentialScope": "existing server-side OTARI_API_KEY; secret not recorded",
+  "httpStatus": 200,
+  "available": false,
+  "reason": "No guardrails service is configured, so its profiles cannot be listed.",
+  "profiles": [],
+  "inferenceRequestsSent": 0,
+  "organizationMandateChanged": false,
+  "status": "no_active_profile_for_current_inference_workspace",
+  "limitation": "This read-only deployment profile response does not determine whether an organization owner can mandate a workspace-scoped organization guardrail. No request-level guardrail test was attempted without an active profile."
+}
