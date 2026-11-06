@@ -278,16 +278,25 @@ the effective provider-key preference and funded backup route remain
 unverified. The production routing receipt remains a separate successful
 policy-resolution event with `fallback=false`; it is not fallback evidence.
 
-The exact remaining operator check is in the `ModelSwitch Fallback Test`
-workspace's provider selection: explicitly choose DeepInfra credential
-`fallback-test` as **Always use this key**, not simply enabled. Confirm the
-test policy uses Qwen/DeepInfra primary and Llama/Bedrock backup, and confirm
-available backup spend. Then one tiny call can be sent through that policy.
-Afterward restore that workspace to **Follow the organization**. Do not enable
-the invalid credential in Default or alter production routing. Otari documents
-that provider-key preference is distinct from enabled provider access and that
-a routing policy moves to its next candidate when the first credential is
-rejected. [Dashboard docs](https://github.com/mozilla-ai/otari/blob/main/docs/dashboard.md),
+The operator then inspected `Workspace → Providers → DeepInfra` in the isolated
+test workspace. The dashboard showed `fallback-test` as “Your key, enabled”
+and Hosted as “Not used, your key serves this provider”; Amazon Bedrock was
+enabled. This operator-reported observation is accepted as evidence that the
+custom DeepInfra key is selected, rather than treating an enabled toggle alone
+as proof. The test key's workspace association and key-level spend ceiling
+were not returned by the authenticated catalog, and the available records do
+not establish a funded/eligible Bedrock backup. No inference was sent because
+the test key's spending boundary and backup eligibility remain unverified.
+Updated receipt: [`fallback-test-readiness.json`](../evidence/fallback-test-readiness.json).
+
+The remaining safety check is the API key's budget row in `ModelSwitch
+Fallback Test → API keys`: verify `OTARI_FALLBACK_TEST_KEY` is the key in this
+workspace and that a spending ceiling is attached, including limit and reset
+period. Also verify the Bedrock backup has an eligible hosted route and
+available spend. No credential preference was changed, so no restoration was
+needed. Do not enable the invalid credential in Default or alter production
+routing. Otari documents that API keys are workspace-scoped and that fallback
+attempts are recorded per candidate. [API-key docs](https://github.com/mozilla-ai/otari/blob/main/docs/api-keys.md),
 [routing docs](https://github.com/mozilla-ai/otari/blob/main/docs/routing.md).
 
 Using the fallback key, `GET /api/v1/tools` returned HTTP 200 with web fetch

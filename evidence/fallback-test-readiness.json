@@ -1,6 +1,6 @@
 {
   "recordVersion": 2,
-  "checkedAt": "2026-11-06T10:22:00Z",
+  "checkedAt": "2026-11-06T16:35:18Z",
   "status": "not_ready_for_live_test",
   "operatorReported": {
     "workspace": "ModelSwitch Fallback Test",
@@ -72,17 +72,40 @@
     "inferenceRequestsSent": 0,
     "meaning": "The key authenticates and its catalog lists the alias and both model IDs. This response does not establish the key's workspace, policy targets, or whether the invalid DeepInfra key is selected with the documented Always use this key preference. No inference was sent because the required preference and backup spend could not be verified through authorized read-only access."
   },
+  "operatorDashboardObservation": {
+    "observedAt": "2026-11-06T16:35:18Z",
+    "workspace": "ModelSwitch Fallback Test",
+    "provider": "DeepInfra",
+    "credential": "fallback-test",
+    "displayedAs": "Your key, enabled",
+    "hostedProviderText": "Not used, your key serves this provider",
+    "bedrockEnabled": true,
+    "provenance": "Operator-reported dashboard inspection",
+    "interpretation": "Accepted as evidence that the workspace selects the custom DeepInfra key, consistent with the dashboard's explicit 'your key serves this provider' text. No management/API response independently exposed the preference or key-to-workspace association."
+  },
+  "fallbackTestSpendSafety": {
+    "testKeyBudgetCeilingVerified": false,
+    "maxBudgetUsd": null,
+    "attachedCeilingCount": null,
+    "budgetPeriod": null,
+    "policyPrimaryAndBackupConfirmedByOperator": true,
+    "bedrockBackupEnabledPerOperatorReport": true,
+    "llamaModelListedInAuthenticatedCatalog": true,
+    "bedrockRouteConfiguration": "Qwen/DeepInfra primary and Llama/Bedrock backup, operator-confirmed; Bedrock enabled in test workspace",
+    "bedrockFundingVerified": false,
+    "inferenceRequestsSent": 0,
+    "blocker": "The available evidence does not establish a spend ceiling attached specifically to OTARI_FALLBACK_TEST_KEY or available funding for the hosted Bedrock backup."
+  },
   "inferenceRequestsSent": 0,
   "productionPolicyModified": false,
   "defaultWorkspaceModified": false,
   "requiredBeforeOneRequest": [
-    "In ModelSwitch Fallback Test, explicitly select the invalid DeepInfra fallback-test credential as Always use this key; verify the selected preference, not just the enabled switch.",
-    "Have an authorized owner verify the modelswitch-fallback-proof policy's exact primary and backup configuration and that the backup route is eligible.",
-    "Confirm the Bedrock backup has available spend."
+    "Verify in ModelSwitch Fallback Test → API keys that OTARI_FALLBACK_TEST_KEY belongs to this workspace and has an attached spending ceiling; record its limit and reset period.",
+    "Confirm the Bedrock backup route has available spend and is eligible for the configured policy."
   ],
   "limitations": [
-    "The dedicated key authenticates and its catalog exposes the test policy alias, but the inference key cannot read policy-management configuration or the provider-key preference.",
+    "The dedicated key authenticates and its catalog exposes the test policy alias, but the inference key does not expose the key's workspace association or its attached budget.",
     "The model catalog proves model access, not available account funding.",
-    "No inference request was sent because the provider pin and backup funding were not verified."
+    "The operator dashboard observation supports custom-key selection, but no inference request was sent because the key-level spend boundary and backup funding were not verified."
   ]
 }
