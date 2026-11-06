@@ -218,7 +218,42 @@ headers; see their individual evidence records.
 
 ## Spending ceilings — operator-reported, no enforcement proof
 
+### Request-count enforcement — live verified 2026-11-06
+
+The operator confirmed the separate `modelswitch-budget-proof (API key)`
+budget was set through Mozilla's authorized procedure to `$5` and
+`request_limit: 1`, with one attached spending ceiling. The production
+`Setup guide` budget remained separate and was not changed. The test key
+variable was present locally; only `OTARI_BUDGET_TEST_KEY` was used.
+
+One tiny, non-streaming request to `alibaba/qwen3.8-27b` was admitted. Otari
+returned HTTP 200, request `7d25171f-beee-4533-acce-753ad1d78256`, effective
+model `Qwen/Qwen3.8-27B`, provider `deepinfra`, one attempt, no fallback, and
+reported cost `$0.000095` (77 prompt / 32 completion tokens). The response
+content was empty. A test-key usage lookup returned HTTP 200, status `success`,
+one usage row, and the same settled cost. This is a completed/billed gateway
+request, but it did not produce a usable answer.
+
+The one permitted follow-up was rejected by Otari with HTTP 403,
+`Otari-Error-Code: budget_exceeded`,
+`Otari-Budget-Scope: api_token`, request
+`35e28010-c697-43bc-b278-cc039b2279b0`, and `Retry-After: 2139559`. The gateway
+detail was `API key has exceeded request limit`. Its usage lookup returned
+HTTP 200, status `error`, one row, zero tokens, and no cost. No provider was
+invoked for the refusal. This is genuine Otari key-scoped request-limit
+enforcement, distinct from HTTP 402 insufficient funds, HTTP 429 rate limiting,
+or a ModelSwitch application refusal. No automatic retries were made and no
+third request was sent. See the redacted
+[`budget-enforcement-test.json`](../evidence/budget-enforcement-test.json).
+
+This verifies the Otari budgets/spending-limits rubric category. The first
+admitted model response was empty, so this receipt proves gateway enforcement,
+not successful task completion. Per-user budgets remain unverified.
+
 ### Request-count budget preflight — 2026-11-06
+
+This section records the pre-inference checkpoint and is superseded for
+inference status by the live result above.
 
 The participant reports that an authorized owner management operation updated
 the dedicated `modelswitch-budget-proof (API key)` budget and read it back as
@@ -238,12 +273,9 @@ could not be established. No inference call was sent and no budget refusal
 was observed. The experiment stopped before consuming the one-request
 allowance, as required by the preflight condition.
 
-This does **not** verify enforcement or earn the budget rubric category. An
-authorized owner must provide a read-only confirmation of the current budget
-period/reset and that the attached test-key budget has zero requests consumed
-in that period (or an authorized usage view scoped to that key). Only then is
-one small Qwen request safe; a second may be attempted only after the first
-settles clearly. The redacted preflight record is
+At the time of this checkpoint, no inference had been sent. The subsequent
+bounded test and actual gateway refusal are recorded above. The redacted
+preflight record is
 [`budget-enforcement-preflight.json`](../evidence/budget-enforcement-preflight.json).
 
 Keep these response classes distinct: only HTTP 403 with
@@ -255,9 +287,8 @@ states that a request is counted when admitted and that request limits apply
 over the configured budget period.
 
 Earlier paragraphs in this section and the 2026-11-05 investigation below are
-historical snapshots. This 2026-11-06 preflight supersedes their report of the
-test budget's configuration, but does not supersede the lack of live
-enforcement evidence.
+historical snapshots. The 2026-11-06 live test above supersedes their report
+that no request-count configuration or enforcement evidence was available.
 
 The participant reports two separate $1 monthly ceilings attached in Otari:
 the `Setup guide` production key and `modelswitch-budget-proof` test key. These

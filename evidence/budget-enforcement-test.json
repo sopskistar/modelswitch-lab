@@ -1,0 +1,82 @@
+{
+  "recordVersion": 1,
+  "testedAt": "2026-11-06T05:39:11Z",
+  "credential": {
+    "environmentVariable": "OTARI_BUDGET_TEST_KEY",
+    "present": true,
+    "secretIncluded": false,
+    "productionCredentialUsed": false
+  },
+  "operatorConfirmedBudget": {
+    "name": "modelswitch-budget-proof (API key)",
+    "maxBudgetUsd": 5,
+    "requestLimit": 1,
+    "attachedSpendingCeilings": 1,
+    "productionSetupGuideBudgetModified": false,
+    "provenance": "Operator-confirmed authorized Otari dashboard procedure and management API read-back"
+  },
+  "requests": [
+    {
+      "purpose": "Tiny fixed-output Qwen request",
+      "requestId": "7d25171f-beee-4533-acce-753ad1d78256",
+      "httpStatus": 200,
+      "gatewayErrorCode": null,
+      "budgetScope": null,
+      "requestedModel": "alibaba/qwen3.8-27b",
+      "effectiveModel": "Qwen/Qwen3.8-27B",
+      "provider": "deepinfra",
+      "attemptCount": 1,
+      "fallback": false,
+      "latencyMs": 3818,
+      "costUsd": "0.000095",
+      "pricingSource": "deployment",
+      "promptTokens": 77,
+      "completionTokens": 32,
+      "totalTokens": 109,
+      "responseContent": "",
+      "usageLookup": {
+        "httpStatus": 200,
+        "status": "success",
+        "requestId": "7d25171f-beee-4533-acce-753ad1d78256",
+        "costUsd": "0.000095",
+        "rowCount": 1
+      }
+    },
+    {
+      "purpose": "Single follow-up to test the one-request boundary",
+      "requestId": "35e28010-c697-43bc-b278-cc039b2279b0",
+      "httpStatus": 403,
+      "gatewayErrorCode": "budget_exceeded",
+      "budgetScope": "api_token",
+      "retryAfterSeconds": 2139559,
+      "provider": null,
+      "effectiveModel": null,
+      "costUsd": null,
+      "promptTokens": null,
+      "completionTokens": null,
+      "gatewayDetail": "API key has exceeded request limit",
+      "usageLookup": {
+        "httpStatus": 200,
+        "status": "error",
+        "requestId": "35e28010-c697-43bc-b278-cc039b2279b0",
+        "costUsd": null,
+        "promptTokens": 0,
+        "completionTokens": 0,
+        "rowCount": 1
+      }
+    }
+  ],
+  "classification": {
+    "requestLimitEnforcement": "confirmed",
+    "refusalWasOtariGatewayLevel": true,
+    "notInsufficientFunds": true,
+    "notRateLimited": true,
+    "notApplicationLevel": true,
+    "inferenceRequestsSent": 2,
+    "automaticRetries": 0
+  },
+  "limitations": [
+    "The first gateway request was admitted and billed, but returned empty answer content despite HTTP 200 and a settled usage status of success.",
+    "The refusal's api_token scope matches Otari's documented API-key budget scope. The budget name and separate production budget configuration are operator-confirmed; no management credential or production key was used."
+  ]
+}

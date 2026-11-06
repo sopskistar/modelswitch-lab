@@ -23,7 +23,7 @@
 
 ## Evidence and demo
 
-- [ ] Budget-enforcement demonstration remains pending. The test budget is operator-reported as `$5` / one request, but inference-key usage reads returned 401 and the active period/request count could not be confirmed. No request was sent; do not claim this rubric capability yet. See [`budget-enforcement-preflight.json`](../evidence/budget-enforcement-preflight.json).
+- [x] Otari request-count budget enforcement verified using only the dedicated test key: one admitted Qwen request, followed by an HTTP 403 `budget_exceeded` refusal scoped to `api_token`. Redacted evidence: [`budget-enforcement-test.json`](../evidence/budget-enforcement-test.json). The production budget was untouched; the admitted response content was empty.
 
 - [x] Verified Otari capabilities: distinct open-weight roles, code execution, production policy routing (without failover), and one production-managed MCP tool call/result. See [proof](OTARI_PROOF.md) and [rubric matrix](RUBRIC_EVIDENCE.md).
 - [x] Real model IDs, serving providers, request IDs, measured outputs and reported usage recorded in `evidence/`.
@@ -56,7 +56,7 @@
 - [x] The production timeout diagnosis receipt returned HTTP 200. The operator confirmed deployment `ff915c5` Ready; the endpoint does not reveal a source SHA.
 - [x] No paid inference was sent in this validation. The $5 production cap was planned but not confirmed, and current balance/usage reads returned 401 for both local inference keys.
 - [x] Preserved prior Llama, MCP, code execution and routing receipts; routing still reports `fallback=false`.
-- [x] Guardrail profile discovery explicitly reports no configured service. Per-user and budget enforcement remain unverified.
+- [x] Guardrail profile discovery explicitly reports no configured service. Per-user budgets remain unverified; key-scoped request-count enforcement is verified in the later 2026-11-06 test.
 - [x] Added server-only redacted diagnostics for future gateway errors. Existing web-fetch 400 root cause remains unavailable; no retry was made.
 - [x] Full local checks passed: typecheck, lint, formatting, 117 unit tests, production build, and 20 desktop/mobile Playwright tests with axe.
 - [ ] Participant confirms the current $5 Otari cap and spend/headroom, then personally performs bounded Qwen/Llama and web-tool live acceptance if still desired.

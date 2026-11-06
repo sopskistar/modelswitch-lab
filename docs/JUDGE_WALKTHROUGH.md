@@ -48,7 +48,7 @@ Start at the selected public demo: [modelswitch-lab.vercel.app](https://modelswi
 
 ## Operator-only items
 
-- The test-key budget is now operator-reported as `$5` with `request_limit: 1` and one attached ceiling. The key can list Qwen, but its usage endpoints return 401, so the active period and remaining request allowance are unknown. No request was sent. Do not demonstrate a refusal until an authorized owner confirms the current period and zero requests consumed; see [`budget-enforcement-preflight.json`](../evidence/budget-enforcement-preflight.json). A budget point is not currently claimed.
+- The operator can reproduce the isolated test-key budget proof from [`budget-enforcement-test.json`](../evidence/budget-enforcement-test.json): a tiny Qwen request was admitted and billed `$0.000095`, then one follow-up returned HTTP 403 `budget_exceeded` with scope `api_token`. The first model answer was empty; the proof is about gateway enforcement. No production key was used and no third request was sent. The earlier usage-read 401 preflight is recorded separately in [`budget-enforcement-preflight.json`](../evidence/budget-enforcement-preflight.json).
 
 - Do not change the production routing policy to force failover. No safe fallback event is recorded.
 - The operator planned to raise the production key cap to $5, but that change and actual spend are unverified. Usage reads returned 401; do not send more paid requests until an owner confirms the active limit and available headroom.

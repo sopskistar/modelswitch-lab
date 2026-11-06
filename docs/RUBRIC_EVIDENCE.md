@@ -1,14 +1,14 @@
 # Rubric evidence
 
 Recorded 2026-11-04; refreshed 2026-11-06. Target ceiling: 100. Current
-evidence supports **up to 75/100 potential points**: 30 for two meaningful
-open-weight roles, 40 for verified advanced capabilities (policy routing,
-code execution, distinct roles and one hosted MCP tool execution), and 5 for
-the working use case. The routing points depend on judges accepting verified
-policy resolution without an observed failover. This is our evidence
-assessment, not an official judge score. The separately reported
-production invoice run remains participant-reported. Routing fallback, gateway
-budget enforcement, web retrieval, guardrails and the personally recorded demo
+evidence supports **up to 85/100 potential points**: 30 for two meaningful
+open-weight roles, 50 for five verified advanced capabilities (policy routing,
+code execution, distinct roles, hosted MCP, and key-scoped request-count
+budget enforcement), and 5 for the working use case. Routing points depend on
+judges accepting verified policy resolution without an observed failover. This
+is our evidence assessment, not an official judge score. The separately
+reported production invoice run remains participant-reported. Actual routing
+fallback, web retrieval, guardrails, per-user budgets and the personal demo
 remain unverified or unavailable.
 
 | Rubric feature                | Possible points | Implementation location                            | Tested live?                 | Evidence                                                                                                                                         | Reproduction steps                                                                                           | Status                                  | Known limitations                                                  |
@@ -19,20 +19,20 @@ remain unverified or unavailable.
 | MCP integrations              | 10              | `/api/execute` fixed repository MCP action; streamed Otari Messages adapter | **Yes**                        | [`mcp-status.json`](../evidence/mcp-status.json), Otari request `d9283ac4-3aec-4ee3-8151-08937bb08554`; one `read_wiki_structure` use and successful result | Open Otari Capabilities and inspect the committed production proof; for a fresh demonstration, run **Inspect repository** once and inspect returned Otari request/activity | **Verified live** | Gateway result block omits use ID/name; this request exposed exactly one allowlisted tool, and the complete stream contained one successful result after its use; reported cost unavailable |
 | Web search or fetch           | 10              | `/api/execute` web action; exact source allowlist  | Attempted; no tool event       | Catalog reports fetch/search available. One allowlisted fetch returned HTTP 400, Otari request `9bd36cf5-6ddf-433a-9d1a-95295a50fae5`; no completed tool event, raw error code or cost | Authorized operator inspects the request ID in Otari activity; only retry after resolving the 400; require completed `otari_tool_calls` evidence | Available, execution unverified         | App exposes generic gateway_error; tool execution, model/provider and cost unconfirmed |
 | Code execution                | 10              | `/api/execute` code action; typed verifier         | **Yes**                      | `verification.json`, `732c1ded-aba4-4210-8cd7-1251027e367c`; exit 0, correct=4, total=5, accuracy=.8                                             | `npm run otari:verify -- --capabilities-only` or Check sandbox                                               | **Verified live**                       | Fixed control vectors; cost unreported                             |
-| Budgets/spending limits       | 10              | Otari key spending ceilings; denial normalization | No inference or refusal | [`budget-enforcement-preflight.json`](../evidence/budget-enforcement-preflight.json): operator reports the test-key budget is $5 with `request_limit: 1`; test key lists Qwen, but all authorized usage reads returned 401 | Owner confirms active reset window and zero consumed requests for the test-key budget; run one tiny request, then at most one follow-up to observe refusal | Unverified; stopped before inference | Cannot observe active period or current count with the inference key; the older $1 operator report is historical; test key budget only, production budget untouched |
+| Budgets/spending limits       | 10              | Otari key spending ceilings; denial normalization | **Yes: hosted request and refusal** | [`budget-enforcement-test.json`](../evidence/budget-enforcement-test.json): Qwen request `7d25171f-beee-4533-acce-753ad1d78256` admitted at $0.000095; second request `35e28010-c697-43bc-b278-cc039b2279b0` returned 403 `budget_exceeded`, scope `api_token` | Operator sets one-request test-key budget; send one tiny request, then at most one follow-up; inspect response headers and usage records | **Verified live** | First request had empty answer content; production budget untouched; no arbitrary refusal or repeated exhaustion |
 | Multiple distinct model roles | 10              | Evaluator scoring then separate analyst action     | **Yes**                      | Typed verifier and `browser-smoke.json` record distinct role requests and real providers                                                         | Run benchmark, inspect analyst event and request IDs/models                                                  | **Verified live**                       | Comparison calls alone are not the distinct-role proof             |
 | Inference guardrails          | 10              | `/api/execute` guardrail fixture                   | No gateway verdict            | `verification.json`, 502, `ef371ed6-bad2-4631-9e63-26f4c452509f`; latest recorded profile discovery found no configured service                   | Otari owner configures an actual hosted guardrail service; run harmless fixture once and inspect gateway decision | Unavailable: no guardrail service configured | Fail-closed service error is not a guardrail verdict                  |
 | Per-user budgets              | 10              | None                                               | No                           | None; no authorized service/admin key available; see exact hosted configuration blocker in `OTARI_PROOF.md`                                    | Owner provisions a dedicated scoped service key and two end-user budget IDs; run fixed synthetic identities  | Blocked pending hosted owner setup      | No local label or shared $1 key ceiling is counted                  |
 | Working real use case         | 5               | Five views, 15 fixtures, scorer and recommendation | **Yes**                      | `browser-smoke.json`, run `365aae24-b64e-43ec-ba02-3c5e9a7d8739`: 10 cases + analyst, no request failures                                        | Select five classification cases and both models; Run; inspect/export                                        | **Verified live**                       | Qwen 5/5, Llama 4/5 only on these cases                            |
 | Recorded Otari demonstration  | 5               | `docs/DEMO_SCRIPT.md`                              | Not recorded                 | Script only                                                                                                                                      | Participant personally records actual screen and narrates                                                    | Awaiting participant                    | No synthetic narration or fabricated recording                     |
 
-Only six of eight advanced targets can count, capped at 60. Four rubric
-categories are verified now: policy routing (without an observed failover),
-distinct model roles, code execution, and MCP. Do not count local equivalents.
-The path to 100 still needs two additional advanced capabilities and the
-personal recording. Web and guardrails need hosted setup; gateway budget
-enforcement and per-user budgets need authorized configuration and genuine
-gateway execution.
+Only six of eight advanced targets can count, capped at 60. Five categories
+are evidenced: policy routing (without an observed failover), distinct model
+roles, code execution, MCP, and key-scoped request-count budget enforcement.
+Do not count local equivalents. Web retrieval, guardrails and per-user budgets
+remain unavailable or unverified. Routing/fallback scoring remains conditional
+on judging interpretation, and the personal recording is still required for
+the final five project/demo points.
 
 Live comparison under the balance objective:
 
@@ -67,17 +67,13 @@ so the cause is unknown. No hosted guardrail service was configured in the
 latest profile discovery. Request IDs and the 2026-11-05 live checks are in
 [OTARI_PROOF.md](OTARI_PROOF.md).
 
-Otari's current budget documentation and generated OpenAPI support both
+Historical 2026-11-05 note (superseded by the live test below): Otari's current budget documentation and generated OpenAPI support both
 `max_budget` (USD) and `request_limit` (requests per budget period). Read-only
 checks with the dedicated test inference key confirmed access to the Qwen model
 catalog but returned HTTP 401 `Invalid master key` for organization context,
 organization budgets, and owned keys. The specific test-key ceiling attachment
-could not be inspected, and no budget mutation or inference request was made.
-No budget point is verified; the $1 ceilings are operator-reported and no
-gateway refusal or spend record was captured. The revised total is **75/100
-potential** because production policy routing and a separate hosted MCP request
-are independently recorded; see `evidence/routing-production.json` and
-`evidence/mcp-status.json`.
+could not be inspected, and no budget mutation or inference request was made
+at that time.
 See the attempt record in [`OTARI_PROOF.md`](OTARI_PROOF.md).
 
 The latest public catalog observation on the selected hyphenated domain reports
@@ -134,6 +130,9 @@ receipt correctly records one attempt and `fallback=false`.
 
 ### 2026-11-05 final read-only validation
 
+This is a dated snapshot; its 75-point total predates the verified
+2026-11-06 request-count budget experiment recorded above.
+
 Production now reports the evaluator/analyst models and web tools available,
 and Qwen catalog metadata includes tool support. This confirms availability,
 not web execution. Two historical Otari fetch requests returned HTTP 400 with
@@ -142,7 +141,7 @@ and balance could not be verified. The supported tenant usage query returned
 401 for both local inference keys. The operator's planned $5 key cap is not
 treated as configured. Guardrail profile discovery now explicitly reports no
 service configured. No routing change was made, and `fallback=false` remains
-the only live routing outcome. The verified rubric coverage therefore remains
+the only live routing outcome. At that time, verified rubric coverage was
 **75/100 potential**, conditional on the existing policy-routing category
 being accepted without observed failover; the participant's demo video remains
 unrecorded. The detailed redacted snapshot is

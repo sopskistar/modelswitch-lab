@@ -1,5 +1,21 @@
 # Testing and reproduction
 
+## Otari request-count budget acceptance — 2026-11-06
+
+The dedicated `OTARI_BUDGET_TEST_KEY` was confirmed present without printing
+its value. One tiny non-streaming Qwen request succeeded at the gateway and its
+usage record settled at `$0.000095`; a second request returned HTTP 403 with
+`Otari-Error-Code: budget_exceeded` and
+`Otari-Budget-Scope: api_token`. No retry or third inference was made. The
+first model answer was empty, so this is enforcement evidence, not a quality
+result. See [`budget-enforcement-test.json`](../evidence/budget-enforcement-test.json).
+
+The default sandboxed `npm run build` attempt failed because Next.js could not
+spawn TypeScript's `--showConfig` process (`EPERM` in the sandbox); direct
+`tsc --showConfig` returned valid JSON. Running the unchanged production build
+with approved process execution succeeded. No TypeScript/Next build workaround
+or source change was needed.
+
 ## Focused landing and Model Switch checks — 2026-11-05
 
 The final run for the landing and switch changes is recorded below. Added

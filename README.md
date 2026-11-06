@@ -43,7 +43,7 @@ The analyst interprets deterministic results and cannot change their scores. The
 
 ## Verified evidence
 
-The project evidence assessment is **up to 75/100 potential points**, not an official score. It includes two open-weight model roles, hosted code execution, distinct model roles, policy routing (successful primary; fallback unobserved), a completed Otari-managed MCP call, and a working use case. Web fetch is available in discovery but two requests were rejected with HTTP 400 and no tool result. Gateway budget enforcement, guardrails, per-user budgets, and the personal recording are not verified. Review the [rubric matrix](docs/RUBRIC_EVIDENCE.md), [Otari proof](docs/OTARI_PROOF.md), [routing receipt](evidence/routing-production.json), and [MCP receipt](evidence/mcp-status.json).
+The project evidence assessment is **up to 85/100 potential points**, not an official score. It includes two open-weight model roles, hosted code execution, distinct model roles, policy routing (successful primary; fallback unobserved), a completed Otari-managed MCP call, a working use case, and verified Otari key-scoped request-count enforcement. The isolated budget receipt shows one admitted request followed by an Otari `budget_exceeded` refusal; its first answer content was empty. Web fetch, guardrails, per-user budgets, and the personal recording are not verified. Review the [rubric matrix](docs/RUBRIC_EVIDENCE.md), [Otari proof](docs/OTARI_PROOF.md), and [budget receipt](evidence/budget-enforcement-test.json).
 
 ## Architecture and local setup
 
