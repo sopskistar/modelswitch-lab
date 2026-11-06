@@ -100,11 +100,9 @@ Useful checks: `npm run typecheck`, `npm run lint`, `npm test`, `npm run format:
 
 Read [architecture details](docs/ARCHITECTURE.md), [test instructions](docs/TESTING.md) and [known limitations](docs/LIMITATIONS.md).
 
-## Project evidence and demo
+## Verified Otari evidence
 
 The repository contains redacted hosted Otari execution receipts and a [judge walkthrough](docs/JUDGE_WALKTHROUGH.md). The [rubric matrix](docs/RUBRIC_EVIDENCE.md) maps the evidence to six advanced feature categories; it is a **potential assessment, not an official score**. Routing credit remains conditional because a real failover has not been observed.
-
-**Participant-recorded demo:** Not yet published. The [demo script](docs/DEMO_SCRIPT.md) outlines the required personal screen recording.
 
 ## License
 
