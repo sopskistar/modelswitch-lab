@@ -30,7 +30,7 @@
 
 - [x] Latest public verification: `GET /api/evidence?file=web-fetch-live.json` on the official URL returned HTTP 200 on 2026-11-06 and matched request `8058116e-e1b4-4f24-90d7-3b766a4f41e1`.
 - [ ] **Exact production Git SHA:** verify in the existing `modelswitch-lab` Vercel project's deployment details. Public endpoints do not reveal it; do not infer it from a successful evidence URL.
-- [x] Source branches were synchronized at `e847e3f3c782e3590e3ce4b9772ef675bd33b478` before this documentation pass; update this entry to the final release SHA after commit/push.
+- [x] Final documentation release is synchronized to `main` and `hackathon/mozfest-otari-2026` with a fast-forward-only push; both branches should point to the same final release commit.
 - [ ] Confirm the final docs commit is included in Vercel's production deployment if required. Do not deploy to the duplicate no-hyphen project.
 - [x] No production key, budget, policy or Vercel environment setting was changed for this documentation pass.
 
