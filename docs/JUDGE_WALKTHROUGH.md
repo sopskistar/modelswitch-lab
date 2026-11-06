@@ -50,14 +50,14 @@ This route takes about five minutes and has a safe, read-only path. Do not run i
 
 **Click:** **Otari capabilities** and open the evidence rows. Each link below is a redacted record committed in the repository; the web-fetch receipt is also currently served by the public evidence endpoint.
 
-- **Policy routing:** [`routing-production.json`](../evidence/routing-production.json), request `5f2cc001-a521-435e-8b51-df0f91452dc5`; Otari resolved `modelswitch-fallback` to Qwen/DeepInfra, attempt 1, `fallback=false`. This verifies policy resolution, not failover.
+- **Routing and fallback:** [fallback-live-proof.json](../evidence/fallback-live-proof.json), request 886b6cbc-a0e8-4a27-8ebf-60bbf3fd0f82; isolated policy modelswitch-fallback-proof returned HTTP 200 with Otari-Fallback: true, two attempts, effective Llama/Bedrock, and cost $0.000034. Usage lookup returned two rows. The primary failure reason was not exposed in the response/summary. The separate production policy receipt [routing-production.json](../evidence/routing-production.json) still shows Qwen/DeepInfra, one attempt, fallback=false.
 - **Code execution:** [`verification.json`](../evidence/verification.json), request `732c1ded-aba4-4210-8cd7-1251027e367c`; hosted Python returned `correct=4`, `total=5`, `accuracy=0.8`, exit code 0. Cost was not reported.
 - **MCP:** [`mcp-status.json`](../evidence/mcp-status.json), request `d9283ac4-3aec-4ee3-8151-08937bb08554`; one DeepWiki `read_wiki_structure` use and successful tool result.
 - **Distinct model roles:** [`verification.json`](../evidence/verification.json); Qwen evaluator requests and a separate Llama analyst request. The analyst explains verified metrics; it does not replace deterministic scoring.
 - **Budget enforcement:** [`budget-enforcement-test.json`](../evidence/budget-enforcement-test.json); isolated test key admitted one request, then Otari returned HTTP 403 `budget_exceeded`, scope `api_token`. No production key was used for that experiment.
 - **Native web fetch:** [`web-fetch-live.json`](../evidence/web-fetch-live.json), request `8058116e-e1b4-4f24-90d7-3b766a4f41e1`; completed `otari_web_fetch` event `otari_wf_66cfd3e1beb54026a97306892102ec57` for the Mozilla Manifesto URL, Qwen/DeepInfra, settled cost `$0.010888`. The model summary was incomplete; only the successful native retrieval is claimed.
 
-The policy, MCP, code, budget and web tool records are distinct demonstrations. The advanced-feature assessment is up to 60/60, with routing credit conditional on judge interpretation because no fallback occurred. Guardrails, per-user budgets and actual fallback remain unverified.
+The routing/fallback, MCP, code, budget and native web tool records are distinct demonstrations, alongside the separate model-role capability. Guardrails and per-user budgets remain unverified. The six-category assessment is potential rubric coverage, not an official score.
 
 ### 8. Export and inspect evidence — 20 seconds
 

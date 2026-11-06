@@ -3,14 +3,17 @@ import { capabilities } from '@/lib/capabilities';
 import {
   advancedVerifiedPoints,
   budgetEnforcementVerified,
+  fallbackLiveVerified,
   webFetchVerified,
 } from '@/lib/capabilities';
 
 describe('routing evidence state', () => {
-  it('counts an executed Otari policy resolution while explicitly showing no failover', () => {
+  it('counts an executed Otari fallback using actual serving headers and usage rows', () => {
     const route = capabilities().find((cap) => cap.id === 'routing');
-    expect(route).toMatchObject({ status: 'Verified live', file: 'routing-production.json' });
-    expect(route?.detail).toContain('fallback false');
+    expect(fallbackLiveVerified).toBe(true);
+    expect(route).toMatchObject({ status: 'Verified live', file: 'fallback-live-proof.json' });
+    expect(route?.detail).toContain('fallback=true');
+    expect(route?.detail).toContain('886b6cbc-a0e8-4a27-8ebf-60bbf3fd0f82');
     expect(budgetEnforcementVerified).toBe(true);
     expect(advancedVerifiedPoints).toBe(60);
   });

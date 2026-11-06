@@ -20,11 +20,11 @@
 
 - [x] Qwen evaluator and distinct Llama analyst use real hosted Otari requests; see [`verification.json`](../evidence/verification.json).
 - [x] Hosted code execution, DeepWiki MCP, policy routing, key-scoped request-limit enforcement, and native Otari web fetch have redacted records in [`evidence/`](../evidence).
-- [x] Routing is described as policy execution only: the captured response has `fallback=false`; actual failover is not claimed.
+- [x] Genuine isolated Otari fallback is recorded in [fallback-live-proof.json](../evidence/fallback-live-proof.json): fallback=true, two attempts, Llama/Bedrock served. The production policy remains unchanged and its separate receipt has fallback=false.
 - [x] Budget evidence is an Otari HTTP 403 `budget_exceeded` for the dedicated test key; it is not an application or Redis rate-limit simulation.
 - [x] Native fetch claim is limited to Otari's completed tool event; the model-generated summary was incomplete.
-- [x] Current assessment is up to **95/100 potential before the participant demo**, conditional on routing credit being accepted. This is not an official judge score.
-- [x] Guardrails, per-user budgets and actual provider fallback remain unverified.
+- [x] Current assessment is up to **95/100 potential before the participant demo**. This is not an official judge score.
+- [x] Guardrails and per-user budgets remain unverified.
 
 ## Production and release
 

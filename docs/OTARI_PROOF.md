@@ -3,11 +3,11 @@
 ## Current evidence summary — 2026-11-06
 
 Six advanced categories now have hosted execution receipts: policy routing
-(without an observed fallback), code execution, MCP, native web fetch, distinct
+with a genuine isolated fallback, code execution, MCP, native web fetch, distinct
 model roles, and gateway request-count budget enforcement. The detailed score
 and limitations are in [`RUBRIC_EVIDENCE.md`](RUBRIC_EVIDENCE.md). The current
-assessment is up to 95/100 potential before the participant-recorded demo,
-conditional on routing interpretation; it is not an official score.
+assessment is up to 95/100 potential before the participant-recorded demo;
+it is not an official score.
 
 The live official site's
 `GET /api/evidence?file=web-fetch-live.json` returned HTTP 200 on
@@ -257,7 +257,7 @@ limiting, or the app's Redis limiter. The first response had empty answer
 content, so this receipt proves enforcement, not useful answer quality.
 Redacted record: [`budget-enforcement-test.json`](../evidence/budget-enforcement-test.json).
 
-## Fallback and guardrail readiness — 2026-11-06
+## Fallback preflight before final operator confirmation — 2026-11-06 (superseded below)
 
 No fallback request was sent. The local `OTARI_FALLBACK_TEST_KEY` variable is
 present (secret not recorded). Authenticated `GET /api/v1/models` returned
@@ -289,7 +289,7 @@ not establish a funded/eligible Bedrock backup. No inference was sent because
 the test key's spending boundary and backup eligibility remain unverified.
 Updated receipt: [`fallback-test-readiness.json`](../evidence/fallback-test-readiness.json).
 
-The remaining safety check is the API key's budget row in `ModelSwitch
+At this preflight stage, the remaining safety check was the API key's budget row in `ModelSwitch
 Fallback Test → API keys`: verify `OTARI_FALLBACK_TEST_KEY` is the key in this
 workspace and that a spending ceiling is attached, including limit and reset
 period. Also verify the Bedrock backup has an eligible hosted route and
@@ -652,10 +652,37 @@ The hosted guardrail profile endpoint returned HTTP 200 with
 `available=false`, “No guardrails service is configured,” and no profiles.
 Reading `/routing/policies` returned HTTP 401 for the inference key; the
 existing production inference receipt continues to verify successful policy
-resolution with `fallback=false`. No fallback event is claimed. Budget
-enforcement is verified; the native web-fetch result below supersedes the
-earlier web-unverified snapshots. Actual fallback, guardrails, and per-user
-budgets remain unverified.
+resolution with `fallback=false`. The separate test policy's actual fallback is verified in the receipt above.
+Budget enforcement is verified; the native web-fetch result below supersedes
+the earlier web-unverified snapshots. Guardrails and per-user budgets remain
+unverified.
+
+## Isolated Otari fallback — verified live 2026-11-06
+
+Using only OTARI_FALLBACK_TEST_KEY, one non-streaming request sent the policy
+alias modelswitch-fallback-proof with the fixed prompt “Reply with exactly:
+FALLBACK_OK”. The model catalog preflight returned HTTP 200 and listed the
+policy alias, Qwen, and Llama. The operator confirmed the isolated workspace's
+$1 monthly key ceiling and $0.00 pre-request spend, the custom DeepInfra key
+selection, the enabled Bedrock route, and policy order Qwen/DeepInfra then
+Llama/Bedrock. No production credential or workspace was used or changed.
+
+Otari returned HTTP 200, request
+886b6cbc-a0e8-4a27-8ebf-60bbf3fd0f82, body model
+modelswitch-fallback-proof, content FALLBACK_OK, Otari-Fallback: true, and
+Otari-Attempt-Count: 2. The gateway served
+meta.llama3-3-70b-instruct-v1:0 through bedrock; usage reported 42 prompt
+tokens, 5 completion tokens, 47 total tokens, and cost $0.000034. A key-scoped
+usage lookup returned HTTP 200, status success, and two grouped usage rows.
+Together, the fallback header, two attempts/rows, configured route order, and
+effective backup identity verify genuine Otari failover. The per-attempt
+failure reason for Qwen/DeepInfra was not included in response headers or the
+usage summary, so the receipt does not invent one. No workspace setting was
+changed by the test; restoration was not needed.
+
+Redacted receipt: [fallback-live-proof.json](../evidence/fallback-live-proof.json).
+The production modelswitch-fallback policy remains unchanged; its older request
+still records fallback=false and proves normal policy resolution, not failover.
 
 ## Native Otari web fetch — verified live 2026-11-06
 

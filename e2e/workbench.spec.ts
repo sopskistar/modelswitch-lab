@@ -276,17 +276,24 @@ test('missing configuration and disabled tools', async ({ page }) => {
   await page.getByRole('button', { name: 'Open setup guide' }).click();
   await expect(page.getByRole('heading', { name: 'Configure the server' })).toBeVisible();
 });
-test('capabilities expose recorded evidence and keep failed checks unverified', async ({
-  page,
-}) => {
+test('capabilities expose verified fallback and recorded evidence', async ({ page }) => {
   await page.goto('/app?view=capabilities');
   await expect(page.getByText('60 / 60 advanced points verified')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Fetch through Otari' })).toBeDisabled();
   await expect(page.getByRole('link', { name: 'Inspect JSON' })).toHaveCount(8);
-  await expect(page.getByRole('link', { name: 'Fallback readiness' })).toHaveAttribute(
+  await expect(page.locator('a[href="/api/evidence?file=fallback-live-proof.json"]')).toBeVisible();
+  const fallbackReceipt = await page.request.get('/api/evidence?file=fallback-live-proof.json');
+  expect(fallbackReceipt.status()).toBe(200);
+  const fallbackJson = await fallbackReceipt.json();
+  expect(fallbackJson.request.headers['otari-fallback']).toBe('true');
+  expect(fallbackJson.request.headers['otari-attempt-count']).toBe('2');
+  await expect(page.getByRole('link', { name: 'Fallback preflight history' })).toHaveAttribute(
     'href',
     '/api/evidence?file=fallback-test-readiness.json',
   );
+  const routingRow = page.getByRole('row').filter({ hasText: 'Routing and fallbacks' });
+  await expect(routingRow).toContainText('fallback=true');
+  await expect(routingRow).toContainText('886b6cbc-a0e8-4a27-8ebf-60bbf3fd0f82');
   const webRow = page.getByRole('row').filter({ hasText: 'Web retrieval' });
   await expect(webRow).toContainText('Verified live');
   await expect(webRow.getByRole('link', { name: 'Inspect JSON' })).toHaveAttribute(

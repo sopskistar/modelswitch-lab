@@ -5,6 +5,7 @@ import routingProof from '../../evidence/routing-production.json';
 import webFetchDiagnosis from '../../evidence/web-fetch-diagnosis.json';
 import webFetchProof from '../../evidence/web-fetch-live.json';
 import budgetEnforcement from '../../evidence/budget-enforcement-test.json';
+import fallbackLiveProof from '../../evidence/fallback-live-proof.json';
 interface EvidenceRecord {
   role: string;
   status: string;
@@ -46,6 +47,13 @@ export const routingVerified =
     routingProof.gateway.effectiveModel &&
     routingProof.gateway.provider,
   );
+export const fallbackLiveVerified =
+  fallbackLiveProof.status === 'verified_live' &&
+  fallbackLiveProof.request.httpStatus === 200 &&
+  fallbackLiveProof.request.headers['otari-fallback'] === 'true' &&
+  fallbackLiveProof.request.headers['otari-attempt-count'] === '2' &&
+  fallbackLiveProof.usageLookup.rowCount === 2 &&
+  Boolean(fallbackLiveProof.request.headers['otari-request-id']);
 export const mcpVerified =
   mcpProof.liveExecution.verified === true && Boolean(mcpProof.liveExecution.requestId);
 export const budgetEnforcementVerified =
@@ -115,14 +123,25 @@ export function capabilities(
       id: 'routing',
       name: 'Routing and fallbacks',
       points: 10,
-      status: routingVerified ? 'Verified live' : 'Implemented, unverified',
-      detail: routingVerified
-        ? `Otari routed ${routingProof.gateway.requestedPolicy} to ${routingProof.gateway.effectiveModel} through ${routingProof.gateway.provider}; attempt ${routingProof.gateway.attempts}, fallback ${routingProof.gateway.fallback}. The isolated test key now authenticates and can address modelswitch-fallback-proof, but the provider pin and backup funding are not verified, so no fallback request was sent.`
-        : fallbackVerified
-          ? 'Actual gateway fallback recorded in serving headers.'
-          : 'The routing policy has not been verified with a live request and effective model/provider metadata.',
-      file: routingVerified ? 'routing-production.json' : 'verification.json',
-      relatedFiles: [{ label: 'Fallback readiness', file: 'fallback-test-readiness.json' }],
+      status: fallbackLiveVerified || routingVerified ? 'Verified live' : 'Implemented, unverified',
+      detail: fallbackLiveVerified
+        ? `Isolated policy ${fallbackLiveProof.request.requestedPolicy} genuinely failed over: Otari reported fallback=true and ${fallbackLiveProof.request.headers['otari-attempt-count']} attempts, then served ${fallbackLiveProof.request.headers['otari-model']} through ${fallbackLiveProof.request.headers['otari-provider']}; request ${fallbackLiveProof.request.headers['otari-request-id']}, cost $${fallbackLiveProof.request.usage.costUsd}. The primary failure reason is not exposed in the response or usage summary.`
+        : routingVerified
+          ? `Otari routed ${routingProof.gateway.requestedPolicy} to ${routingProof.gateway.effectiveModel} through ${routingProof.gateway.provider}; attempt ${routingProof.gateway.attempts}, fallback ${routingProof.gateway.fallback}.`
+          : fallbackVerified
+            ? 'Actual gateway fallback recorded in serving headers.'
+            : 'The routing policy has not been verified with a live request and effective model/provider metadata.',
+      file: fallbackLiveVerified
+        ? 'fallback-live-proof.json'
+        : routingVerified
+          ? 'routing-production.json'
+          : 'verification.json',
+      relatedFiles: fallbackLiveVerified
+        ? [
+            { label: 'Production policy route (no failover)', file: 'routing-production.json' },
+            { label: 'Fallback preflight history', file: 'fallback-test-readiness.json' },
+          ]
+        : [{ label: 'Fallback readiness', file: 'fallback-test-readiness.json' }],
     },
     {
       id: 'mcp',

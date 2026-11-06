@@ -93,13 +93,12 @@ $0.000159. This verifies policy routing in the application; it does not prove
 that a fallback occurred. The status/evidence view explicitly keeps those facts
 separate.
 
-For a controlled failover, ask an authorized operator to create a dedicated test
-policy with a primary provider instance intentionally left **unconfigured** and
-an accessible funded backup. This is a documented retryable routing condition.
-Use no invalid credentials. Do not alter the production policy or intentionally
-overload a provider. If the hosted dashboard disallows this test configuration,
-request an operator-supported fault-injection method; until then fallback remains
-unverified. No such test policy was created in this session.
+A genuine isolated failover is now verified in
+[evidence/fallback-live-proof.json](../evidence/fallback-live-proof.json). One
+request through modelswitch-fallback-proof returned Otari-Fallback=true,
+attempt count 2, and the Llama/Bedrock backup. The production policy was not
+modified. The gateway response and usage summary did not expose the primary
+attempt's detailed error reason.
 
 ## Web document check
 

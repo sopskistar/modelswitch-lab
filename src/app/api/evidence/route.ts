@@ -13,6 +13,7 @@ import finalLiveValidation from '../../../../evidence/final-live-validation.json
 import productionDeploymentCheck from '../../../../evidence/production-deployment-check.json';
 import budgetEnforcement from '../../../../evidence/budget-enforcement-test.json';
 import fallbackTestReadiness from '../../../../evidence/fallback-test-readiness.json';
+import fallbackLiveProof from '../../../../evidence/fallback-live-proof.json';
 import guardrailProfileCheck from '../../../../evidence/guardrail-profile-check.json';
 export function GET(request: Request) {
   const file = new URL(request.url).searchParams.get('file');
@@ -44,10 +45,12 @@ export function GET(request: Request) {
                             ? NextResponse.json(budgetEnforcement)
                             : file === 'fallback-test-readiness.json'
                               ? NextResponse.json(fallbackTestReadiness)
-                              : file === 'guardrail-profile-check.json'
-                                ? NextResponse.json(guardrailProfileCheck)
-                                : NextResponse.json(
-                                    { error: 'Unknown evidence file.' },
-                                    { status: 404 },
-                                  );
+                              : file === 'fallback-live-proof.json'
+                                ? NextResponse.json(fallbackLiveProof)
+                                : file === 'guardrail-profile-check.json'
+                                  ? NextResponse.json(guardrailProfileCheck)
+                                  : NextResponse.json(
+                                      { error: 'Unknown evidence file.' },
+                                      { status: 404 },
+                                    );
 }

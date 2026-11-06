@@ -1,0 +1,94 @@
+{
+  "recordVersion": 1,
+  "testedAt": "2026-11-06T16:57:07.142Z",
+  "credential": {
+    "environmentVariable": "OTARI_FALLBACK_TEST_KEY",
+    "present": true,
+    "secretRecorded": false,
+    "productionKeyUsed": false
+  },
+  "operatorConfirmedPreflight": {
+    "workspace": "ModelSwitch Fallback Test",
+    "keyName": "modelswitch-fallback-proof",
+    "monthlySpendCeilingUsd": 1,
+    "displayedSpendUsd": 0,
+    "expiration": "2026-11-12",
+    "providerSelection": "custom DeepInfra fallback-test key selected",
+    "backupProvider": "Amazon Bedrock enabled",
+    "policy": {
+      "name": "modelswitch-fallback-proof",
+      "primary": "alibaba/qwen3.8-27b / DeepInfra",
+      "backup": "meta/llama-3.3-70b-instruct / Amazon Bedrock"
+    },
+    "provenance": "Operator-confirmed Otari dashboard configuration; not independently read through management API"
+  },
+  "preflightCatalog": {
+    "endpoint": "GET /api/v1/models",
+    "httpStatus": 200,
+    "requestId": null,
+    "policyAliasDiscoverable": true,
+    "qwenDiscoverable": true,
+    "llamaDiscoverable": true
+  },
+  "status": "verified_live",
+  "request": {
+    "endpoint": "POST /api/v1/chat/completions",
+    "requestedPolicy": "modelswitch-fallback-proof",
+    "httpStatus": 200,
+    "elapsedMs": 1037,
+    "headers": {
+      "otari-request-id": "886b6cbc-a0e8-4a27-8ebf-60bbf3fd0f82",
+      "otari-provider": "bedrock",
+      "otari-model": "meta.llama3-3-70b-instruct-v1:0",
+      "otari-fallback": "true",
+      "otari-attempt-count": "2",
+      "otari-response-duration-ms": "339"
+    },
+    "bodyModel": "modelswitch-fallback-proof",
+    "content": "FALLBACK_OK",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 42,
+      "completionTokens": 5,
+      "totalTokens": 47,
+      "costUsd": "0.000034",
+      "pricingSource": "deployment"
+    },
+    "gatewayError": null
+  },
+  "fallbackAssessment": {
+    "verified": true,
+    "primaryAttempt": {
+      "model": "alibaba/qwen3.8-27b",
+      "provider": "deepinfra",
+      "attempted": true,
+      "served": false,
+      "failureReason": null,
+      "failureReasonAvailability": "Not exposed in the successful response headers or the key-scoped usage summary."
+    },
+    "backupAttempt": {
+      "model": "meta.llama3-3-70b-instruct-v1:0",
+      "provider": "bedrock",
+      "served": true
+    },
+    "attemptHistorySource": "Otari-Fallback=true, Otari-Attempt-Count=2, and two grouped usage rows; no per-attempt error details inferred"
+  },
+  "usageLookup": {
+    "endpoint": "GET /api/v1/usage/requests/{request_id}",
+    "httpStatus": 200,
+    "requestId": "886b6cbc-a0e8-4a27-8ebf-60bbf3fd0f82",
+    "status": "success",
+    "costUsd": "0.000034",
+    "promptTokens": 42,
+    "completionTokens": 5,
+    "totalTokens": 47,
+    "rowCount": 2,
+    "attemptRows": []
+  },
+  "cleanup": {
+    "workspacePreferenceChangedByThisTest": false,
+    "restorationPerformed": false,
+    "restorationRequired": false,
+    "productionOrDefaultWorkspaceModified": false
+  }
+}
