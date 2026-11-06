@@ -53,7 +53,7 @@ Running a new benchmark is **optional** and incurs actual hosted inference usage
 | Otari integrations | Policy routing, distinct model roles, hosted code execution, DeepWiki MCP, enforced API-key request budgets, native web fetch |
 | Protection | Server-only credentials, model/case allowlists, bounded requests, and optional Upstash-backed public rate limits |
 
-The verified routing receipt shows Otari resolved a policy to Qwen/DeepInfra, but **`fallback=false`**: actual gateway failover has **not** been demonstrated. A native web-fetch tool completed successfully, although its model-generated summary was incomplete. Guardrails and per-user budget enforcement are not claimed as verified.
+**Verified gateway fallback:** In a separate test workspace, a request to `modelswitch-fallback-proof` attempted the Qwen/DeepInfra primary and was served by Llama on Bedrock. Otari returned HTTP 200, `Otari-Fallback: true`, `Otari-Attempt-Count: 2`, request ID `886b6cbc-a0e8-4a27-8ebf-60bbf3fd0f82`, and reported cost `$0.000034`. The primary attempt's precise failure reason was not exposed. The [redacted fallback receipt](evidence/fallback-live-proof.json) records the observed result; the separate production routing policy was unchanged. Native web fetch also completed successfully, although its model-generated summary was incomplete. Guardrails and per-user budget enforcement are not claimed as verified.
 
 **[Inspect the individual redacted receipts](docs/OTARI_PROOF.md)** · **[Rubric evidence and limitations](docs/RUBRIC_EVIDENCE.md)** · **[Testing methodology](docs/TESTING.md)**
 
@@ -102,7 +102,7 @@ Read [architecture details](docs/ARCHITECTURE.md), [test instructions](docs/TEST
 
 ## Verified Otari evidence
 
-The repository contains redacted hosted Otari execution receipts and a [judge walkthrough](docs/JUDGE_WALKTHROUGH.md). The [rubric matrix](docs/RUBRIC_EVIDENCE.md) maps the evidence to six advanced feature categories; it is a **potential assessment, not an official score**. Routing credit remains conditional because a real failover has not been observed.
+The repository contains redacted hosted execution receipts and a [step-by-step judge walkthrough](docs/JUDGE_WALKTHROUGH.md). The [rubric matrix](docs/RUBRIC_EVIDENCE.md) maps evidence to six advanced Otari categories: routing/fallbacks, code execution, MCP, budgets, web fetch, and distinct model roles. The isolated test now demonstrates **actual gateway fallback**, alongside the original normal-routing receipt. This supports a **potential 95/100 before the participant's video**, or up to 100/100 with an eligible demo, subject to judging—not a guaranteed score. [Inspect the fallback receipt](evidence/fallback-live-proof.json). The new fallback receipt may not appear on the production site until the corresponding commit is deployed.
 
 ## License
 
