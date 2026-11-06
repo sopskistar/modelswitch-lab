@@ -55,6 +55,23 @@
       "fundingVerified": false
     }
   },
+  "latestReadOnlyRecheck": {
+    "checkedAt": "2026-11-06T16:13:47Z",
+    "credential": "OTARI_FALLBACK_TEST_KEY",
+    "secretRecorded": false,
+    "endpoint": "GET /api/v1/models",
+    "httpStatus": 200,
+    "requestId": null,
+    "listedPolicyAlias": true,
+    "listedPrimaryModel": true,
+    "listedBackupModel": true,
+    "workspaceIdentityReturned": false,
+    "policyDefinitionReturned": false,
+    "credentialPreferenceVerified": false,
+    "backupFundingVerified": false,
+    "inferenceRequestsSent": 0,
+    "meaning": "The key authenticates and its catalog lists the alias and both model IDs. This response does not establish the key's workspace, policy targets, or whether the invalid DeepInfra key is selected with the documented Always use this key preference. No inference was sent because the required preference and backup spend could not be verified through authorized read-only access."
+  },
   "inferenceRequestsSent": 0,
   "productionPolicyModified": false,
   "defaultWorkspaceModified": false,

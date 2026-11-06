@@ -271,6 +271,13 @@ and disabled in Default. Its explicit **Always use this key** preference is
 not verified, and backup funding is not verified. Readiness receipt:
 [fallback-test-readiness.json](../evidence/fallback-test-readiness.json).
 
+A further authenticated, read-only catalog check on 2026-11-06 returned HTTP
+200 and again listed the policy alias and both model IDs. It did not return
+workspace identity or the policy definition. No inference request was sent:
+the effective provider-key preference and funded backup route remain
+unverified. The production routing receipt remains a separate successful
+policy-resolution event with `fallback=false`; it is not fallback evidence.
+
 The exact remaining operator check is in the `ModelSwitch Fallback Test`
 workspace's provider selection: explicitly choose DeepInfra credential
 `fallback-test` as **Always use this key**, not simply enabled. Confirm the
