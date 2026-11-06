@@ -1,62 +1,81 @@
 # Judge walkthrough
 
-Start at the selected public demo: [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app). **Production browser check, Nov 5, 2026:** the landing and `/app?view=model-switch` both loaded; the Otari catalog returned the permitted Qwen and Llama models. A manual browser selection changed to Llama without making an inference request. Desktop and 390px mobile checks had no axe violations, page errors, or horizontal overflow. The exact Vercel deployment SHA remains unconfirmed. See the [production check record](../evidence/production-deployment-check.json) and real [desktop](screenshots/production-landing-desktop.png) / [mobile](screenshots/production-model-switch-mobile.png) captures.
+**Official app:** [modelswitch-lab.vercel.app](https://modelswitch-lab.vercel.app) · **Repository:** [sopskistar/modelswitch-lab](https://github.com/sopskistar/modelswitch-lab)
 
-## Seven checkpoints
+This route takes about five minutes and has a safe, read-only path. Do not run inference unless you choose the optional live path below and the operator has confirmed current spending protection. A model request can time out after reaching Otari; do not automatically retry an ambiguous request.
 
-### 1. Open the product
+## Eight checkpoints
 
-**Click:** **Launch workspace** on the landing page. In the app, choose **Model switch**.
+### 1. Understand the product — 20 seconds
 
-**Observe:** Available model IDs come from the Otari catalog and are restricted to the configured evaluator/analyst pair. The active choice is saved in this browser only.
+**Open:** the landing page at `/`.
 
-### 2. Test Qwen on a known case
+**Do:** point out the **Launch workspace** action and the product promise: test known-answer tasks, compare measured behavior, switch the active test model, and inspect gateway evidence.
 
-**Click:** Select Qwen if it is not active. Only press **Test Qwen3.8 27B** after the operator confirms the current Otari spend limit and remaining balance. Otherwise inspect the saved timeout receipt and continue to the existing completed Llama evidence without sending inference.
+**Observe:** the landing page previews the existing workbench. The active selection affects ModelSwitch requests only; it does not update another application or Otari's production policy.
 
-**Observe:** The fixed synthetic invoice `inv-01` is sent only after the click. Expand the result to inspect the model response, deterministic six-field score, effective model, provider, Otari request ID, measured latency, reported cost, and fallback metadata where returned. The prior production Qwen attempt timed out at the app's 22-second wait deadline without an Otari request ID; completion and billing are unknown. Inspect [`qwen-timeout-diagnosis.json`](../evidence/qwen-timeout-diagnosis.json); do not retry without confirmed spend headroom.
+### 2. Launch the workspace — 30 seconds
 
-### 3. Switch to Llama and send the same fixture
+**Click:** **Launch workspace** or open [`/app?view=workspace`](https://modelswitch-lab.vercel.app/app?view=workspace).
 
-**Click:** **Switch to Llama 3.3 70B Instruct**, then **Test Llama 3.3 70B Instruct**.
+**Observe:** three synthetic scenarios—invoice extraction, support classification, and bounded reasoning—with fixed expected answers. Select a scenario and a small case count. No inference begins until **Run benchmark** is pressed.
 
-**Observe:** Changing selection alone sends no request. The next explicit request carries the selected model ID to the server route and then hosted Otari. The production API smoke confirmed Llama served by `bedrock`, request `77cf5458-46f6-40c9-98ab-80468ba890ec`, six of six fields correct, 929 ms, reported cost $0.000170. Browser tests also verify both switch directions and request payload selection, but those tests intercept requests and are not live Otari evidence. The latest Qwen/Llama production smoke record is [`model-switch-production.json`](../evidence/model-switch-production.json).
+### 3. Evaluate a model — 40 seconds
 
-### 4. Compare and choose
+**Safe path:** open **Results** and **Request trace** to inspect saved runs and receipts. The repository includes actual Otari records in [`evidence/verification.json`](../evidence/verification.json) and [`evidence/model-switch-production.json`](../evidence/model-switch-production.json).
 
-**Click:** Review the two same-fixture results. If both have valid completed results, inspect the deterministic recommendation and choose **Switch to [model]**.
+**Optional live path:** only after confirming the current Otari key ceiling, available spend and durable rate limit, choose one synthetic case and one model, then click **Run benchmark** or **Test active model** once. Inspect the result and trace. A failed, timed out, or metadata-free request is a failure/unknown outcome, not a successful evaluation. Do not retry if billing or completion is ambiguous.
 
-**Observe:** The recommendation orders verified same-fixture scores by field accuracy and schema validity, then measured latency and reported cost. Accepting it updates the browser-scoped model and makes no request by itself. One fixture cannot establish general superiority. If only one model has a valid result, the app asks you to test another before comparing.
+### 4. Switch models — 45 seconds
 
-### 5. Inspect traces
+**Open:** [`/app?view=model-switch`](https://modelswitch-lab.vercel.app/app?view=model-switch).
 
-**Click:** Open **Request trace**.
+**Do:** select Qwen 3.8 27B, then Llama 3.3 70B Instruct (or switch back). Selection is browser-scoped and sends no paid request. To test, explicitly press the active-model test action using the same synthetic fixture.
 
-**Observe:** Model Switch requests appear with their actual response metadata, separately from full benchmark runs and application events. Missing model metadata after a timeout remains unknown; the UI does not infer which provider served it.
+**Observe:** a subsequent request carries the selected allowlisted model ID through the server to hosted Otari. The recorded Llama `inv-01` request completed with six fields correct, effective Bedrock model `meta.llama3-3-70b-instruct-v1:0`, request `77cf5458-46f6-40c9-98ab-80468ba890ec`, and reported cost `$0.000170`. The paired Qwen attempt timed out at the application deadline with no Otari request ID; its completion and billing are unknown. These receipts are not a completed two-model comparison. The analyst remains a separate role and is not counted as a second evaluator for that case.
 
-### 6. Check Otari policy routing
+### 5. Interpret results and recommendation — 35 seconds
 
-**Click:** Return to **Model switch** and use **Use Otari fallback policy** once.
+**Open:** **Results**; inspect accuracy, pass rate, schema validity, missing fields, failures, measured latency and reported cost.
 
-**Observe:** The app sends the configured `modelswitch-fallback` alias to hosted Otari without application retry. Current verified policy evidence resolved to Qwen through DeepInfra with one attempt and `fallback=false`: the primary succeeded and no fallback occurred. This is distinct from manually selecting Llama. Inspect [`routing-production.json`](../evidence/routing-production.json). Do not describe this receipt as an actual failover.
+**Observe:** local deterministic scoring is the source of the benchmark score. The recommendation is limited to completed comparable cases; if there is only one eligible model, the app should say that another model must be tested. Small synthetic samples do not establish universal model superiority. An explicit **Switch to recommended model** selection does not itself send inference.
 
-### 7. Inspect other verified capabilities
+### 6. Inspect requests — 35 seconds
 
-**Click:** Open **Otari capabilities**, then inspect the **Repository evidence inspector** and **Code execution** evidence.
+**Click:** **Request trace**.
 
-**Observe:** MCP proof records a completed Otari-managed DeepWiki tool use/result; code proof records a successful hosted sandbox computation. Native Otari web fetch is now verified by request `8058116e-e1b4-4f24-90d7-3b766a4f41e1`: Qwen/DeepInfra completed tool `otari_wf_66cfd3e1beb54026a97306892102ec57` for the Mozilla Manifesto URL at a settled `$0.010888`. Open the Web retrieval row and inspect [`web-fetch-live.json`](../evidence/web-fetch-live.json). The hosted endpoint rejected the old extra declaration fields; the corrected request used only `type`, one non-parallel fetch iteration, and the fixed allowlisted URL. The model summary ended mid-sentence, so the verified claim is Otari's completed retrieval, not a complete factual answer. Guardrails and per-user budgets remain unverified. See the [rubric matrix](RUBRIC_EVIDENCE.md).
+**Observe:** local task/scoring events are distinct from gateway metadata. Where returned, inspect requested and effective model, provider, Otari request ID, attempt/fallback metadata, latency, usage and cost. Missing metadata stays unknown. Exported receipts contain only redacted application evidence.
 
-Native retrieval lets a developer distinguish a model's own answer from information the gateway actually fetched, and gives benchmark tasks a reproducible public source.
+### 7. Verify Otari capabilities — 75 seconds
 
-## Operator-only items
+**Click:** **Otari capabilities** and open the evidence rows. Each link below is a redacted record committed in the repository; the web-fetch receipt is also currently served by the public evidence endpoint.
 
-- The operator can reproduce the isolated test-key budget proof from [`budget-enforcement-test.json`](../evidence/budget-enforcement-test.json): a tiny Qwen request was admitted and billed `$0.000095`, then one follow-up returned HTTP 403 `budget_exceeded` with scope `api_token`. The first model answer was empty; the proof is about gateway enforcement. No production key was used and no third request was sent. The earlier usage-read 401 preflight is recorded separately in [`budget-enforcement-preflight.json`](../evidence/budget-enforcement-preflight.json).
+- **Policy routing:** [`routing-production.json`](../evidence/routing-production.json), request `5f2cc001-a521-435e-8b51-df0f91452dc5`; Otari resolved `modelswitch-fallback` to Qwen/DeepInfra, attempt 1, `fallback=false`. This verifies policy resolution, not failover.
+- **Code execution:** [`verification.json`](../evidence/verification.json), request `732c1ded-aba4-4210-8cd7-1251027e367c`; hosted Python returned `correct=4`, `total=5`, `accuracy=0.8`, exit code 0. Cost was not reported.
+- **MCP:** [`mcp-status.json`](../evidence/mcp-status.json), request `d9283ac4-3aec-4ee3-8151-08937bb08554`; one DeepWiki `read_wiki_structure` use and successful tool result.
+- **Distinct model roles:** [`verification.json`](../evidence/verification.json); Qwen evaluator requests and a separate Llama analyst request. The analyst explains verified metrics; it does not replace deterministic scoring.
+- **Budget enforcement:** [`budget-enforcement-test.json`](../evidence/budget-enforcement-test.json); isolated test key admitted one request, then Otari returned HTTP 403 `budget_exceeded`, scope `api_token`. No production key was used for that experiment.
+- **Native web fetch:** [`web-fetch-live.json`](../evidence/web-fetch-live.json), request `8058116e-e1b4-4f24-90d7-3b766a4f41e1`; completed `otari_web_fetch` event `otari_wf_66cfd3e1beb54026a97306892102ec57` for the Mozilla Manifesto URL, Qwen/DeepInfra, settled cost `$0.010888`. The model summary was incomplete; only the successful native retrieval is claimed.
 
-- The isolated budget proof is now real: one admitted Qwen request cost `$0.000095`, followed by HTTP 403 `budget_exceeded` at scope `api_token`. The first answer was empty; use this only to demonstrate gateway enforcement. See [`budget-enforcement-test.json`](../evidence/budget-enforcement-test.json).
-- No safe fallback event is recorded. The dedicated key now authenticates and sees the `modelswitch-fallback-proof` alias, but the inference key cannot inspect its policy body and cannot prove provider selection. In **ModelSwitch Fallback Test**, explicitly set DeepInfra `fallback-test` to **Always use this key**, confirm the isolated Qwen→Llama policy and funded backup, then request one tiny test. Afterwards restore **Follow the organization**. See [readiness evidence](../evidence/fallback-test-readiness.json).
-- Do not change the production routing policy or enable the invalid credential in Default workspace.
-- Guardrail discovery reports no configured service/profile, though the Otari build lists guardrail integrations. An owner/admin must configure an actual service or guardrail definition, then mandate it only to the test workspace (`workspace_ids` is the documented API scope). Test one harmless adversarial input and a legitimate control, and inspect actual gateway decisions. No organization-wide mandate was changed. See [profile check](../evidence/guardrail-profile-check.json) and [Otari's guardrail guide](https://github.com/mozilla-ai/otari/blob/main/docs/guardrails.md).
-- Vercel logs are inaccessible from this checkout. The adapter now logs a redacted `[otari_request_failed]` record for a future failure; an authorized operator should inspect one existing request's dashboard activity or provide the next single request's log before a retry.
-- Per-user budgets have not been configured or verified.
-- Before any additional live run, confirm the Otari spend ceiling and durable Upstash limiter. `demoEnabled: true` only confirms an environment condition; it does not prove Redis behavior.
-- The operator confirmed `ff915c5` Ready. Read-only production checks confirm the new timeout evidence endpoint is served, but the public site does not provide a source SHA for future deployments. Check Vercel's selected project's source revision before claiming later changes are deployed.
+The policy, MCP, code, budget and web tool records are distinct demonstrations. The advanced-feature assessment is up to 60/60, with routing credit conditional on judge interpretation because no fallback occurred. Guardrails, per-user budgets and actual fallback remain unverified.
+
+### 8. Export and inspect evidence — 20 seconds
+
+**Open:** **Results**, select a completed run, then use its JSON or CSV download control.
+
+**Observe:** the JSON receipt preserves model IDs, measured outputs, scoring, trace references and known limitations. It is a project record, not a cryptographic external attestation. The GitHub [`evidence/`](../evidence) directory is available if the production Capabilities view is on an older deployment.
+
+## Optional live demonstration
+
+Only do this with the operator's approval and current protections verified:
+
+1. Confirm the selected production Vercel project is `modelswitch-lab`, Otari has an active hard spending ceiling, and durable Upstash limits are configured.
+2. Choose one fixed synthetic invoice case and one model; send one request.
+3. Inspect the inner model result, deterministic score, trace, request ID, provider, latency and reported cost.
+4. If it completes and the spend boundary remains clear, you may explicitly switch the selected model and send the same case once more. Keep the runs separately identified. If a request times out or its billing is ambiguous, stop and inspect usage before any further call.
+
+There is no guarantee every provider/model request succeeds. Intercepted Playwright fixtures test UI behavior only and are not Otari evidence.
+
+## Production verification note
+
+On 2026-11-06, the official production Capabilities view passed a browser check: it displayed `60 / 60` advanced points and a **Verified live** web-fetch row. The row linked to `GET /api/evidence?file=web-fetch-live.json`, which returned HTTP 200 with the matching redacted receipt. The browser check intercepted its repository-inspection action and made no inference request. These checks prove the evidence view and route are deployed; public responses do not reveal the exact Vercel source SHA. Verify the selected project's deployment revision in Vercel before attributing the whole site to a particular commit. Do not use the similarly named duplicate project.

@@ -20,7 +20,7 @@
       "vercelRequestId": "fra1::nvghd-1793897258409-4d47f83b0936"
     }
   ],
-  "conclusion": "The initial post-push check observed the previous workspace at / and 404 at /app. A later production browser check confirmed the landing and Model Switch routes are now live. The exact Vercel source commit is not exposed, so deployment SHA matching remains unverified.",
+  "conclusion": "Public landing and Model Switch routes were previously observed; on 2026-11-06 the official production evidence endpoint returned the matching verified native web-fetch receipt. Exact Vercel source SHA remains unconfirmed.",
   "latestBrowserRecheck": {
     "checkedAt": "2026-11-05T17:26:23.630Z",
     "landingStatus": 200,
@@ -59,5 +59,30 @@
     "projectLink": false,
     "vercelToken": false
   },
-    "nextOperatorAction": "In the existing Vercel project modelswitch-lab, verify the latest Production deployment source SHA matches the synchronized main and hackathon branches. The site now serves the feature, but the unauthenticated browser check cannot identify its Git SHA. Do not select the duplicate project."
+  "nextOperatorAction": "In the existing Vercel project modelswitch-lab, verify the latest Production deployment source SHA matches the synchronized main and hackathon branches. The site now serves the feature, but the unauthenticated browser check cannot identify its Git SHA. Do not select the duplicate project.",
+  "latestEvidenceRouteCheck": {
+    "checkedAt": "2026-11-06T11:19:05Z",
+    "path": "/api/evidence?file=web-fetch-live.json",
+    "httpStatus": 200,
+    "capabilitiesPageHttpStatus": 200,
+    "vercelRequestId": "fra1::iad1::ckrqg-1793963945774-08ad91ae21d7",
+    "servedReceiptStatus": "verified_live",
+    "servedOtariRequestId": "8058116e-e1b4-4f24-90d7-3b766a4f41e1",
+    "servedToolEventId": "otari_wf_66cfd3e1beb54026a97306892102ec57",
+    "matchedRepositoryReceipt": true,
+    "deploymentGitSha": null,
+    "interpretation": "The public production evidence route serves the current redacted web-fetch receipt. This does not reveal the Vercel source commit."
+  },
+  "latestCapabilitiesBrowserCheck": {
+    "checkedAt": "2026-11-06T12:08:41Z",
+    "productionUrl": "https://modelswitch-lab.vercel.app/app?view=capabilities",
+    "test": "Playwright capabilities expose recorded evidence and keep failed checks unverified",
+    "result": "passed",
+    "advancedPointsDisplayed": "60 / 60",
+    "webFetchStatus": "Verified live",
+    "webFetchEvidenceHref": "/api/evidence?file=web-fetch-live.json",
+    "paidInferenceRequests": 0,
+    "interceptedAction": "Repository MCP inspection only; no live Otari call",
+    "deploymentGitSha": null
+  }
 }

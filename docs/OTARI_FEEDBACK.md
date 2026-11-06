@@ -1,9 +1,10 @@
 # Feedback to Mozilla
 
-Based on actual observations on 2026-11-04. See the journal and sanitized JSON
-for reproduction. Two-model inference, deterministic comparison, policy
-resolution and code execution were observed. Actual routing failover and budget
-boundaries were not, so they are not reviewed as if they had passed.
+Based on observed hosted execution through 2026-11-06. See the integration
+journal and redacted receipts for reproduction. Two model roles, deterministic
+scoring, policy resolution, code execution, DeepWiki MCP, native web fetch, and
+an API-key request-count budget refusal are verified. Actual routing failover,
+guardrail enforcement and per-user budgets are not verified.
 
 ## 1. Temptation to skip Otari
 
@@ -27,9 +28,9 @@ Application quotas supplement gateway budgets and do not replace them.
 
 Yes, based on observed model discovery, inference through two providers,
 reported costs, policy resolution, the Python sandbox, managed MCP execution,
-and the separately verified request-count budget refusal. Actual provider
-failover remains unverified; continued use would depend on an isolated,
-reproducible fallback configuration.
+native web fetch, and the separately verified request-count budget refusal.
+Actual provider failover remains unverified; continued use would benefit from
+an isolated, reproducible fallback test configuration.
 
 ## 4. What worked well
 
@@ -64,10 +65,11 @@ bug.
 ## 6. What was missing
 
 The code endpoint returned no inline cost or pricing source in its successful
-response, so our UI must retain an unknown cost. A real fallback event remains
-unverified. Native web fetch and request-count budget enforcement are verified.
-A supported hosted fallback fault-injection/test action and a single hosted
-capability/permissions/funding readiness view would shorten setup.
+response, so our UI must retain an unknown cost. A real fallback event,
+guardrail decision and per-user budget remain unverified. Native web fetch and
+request-count budget enforcement are verified. A supported hosted fallback
+test procedure and a single capability/permissions/funding readiness view
+would shorten setup.
 
 ## 7. Recommended improvements
 
@@ -85,6 +87,23 @@ capability/permissions/funding readiness view would shorten setup.
 
 Local sandbox DNS/browser restrictions, npm's peer-resolution crash, and the
 Turbopack port restriction were development-environment issues, not Otari issues.
+
+## Follow-up observation — 2026-11-06
+
+The hosted validator rejected the earlier web-fetch declaration when it
+included `max_uses` and `allowed_domains`, returning HTTP 400 with the detail
+`declarations may contain only the type field`. Using the accepted type-only
+declaration produced a completed native fetch event for the Mozilla Manifesto
+through Qwen/DeepInfra; the request settled at `$0.010888`. The page retrieval
+is verified, while the model's final summary was cut off. The committed
+[`web-fetch-live.json`](../evidence/web-fetch-live.json) records both the
+rejected schema and successful correction. This points to a hosted validator
+and documentation mismatch rather than an inference failure.
+
+On the same date, the official production evidence endpoint returned HTTP 200
+for this redacted receipt. The response did not expose the deployment's Git
+SHA. Reviewers should distinguish evidence-route availability from a verified
+source revision.
 
 ## Follow-up observation — 2026-11-05
 

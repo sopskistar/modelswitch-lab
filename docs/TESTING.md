@@ -1,5 +1,34 @@
 # Testing and reproduction
 
+## Documentation release validation — 2026-11-06
+
+- `npm run typecheck`: passed.
+- `npm run lint`: passed.
+- `npm test`: 119 tests in 6 files passed.
+- `npm run format:check`: passed; Prettier also checked the updated README,
+  judge documents, and production evidence JSON.
+- `npm run build`: passed with Next.js 16.4.5 and webpack. A first sandboxed
+  attempt could not spawn TypeScript `--showConfig`; the unchanged build passed
+  with process access. No build workaround or source code change was made.
+- `PLAYWRIGHT_BASE_URL=http://localhost:3100 npm run test:browser`: 20/20
+  desktop and mobile tests passed against the local production build. The
+  suite includes axe checks, keyboard interaction, no horizontal overflow,
+  model-switch request contracts, results, traces, exports, and capability
+  evidence states. Inference responses are intercepted test fixtures.
+- Read-only production GETs returned HTTP 200 for routing, MCP, budget,
+  verification, and web-fetch receipts; the web-fetch response matched the
+  committed request/tool IDs. The Capabilities route returned HTTP 200. These
+  checks do not identify the deployed Git SHA or make new inference requests.
+- A focused production Playwright check passed for the Capabilities view. It
+  displayed `60 / 60` advanced points and a **Verified live** web-retrieval row
+  linking the committed receipt. The test intercepted the repository-inspection
+  action and made no Otari inference request.
+
+The initial browser command used the default localhost URL and did not reach
+this checkout's production build. The suite was rerun against the explicitly
+started local build on port 3100; only that 20/20 run is the accepted result.
+Production source-revision matching remains unverified.
+
 ## Otari request-count budget acceptance — 2026-11-06
 
 The dedicated `OTARI_BUDGET_TEST_KEY` was confirmed present without printing

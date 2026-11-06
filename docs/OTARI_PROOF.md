@@ -1,5 +1,30 @@
 # Hosted Otari proof
 
+## Current evidence summary — 2026-11-06
+
+Six advanced categories now have hosted execution receipts: policy routing
+(without an observed fallback), code execution, MCP, native web fetch, distinct
+model roles, and gateway request-count budget enforcement. The detailed score
+and limitations are in [`RUBRIC_EVIDENCE.md`](RUBRIC_EVIDENCE.md). The current
+assessment is up to 95/100 potential before the participant-recorded demo,
+conditional on routing interpretation; it is not an official score.
+
+The live official site's
+`GET /api/evidence?file=web-fetch-live.json` returned HTTP 200 on
+2026-11-06 11:19:05 UTC, Vercel request
+`fra1::iad1::ckrqg-1793963945774-08ad91ae21d7`, and the body matched web-fetch
+request `8058116e-e1b4-4f24-90d7-3b766a4f41e1`. This verifies the public evidence
+route and receipt are deployed. It does not identify the Vercel source SHA or
+prove every page is running the latest Git commit. No exact deployment revision
+is available from the unauthenticated response.
+
+The production Capabilities view was also checked with Playwright on
+2026-11-06 12:08 UTC. It displayed `60 / 60` advanced points, marked native
+web retrieval **Verified live**, and linked `/api/evidence?file=web-fetch-live.json`.
+The test intercepted its repository-inspection action and sent no paid inference.
+See `latestCapabilitiesBrowserCheck` in
+[`production-deployment-check.json`](../evidence/production-deployment-check.json).
+
 ## Production deployment checks — 2026-11-05
 
 The initial post-push check at 16:47 UTC returned the previous workspace at `/`
@@ -214,8 +239,7 @@ The fixed evidence record is in [`mcp-status.json`](../evidence/mcp-status.json)
 
 Earlier rollout checks (HTTP 200 serving an old MCP record, then HTTP 404 for
 the routing receipt) are retained as historical observations. The newer checks
-at the top supersede those route-status findings: both receipts now return HTTP
-200. This still does not establish the deployed source SHA. The live MCP and
+at the top supersede those route-status findings: both receipts now return HTTP 200. This still does not establish the deployed source SHA. The live MCP and
 routing executions are corroborated by captured production responses and Otari
 headers; see their individual evidence records.
 

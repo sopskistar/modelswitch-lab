@@ -1,48 +1,31 @@
-# Personal four-minute demo recording
+# Personal demo recording script
 
-The participant records the actual application screen and narrates personally.
-Do not generate narration, a synthetic presenter, or a fabricated screen recording.
-The selected production site is https://modelswitch-lab.vercel.app. A live
-browser check on Nov 5 confirmed the landing and `/app?view=model-switch`, and
-that manually changing the selection sends no request. The deployment SHA is
-not independently confirmed. The bounded production API smoke has one
-successful Llama request and a Qwen timeout; see
-[`model-switch-production.json`](../evidence/model-switch-production.json).
-Confirm the Otari spending boundary and durable Upstash limiter before further
-inference.
+Target length: about four minutes (within the 3–5 minute requirement). The participant records the real application screen and narrates personally. Do not create synthetic narration, a fabricated recording, or a composite result. Use the safe evidence path if live spend protection is not confirmed.
 
-| Time      | Show                                                     | Explain in your own words |
-| --------- | -------------------------------------------------------- | ------------------------- |
-| 0:00–0:30 | Landing page and product purpose                        | ModelSwitch tests models against known answers so a developer can compare reliability, speed, cost, and failures. |
-| 0:30–1:00 | Launch workspace; open Model Switch                     | Browser-scoped model selection changes future ModelSwitch requests; selection itself makes no paid request. |
-| 1:00–1:50 | Show the completed benchmark/results and deterministic score | Explain the synthetic cases, real model response, cost/latency provenance, and that small samples are not universal rankings. Use saved receipts; only run live inference if spend controls are confirmed. |
-| 1:50–2:30 | Otari policy result and fallback-test readiness          | Policy resolution is real, but the captured production request has `fallback=false`. A genuine fallback test is pending an explicit provider pin and verified backup spend; do not imply it happened. |
-| 2:30–3:10 | MCP and code execution capability receipts               | Show the gateway-owned MCP tool use/result and hosted Python execution evidence. |
-| 3:10–3:40 | Budget and native web-fetch receipts                     | Show the separate-key `budget_exceeded` refusal, then the completed Otari `web_fetch` event for the Mozilla Manifesto and its settled cost. |
-| 3:40–4:00 | Evidence links and conclusion                            | Emphasize inspectable request IDs, routing's `fallback=false`, and the limitations, then invite judges to follow the walkthrough. |
+**Before recording:** open the official site, hide credentials and dashboard secrets, and verify the selected Vercel project's source revision if available. If making a fresh inference request, first confirm the Otari spending ceiling and durable Upstash limiter. The public production web-fetch evidence endpoint returned HTTP 200 on 2026-11-06; exact deployed source SHA is not exposed.
 
-If inference is unavailable, do not send repeated requests. Show the saved
-receipts for the real Llama call, policy resolution, MCP, code execution,
-budget refusal, and native web fetch. Current evidence supports up to
-**95/100 potential** before the participant-recorded demo, subject to rubric
-interpretation of routing without observed failover; no official score is
-claimed. Guardrails, per-user budgets, actual fallback, and the personal video
-remain unverified.
+| Time      | Page and action                                                                   | Suggested narration                                                                                                                                                                                                     | Evidence to show / contingency                                                                                                                                                                                                                                                                                                |
+| --------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0:00–0:25 | Landing `/`; point to **Launch workspace**.                                       | “ModelSwitch Lab helps developers test open-weight models against known answers, compare reliability, speed and reported cost, then switch the model used by the next test.”                                            | State that manual selection changes ModelSwitch requests only, not another app's production policy.                                                                                                                                                                                                                           |
+| 0:25–0:55 | Launch workspace; show the three scenarios and one fixture.                       | “The datasets are small synthetic cases with known answers. The scorer checks model output deterministically.”                                                                                                          | Do not start inference merely to fill screen space. Continue with saved results if spend controls are not verified.                                                                                                                                                                                                           |
+| 0:55–1:35 | Open Model Switch. Select Qwen then Llama; run only if the live path is approved. | “Selecting a model is browser-scoped and makes no request by itself. When I explicitly test, the selected model ID is sent through the server-side Otari adapter.”                                                      | Show the recorded Llama fixture receipt: six fields correct, Bedrock effective model, request `77cf5458-46f6-40c9-98ab-80468ba890ec`, `$0.000170`. The Qwen run timed out without a gateway ID; do not present these as a completed comparison. If live testing, use one fixed fixture and stop on timeout/ambiguous billing. |
+| 1:35–2:05 | Results view; show score and tradeoffs.                                           | “Scores come from expected answers, not from the analyst model. A recommendation only compares completed, equivalent cases; a small fixture set is not a universal ranking.”                                            | Point to pass rate, field accuracy, schema validity, latency and reported cost. If only one comparable model completed, say so.                                                                                                                                                                                               |
+| 2:05–2:35 | Request Trace; open a completed trace.                                            | “The trace distinguishes the requested model from the effective model and provider. Request IDs and cost appear only when Otari returns them.”                                                                          | Show a real receipt field; do not infer provider or billing for the Qwen timeout.                                                                                                                                                                                                                                             |
+| 2:35–3:00 | Otari Capabilities; open routing evidence.                                        | “This request resolved a named Otari policy to Qwen on DeepInfra. It used one attempt and reported fallback false, so I call this policy routing—not a demonstrated failover.”                                          | Request `5f2cc001-a521-435e-8b51-df0f91452dc5`; no fallback claimed.                                                                                                                                                                                                                                                          |
+| 3:00–3:35 | Show MCP and code execution evidence, then budget receipt.                        | “Otari executed a read-only DeepWiki tool and a bounded Python calculation. On a separate test key, Otari admitted one request and rejected the next at the configured request limit.”                                  | MCP `d9283ac4-3aec-4ee3-8151-08937bb08554`; code `732c1ded-aba4-4210-8cd7-1251027e367c`; budget refusal `35e28010-c697-43bc-b278-cc039b2279b0`, HTTP 403 `budget_exceeded`. The first budget-test output was empty; enforcement is the demonstrated result.                                                                   |
+| 3:35–4:00 | Show native web fetch receipt and close on the project.                           | “Otari's native fetch tool retrieved the Mozilla Manifesto page. The model's summary was incomplete, so the claim is the gateway fetch event, not a complete answer. The receipts let a reviewer inspect the evidence.” | Web request `8058116e-e1b4-4f24-90d7-3b766a4f41e1`, completed tool event, reported cost `$0.010888`. End by directing judges to the walkthrough and evidence matrix.                                                                                                                                                          |
 
-Before recording: hide `.env.local`, terminal history and dashboard credentials;
-confirm the production SHA in Vercel; verify the Otari spend ceiling and durable
-Upstash behavior; then run at most one tiny live benchmark. If those checks are
-incomplete, show the real UI and dated evidence with provenance clearly stated.
-Record the actual screen, not test fixtures or composited screenshots.
+## If something fails during recording
 
-# Optional personal feedback recording, 3–5 minutes
+- Do not retry a timed-out request automatically. The gateway may still have processed or billed it.
+- Say what is known: application status, gateway request ID (if any), model/provider metadata, and whether the cost is reported. Label missing data unknown.
+- Switch to the committed redacted receipt for that capability. Do not replace the failure with an intercepted test fixture or imply it was live.
+- If the Model Switch request fails, continue with the real completed Llama record and the honest Qwen timeout record; explain that the two do not form a paired comparison.
 
-1. Introduce what was actually built and the hosted account state (30 seconds).
-2. Show discovery and explain why availability differs from execution (45 seconds).
-3. Show the actual working Python response and missing inline cost (45 seconds).
-4. Show the reproducible insufficient-funds and absent-service responses
-   without secrets (45 seconds).
-5. Describe the signed receipts, deterministic scorer, and evidence UI built
-   locally, and where clearer Otari preflight/account setup would help (60 seconds).
-6. State whether you would continue using it, with the limitations from the
-   written feedback, not an invented success story (30 seconds).
+## Optional personal Otari feedback recording (3–5 minutes)
+
+1. Describe what the hosted gateway enabled: model discovery, two provider-backed model roles, policy resolution, code execution, managed MCP, native fetch and budget enforcement.
+2. Explain a concrete integration friction: the hosted web declaration rejected unsupported extra fields with a precise HTTP 400; a type-only declaration then completed a real fetch.
+3. Describe what the application had to supply: deterministic scoring, test fixtures, receipt/export handling, and public rate limits in addition to Otari's budgets.
+4. Offer practical improvements: align hosted validation and docs, clarify which workspace/admin controls are required, and provide consistent request/usage evidence across inference and tools.
+5. State accurately that a real fallback event, guardrail verdict and per-user budget are not demonstrated. Give a balanced view of whether you would keep using Otari based on the work you actually did.

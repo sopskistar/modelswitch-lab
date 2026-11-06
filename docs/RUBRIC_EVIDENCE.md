@@ -1,210 +1,32 @@
 # Rubric evidence
 
-Refreshed 2026-11-06. Target ceiling: 100. Current evidence supports **up to
-95/100 potential points**: 30 for meaningful open-weight models, 60 for six
-advanced capabilities, and 5 for the working use case. The six are policy
-routing, code execution, distinct model roles, hosted MCP, key-scoped
-request-count budget enforcement, and native Otari web fetch. Routing points
-remain conditional on judges accepting policy resolution without an observed
-failover. This is an evidence assessment, not an official judge score. The
-personal demo video has not been recorded, so its 5 points are not included.
+Updated 2026-11-06. This is a project evidence assessment, not an official judge score. Records are redacted and linked below.
 
-An actual fallback event would strengthen the existing routing category; it
-does not count as a second advanced feature. No category is double-counted in
-the 95-point potential assessment.
+**Potential coverage: up to 95/100 before the participant's demo.** The evidence covers 30 open-weight points, six distinct advanced capabilities (60 points), and a working project (5 points). The routing category is conditional: the named Otari policy was resolved successfully, but the recorded response says `fallback=false`. The participant's personal qualifying demo is not recorded and its 5 points are not included.
 
-| Rubric feature                | Possible points | Implementation location                            | Tested live?                 | Evidence                                                                                                                                         | Reproduction steps                                                                                           | Status                                  | Known limitations                                                  |
-| ----------------------------- | --------------- | -------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------- | ------------------------------------------------------------------ |
-| Meaningful open-weight model  | 20              | `src/lib/otari.ts`, `/api/execute` case action     | **Yes**                      | `verification.json`, evaluator request `2070b955-78a2-4a8a-a02d-d72df5e5f1f9`; real Qwen invoice output and exact scoring                        | Select Qwen, run versioned cases, inspect actual output                                                      | **Verified live**                       | Tiny synthetic samples, no general model rank                      |
-| Second open-weight role       | 10              | `/api/execute` analyst action, signed receipts     | **Yes**                      | `verification.json`, Llama analyst `bd24f101-ff53-452a-97a6-27016e8e8600`; primary license links in integration guide                            | Complete evaluator cases, inspect separate analyst request and serving identity                              | **Verified live**                       | Diagnostic text supports deterministic scores                      |
-| Model routing and fallbacks   | 10              | `/api/execute` routing action                      | **Yes: policy resolution**    | [`routing-production.json`](../evidence/routing-production.json), production Otari request `5f2cc001-a521-435e-8b51-df0f91452dc5`; policy → Qwen/DeepInfra, attempt=1, fallback=false | Open Otari Capabilities and inspect the receipt; **Check routing** sends one fixed synthetic task through the named policy | **Routing verified live; fallback unverified** | No failure was induced and no fallback occurred; `fallback=false` is preserved |
-| MCP integrations              | 10              | `/api/execute` fixed repository MCP action; streamed Otari Messages adapter | **Yes**                        | [`mcp-status.json`](../evidence/mcp-status.json), Otari request `d9283ac4-3aec-4ee3-8151-08937bb08554`; one `read_wiki_structure` use and successful result | Open Otari Capabilities and inspect the committed production proof; for a fresh demonstration, run **Inspect repository** once and inspect returned Otari request/activity | **Verified live** | Gateway result block omits use ID/name; this request exposed exactly one allowlisted tool, and the complete stream contained one successful result after its use; reported cost unavailable |
-| Web search or fetch           | 10              | `/api/execute` web action; fixed public source allowlist; type-only Otari declaration | **Yes: hosted request and tool result** | [`web-fetch-live.json`](../evidence/web-fetch-live.json): Qwen/DeepInfra request `8058116e-e1b4-4f24-90d7-3b766a4f41e1`, completed fetch event `otari_wf_66cfd3e1beb54026a97306892102ec57` for Mozilla Manifesto; settled cost `$0.010888` | Open Otari Capabilities and inspect the receipt; the live execution used the fixed URL, type-only `otari_web_fetch`, one non-parallel iteration | **Verified live** | Current hosted endpoint rejects `max_uses` and `allowed_domains` inside the declaration despite current docs; model's final summary ended mid-sentence; workspace domain list not readable with inference key |
-| Code execution                | 10              | `/api/execute` code action; typed verifier         | **Yes**                      | `verification.json`, `732c1ded-aba4-4210-8cd7-1251027e367c`; exit 0, correct=4, total=5, accuracy=.8                                             | `npm run otari:verify -- --capabilities-only` or Check sandbox                                               | **Verified live**                       | Fixed control vectors; cost unreported                             |
-| Budgets/spending limits       | 10              | Otari key spending ceilings; denial normalization | **Yes: hosted request and refusal** | [`budget-enforcement-test.json`](../evidence/budget-enforcement-test.json): Qwen request `7d25171f-beee-4533-acce-753ad1d78256` admitted at $0.000095; second request `35e28010-c697-43bc-b278-cc039b2279b0` returned 403 `budget_exceeded`, scope `api_token` | Operator sets one-request test-key budget; send one tiny request, then at most one follow-up; inspect response headers and usage records | **Verified live** | First request had empty answer content; production budget untouched; no arbitrary refusal or repeated exhaustion |
-| Multiple distinct model roles | 10              | Evaluator scoring then separate analyst action     | **Yes**                      | Typed verifier and `browser-smoke.json` record distinct role requests and real providers                                                         | Run benchmark, inspect analyst event and request IDs/models                                                  | **Verified live**                       | Comparison calls alone are not the distinct-role proof             |
-| Inference guardrails          | 10              | `/api/execute` guardrail fixture                   | No gateway verdict            | [`guardrail-profile-check.json`](../evidence/guardrail-profile-check.json): HTTP 200, `available=false`, no profiles; no inference sent          | Owner configures and scopes a real guardrail to a test workspace, then run one harmless adversarial and one control prompt | **Not verified** | Current profile check does not rule out an owner-configured workspace mandate; no org-wide change made |
-| Per-user budgets              | 10              | None                                               | No                           | None; no authorized service/admin key available; see exact hosted configuration blocker in `OTARI_PROOF.md`                                    | Owner provisions a dedicated scoped service key and two end-user budget IDs; run fixed synthetic identities  | Blocked pending hosted owner setup      | No local label or shared $1 key ceiling is counted                  |
-| Working real use case         | 5               | Five views, 15 fixtures, scorer and recommendation | **Yes**                      | `browser-smoke.json`, run `365aae24-b64e-43ec-ba02-3c5e9a7d8739`: 10 cases + analyst, no request failures                                        | Select five classification cases and both models; Run; inspect/export                                        | **Verified live**                       | Qwen 5/5, Llama 4/5 only on these cases                            |
-| Recorded Otari demonstration  | 5               | `docs/DEMO_SCRIPT.md`                              | Not recorded                 | Script only                                                                                                                                      | Participant personally records actual screen and narrates                                                    | Awaiting participant                    | No synthetic narration or fabricated recording                     |
+## Scored evidence
 
-Only six of eight advanced targets count, capped at 60. Six categories have
-live evidence: policy routing (without an observed failover), distinct model
-roles, code execution, MCP, key-scoped request-count budget enforcement, and
-native Otari web fetch. Guardrails have no configured service in the checked
-inference context; per-user budgets remain unconfigured. The exact tool-result
-receipt and schema failure/correction are linked above. Routing scoring remains
-conditional on judging interpretation. The participant's personal recording
-is still required for the final five project/demo points.
+| Rubric item                                                  | Points | Hosted/live evidence                                                                                                                                                                                                                      | Status and limitation                                                                                                                                                             |
+| ------------------------------------------------------------ | -----: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Meaningful open-weight model use                             |     20 | [`verification.json`](../evidence/verification.json): real Qwen evaluator invoice output and deterministic scoring.                                                                                                                       | Verified. Synthetic cases are small and do not establish general model quality.                                                                                                   |
+| Two open-weight models with distinct jobs                    |     10 | [`verification.json`](../evidence/verification.json): Qwen evaluator and separate Llama analyst request.                                                                                                                                  | Verified. The analyst interprets verified metrics; it is not a second evaluator unless explicitly selected for equivalent cases.                                                  |
+| Model routing and fallbacks                                  |     10 | [`routing-production.json`](../evidence/routing-production.json), request `5f2cc001-a521-435e-8b51-df0f91452dc5`: policy `modelswitch-fallback` resolved to Qwen/DeepInfra, one attempt, `fallback=false`.                                | Routing execution verified. Actual failover unverified; point acceptance is conditional.                                                                                          |
+| MCP integration                                              |     10 | [`mcp-status.json`](../evidence/mcp-status.json), request `d9283ac4-3aec-4ee3-8151-08937bb08554`: DeepWiki `read_wiki_structure` tool use and successful result.                                                                          | Verified hosted tool execution. Cost was not reported.                                                                                                                            |
+| Web search or fetch                                          |     10 | [`web-fetch-live.json`](../evidence/web-fetch-live.json), request `8058116e-e1b4-4f24-90d7-3b766a4f41e1`: Otari completed a fetch event for Mozilla's Manifesto; settled cost `$0.010888`.                                                | Verified native Otari fetch. The model summary ended incomplete; only the retrieval event is claimed.                                                                             |
+| Code execution                                               |     10 | [`verification.json`](../evidence/verification.json), request `732c1ded-aba4-4210-8cd7-1251027e367c`: Otari sandbox returned correct 4/5, accuracy 0.8, exit code 0.                                                                      | Verified. Cost was not reported.                                                                                                                                                  |
+| Budgets and spending limits                                  |     10 | [`budget-enforcement-test.json`](../evidence/budget-enforcement-test.json): separate test key first admitted (HTTP 200, `$0.000095`), then HTTP 403 `budget_exceeded`, scope `api_token`, request `35e28010-c697-43bc-b278-cc039b2279b0`. | Verified gateway request-count enforcement, not Redis/application throttling. The first response body was empty; production key/budget was not used in the experiment.            |
+| Multiple models serving distinct roles (advanced capability) |     10 | Same distinct evaluator/analyst receipt above.                                                                                                                                                                                            | Counted as one of six advanced categories, separately from the open-weight criteria; the advanced award remains capped at six features.                                           |
+| Inference guardrails                                         |     10 | [`guardrail-profile-check.json`](../evidence/guardrail-profile-check.json).                                                                                                                                                               | Not verified; no configured hosted service/profile or real gateway decision.                                                                                                      |
+| Per-user budgets                                             |     10 | No qualifying receipt.                                                                                                                                                                                                                    | Not verified; no actual end-user-scoped gateway enforcement demonstrated.                                                                                                         |
+| Working real use case                                        |      5 | Application source, synthetic benchmarks, scoring and current production site; see [`production-deployment-check.json`](../evidence/production-deployment-check.json).                                                                    | Verified product functionality. Current public web evidence endpoint also serves the native fetch receipt (HTTP 200, checked 2026-11-06). Exact deployed Git SHA remains unknown. |
+| Participant-recorded demo                                    |      5 | [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md).                                                                                                                                                                                                       | Awaiting the participant's real screen recording and personal narration.                                                                                                          |
 
-### 2026-11-06 fallback and guardrail readiness refresh
+The six advanced categories represented in the potential 60 are routing, MCP, web fetch, code execution, budget enforcement, and distinct model roles. The official rubric lists the two-open-weight criterion and the advanced multiple-model-role capability separately; the same genuine evaluator/analyst implementation supplies evidence for both. No seventh advanced category is claimed and no official score is claimed.
 
-The dedicated fallback key is now present locally and authenticated `GET
-/models` returned HTTP 200 with the `modelswitch-fallback-proof` policy alias
-and both model IDs. `GET /routing/policies` returned 401 `Invalid master key`,
-so the inference key cannot confirm the policy's target configuration. The
-operator reports the intentionally invalid provider key enabled only in the
-test workspace, but its **Always use this key** preference and backup funding
-remain unverified. No inference request was sent. See
-[`fallback-test-readiness.json`](../evidence/fallback-test-readiness.json).
+## Reproduction
 
-The fallback workspace's `GET /tools` returned HTTP 200 with web fetch and
-search `workspace_disabled`; code execution was available. Guardrail profile
-discovery returned HTTP 200, `available=false`, no profiles. A separate
-read-only guardrail catalog lists supported integrations, but it proves no
-credentials, configured service, mandate, or verdict. Otari documents
-workspace-scoped organization mandates (`workspace_ids`), which require owner
-or admin authority. No mandate or inference was attempted. See
-[`guardrail-profile-check.json`](../evidence/guardrail-profile-check.json).
+For a zero-cost review, open the live app and inspect **Otari capabilities**, then open the linked JSON receipts in the repository. For live tests, use the bounded instructions in [`JUDGE_WALKTHROUGH.md`](JUDGE_WALKTHROUGH.md), with operator-confirmed gateway spending protections. Never repeat the one-request budget test or retry an ambiguous timeout.
 
-Live comparison under the balance objective:
+## Production evidence availability
 
-| Model         | Accuracy/pass rate | Schema validity | Mean measured request latency | Reported evaluator total | Composite score |
-| ------------- | ------------------ | --------------- | ----------------------------- | ------------------------ | --------------- |
-| Qwen3.8 27B   | 100% (5/5)         | 100%            | 2660 ms                       | $0.000936                | 85.0006         |
-| Llama 3.3 70B | 80% (4/5)          | 100%            | 839.4 ms                      | $0.000493                | 89.0000         |
-
-The faster/cheaper Llama wins this explicit objective despite one wrong answer.
-The separate Llama analyst cost $0.000312, so the total run reports $0.001741.
-These values describe one real recorded run and may differ on repetition. The
-analyst fee is separate from evaluator comparison cost.
-
-Reusable records: `discovery.json`, `smoke.json` (historical initial credit
-refusals), `verification.json`, unmocked `browser-smoke.json`,
-`routing-production.json`, and `mcp-status.json`, under `evidence/`. They retain
-timestamps, roles, actual IDs, outcomes, gateway headers, measured latency,
-reported usage, output and scoring. Secrets, personal data, management bodies
-and signed browser receipts are omitted. Test-only intercepted HTTP responses
-never count as live evidence.
-
-The final polish pass also recorded a separate one-case unmocked smoke at
-`2026-11-04T23:41:17.457Z` in `evidence/polish-live-smoke.json`. It completed
-one Qwen evaluator and a separate Llama analyst for $0.000384 reported total.
-This confirms the current routes still execute through Otari; it is not a new
-rubric point or a comparative benchmark.
-
-The latest read-only production catalog reports web fetch/search available,
-but two bounded requests returned HTTP 400 without a completed tool event;
-they do not qualify for points. The latest hosted error lacks a raw diagnostic,
-so the cause is unknown. No hosted guardrail service was configured in the
-latest profile discovery. Request IDs and the 2026-11-05 live checks are in
-[OTARI_PROOF.md](OTARI_PROOF.md).
-
-Historical 2026-11-05 note (superseded by the live test below): Otari's current budget documentation and generated OpenAPI support both
-`max_budget` (USD) and `request_limit` (requests per budget period). Read-only
-checks with the dedicated test inference key confirmed access to the Qwen model
-catalog but returned HTTP 401 `Invalid master key` for organization context,
-organization budgets, and owned keys. The specific test-key ceiling attachment
-could not be inspected, and no budget mutation or inference request was made
-at that time.
-See the attempt record in [`OTARI_PROOF.md`](OTARI_PROOF.md).
-
-The latest public catalog observation on the selected hyphenated domain reports
-`configured: true` and `demoEnabled: true`; this does not prove rate-limit
-behavior. The participant reports a production invoice run (Qwen 3/3, 5.66 s,
-$0.001710; separate Llama analyst $0.000237; total $0.001947). No request IDs,
-trace or receipt were available to corroborate it here, so the report does not
-change capability verification or rubric coverage. The older
-[`production-acceptance.json`](../evidence/production-acceptance.json) is a
-historical capture of the other state/domain; consult the newer
-[`production-observation.json`](../evidence/production-observation.json).
-
-### Model Switch implementation — 2026-11-05
-
-The new `/app?view=model-switch` workflow stores the active choice in this
-browser and sends no request when the user changes it. On an explicit fixed-case
-test, the existing server route validates the selected ID against the current
-Otari catalog and configured evaluator/analyst allowlist, then sends that model
-ID through hosted Otari. Unit, route, and Playwright contract tests cover both
-Qwen↔Llama directions, absence of requests on selection, recommendation
-selection, unsupported IDs, and preservation of the analyst role. Browser tests
-intercept API calls; they validate the client payload but are not live gateway
-proof.
-
-One production API smoke record provides live identity evidence for Llama:
-requested `meta/llama-3.3-70b-instruct`, effective
-`meta.llama3-3-70b-instruct-v1:0`, provider `bedrock`, request
-`77cf5458-46f6-40c9-98ab-80468ba890ec`, valid six-field output, 929 ms, and
-reported cost $0.000170. A sequential Qwen request timed out at the application
-boundary without an Otari request ID; no retry was made. This supports actual
-Llama inference and model-ID-specific server routing, but it is not a
-successful two-model production comparison or a live browser interaction. See
-[`model-switch-production.json`](../evidence/model-switch-production.json).
-It adds no separate Otari rubric points beyond the existing distinct model-role
-category.
-
-### Hosted capability refresh — 2026-11-05
-
-The selected production host returned HTTP 200 for both
-`/api/evidence?file=routing-production.json` and
-`/api/evidence?file=mcp-status.json`. The latter served the `verified_live`
-record with successful `read_wiki_structure` execution and Otari request
-`d9283ac4-3aec-4ee3-8151-08937bb08554`. This supersedes earlier 404/old-record
-observations in the history below; the exact Vercel source commit remains
-unknown. A fresh catalog check supersedes the earlier `workspace_disabled`
-discovery: fetch and search now report available, but the one fetch attempt
-returned HTTP 400 with no tool event and was not retried. No authorized
-service/admin credential is present for
-creating per-user budgets; no budget mutation or inference test was attempted.
-The previously recorded hosted guardrail discovery found no configured
-guardrail service, so no further guardrail probe was made. No safe fallback
-test was available without changing policy configuration; the existing policy
-receipt correctly records one attempt and `fallback=false`.
-
-### 2026-11-05 final read-only validation
-
-This is a dated snapshot; its 75-point total predates the verified
-2026-11-06 request-count budget experiment recorded above.
-
-Production now reports the evaluator/analyst models and web tools available,
-and Qwen catalog metadata includes tool support. This confirms availability,
-not web execution. Two historical Otari fetch requests returned HTTP 400 with
-no completed tool call; no new fetch was sent because current spending limits
-and balance could not be verified. The supported tenant usage query returned
-401 for both local inference keys. The operator's planned $5 key cap is not
-treated as configured. Guardrail profile discovery now explicitly reports no
-service configured. No routing change was made, and `fallback=false` remains
-the only live routing outcome. At that time, verified rubric coverage was
-**75/100 potential**, conditional on the existing policy-routing category
-being accepted without observed failover; the participant's demo video remains
-unrecorded. The detailed redacted snapshot is
-[`final-live-validation.json`](../evidence/final-live-validation.json).
-
-The Otari adapter now writes a bounded `[otari_request_failed]` server log for
-future gateway HTTP failures. It includes the safe error headers, request ID,
-and clipped diagnostic detail after redacting credentials and URLs. This makes
-a single future web-fetch diagnosis inspectable; it is not evidence that a
-web-tool call succeeded and does not change the current score.
-
-## MCP tool execution (verified live)
-
-One bounded production request used the fixed inline DeepWiki server and
-allowlisted `read_wiki_structure` for `mozilla-ai/otari`. Otari returned
-request `d9283ac4-3aec-4ee3-8151-08937bb08554`, served by effective model
-`Qwen/Qwen3.8-27B` through `deepinfra`, with one attempt and no fallback. The
-stream contained one gateway-owned `mcp_tool_use` and one successful
-`mcp_tool_result`; its result was a repository wiki structure that included
-section 5.1, MCP integration. Cost was not reported. See the redacted
-[`mcp-status.json`](../evidence/mcp-status.json).
-
-Otari's [Messages-stream MCP documentation](https://github.com/mozilla-ai/otari/blob/main/docs/mcp.md#messages-streaming-activity)
-says the call id appears on `mcp_tool_use`; the corresponding result block
-contains content and `is_error`, but does not repeat the id or tool name. The
-initial app verifier incorrectly expected those undocumented fields, so that
-production response was returned with `verified: false`. The corrected verifier
-requires a complete stream, request ID, exactly one allowed use, and exactly
-one successful result following it. It now matches the actual documented
-gateway event shape. This project record is not signed or externally attested.
-
-## Model Switch timeout reliability note — 2026-11-05
-
-The later one-case production attempt did not complete for Qwen: the
-application returned an HTTP 200 envelope containing a local-deadline error,
-without an Otari request ID or usage. The paired Llama case completed (6/6,
-Bedrock, 929 ms, reported $0.000170), but these results do not form a
-successful paired comparison. The app now separates its local wait deadline
-from an Otari HTTP 504 and browser/network interruption. This diagnostic fix
-adds no rubric points and does not resolve the unknown upstream Qwen or
-billing outcome. See
-[`qwen-timeout-diagnosis.json`](../evidence/qwen-timeout-diagnosis.json) and
-[`OTARI_PROOF.md`](OTARI_PROOF.md).
+On 2026-11-06, `GET https://modelswitch-lab.vercel.app/api/evidence?file=web-fetch-live.json` returned HTTP 200 and receipt ID `8058116e-e1b4-4f24-90d7-3b766a4f41e1`. This establishes that the receipt is available from the selected production host, not which Git revision Vercel deployed. See the [redacted deployment check](../evidence/production-deployment-check.json) for the still-unavailable deployment SHA and operator action.
