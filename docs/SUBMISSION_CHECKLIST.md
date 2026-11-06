@@ -68,9 +68,9 @@ Redacted check: [`final-live-validation.json`](../evidence/final-live-validation
 
 - [x] Request-count budget enforcement verified: admitted test-key request followed by gateway HTTP 403 `budget_exceeded`; production budget was not used or changed.
 - [x] Capability matrix and capability page now derive budget status from that redacted receipt; current advanced verified count is five (50/60 potential advanced points).
-- [x] Fallback readiness reviewed against Otari docs. No test inference was sent because this checkout has no API key bound to `ModelSwitch Fallback Test`, and **Always use this key** is not confirmed. See [`fallback-test-readiness.json`](../evidence/fallback-test-readiness.json).
-- [x] Guardrail profiles queried read-only: HTTP 200, `available=false`, no profiles. No guardrail claim is made; see [`guardrail-profile-check.json`](../evidence/guardrail-profile-check.json).
+- [x] Fallback key now authenticates: `/models` HTTP 200 exposes the test policy alias and Qwen/Llama IDs. Provider pin, exact policy body and backup funding remain unverified, so no fallback request was sent; see [`fallback-test-readiness.json`](../evidence/fallback-test-readiness.json).
+- [x] Test-workspace `/tools` reports web fetch/search `workspace_disabled`; guardrail profile discovery has no configured service, while the read-only catalog lists supported integrations. No mandate or inference was attempted; see [`guardrail-profile-check.json`](../evidence/guardrail-profile-check.json).
 - [ ] Sixth advanced feature: actual fallback, an Otari guardrail verdict, web tool result, or per-user budget enforcement.
-- [x] Release commit `4fefced70f1e57f2f8a0faaf9dc23da63cd23b1c` is pushed to both `main` and `hackathon/mozfest-otari-2026`; remote refs were verified equal.
+- [x] The prior evidence-refresh commit is synchronized to both branches; this final capability-verification update is pending release.
 - [ ] Verify the deployed source SHA in the existing `modelswitch-lab` Vercel project. Public endpoints do not reveal the SHA; no Vercel CLI/project access is present here.
 - [ ] Participant personally records and narrates the four-minute demo. No video is claimed.

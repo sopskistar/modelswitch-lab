@@ -64,5 +64,19 @@
     ],
     "neededFromOtari": "Inspect either request ID in hosted request activity and provide the raw sanitized 400 detail or gateway error code plus the rejected field/tool configuration. Do not retry until the rejection is understood.",
     "rubricStatus": "Web search/fetch execution is unverified; no tool event or web-fetch rubric points are claimed."
+  },
+  "latestReadOnlyRecheck": {
+    "checkedAt": "2026-11-06T10:22:00Z",
+    "credentialScope": "OTARI_FALLBACK_TEST_KEY; secret not recorded",
+    "toolsEndpointHttpStatus": 200,
+    "testWorkspace": "ModelSwitch Fallback Test",
+    "testWorkspaceWebFetch": { "available": false, "reason": "workspace_disabled" },
+    "testWorkspaceWebSearch": { "available": false, "reason": "workspace_disabled" },
+    "defaultWorkspace": "Earlier selected-production catalog reported both web tools available; no new request was made.",
+    "schemaReview": "Current Otari tools documentation supports the application's otari_web_fetch declaration with max_uses and allowed_domains. The model is listed with tool support.",
+    "rawFailureDiagnosticsAvailable": false,
+    "cause": "Unknown. The 400 responses have no stored raw Otari detail, error code, provider, or tool event. The inference key cannot inspect protected gateway logs, and this environment has no Vercel log access.",
+    "newInferenceRequestsSent": 0,
+    "rubricStatus": "Unverified; no retry made because no specific root cause or corrective change was established."
   }
 }

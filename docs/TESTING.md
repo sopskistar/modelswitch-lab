@@ -274,6 +274,16 @@ fallback workspace and the explicit provider-key preference was not confirmed;
 see [`fallback-test-readiness.json`](../evidence/fallback-test-readiness.json).
 No paid production request was made.
 
+The dedicated fallback key is present locally and was used only for read-only
+checks: `/models` returned HTTP 200 and listed Qwen, Llama, and
+`modelswitch-fallback-proof`; `/routing/policies` returned HTTP 401 because the
+inference key is not a master key; `/tools` returned HTTP 200 with web search
+and fetch disabled for that test workspace. No fallback request was sent
+because **Always use this key** and backup funding could not be verified. The
+read-only guardrail catalog lists integrations, but profiles return
+`available=false`; no owner mandate was available or changed. The default
+workspace's earlier web availability remains distinct from the test workspace.
+
 Production static route checks during this pass showed existing routing and
 MCP evidence routes available but the newly added budget receipt route returned
 HTTP 404. The deployed site is therefore behind this source revision at least

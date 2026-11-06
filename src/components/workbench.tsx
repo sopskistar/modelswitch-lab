@@ -1754,6 +1754,16 @@ function CapabilityRow({ cap }: { cap: Capability }) {
         <a href={href} target={href.startsWith('#') ? undefined : '_blank'} rel="noreferrer">
           Inspect JSON
         </a>
+        {cap.relatedFiles?.map((evidence) => (
+          <a
+            key={evidence.file}
+            href={`/api/evidence?file=${evidence.file}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {evidence.label}
+          </a>
+        ))}
       </td>
     </tr>
   );

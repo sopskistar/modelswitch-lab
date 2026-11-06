@@ -10,6 +10,10 @@ assessment, not an official judge score. The latest production invoice run is
 participant-reported. A genuine fallback and a sixth advanced capability are
 not verified; the personal demo video has not been recorded.
 
+An actual fallback event would strengthen the existing routing category; it
+does not count as a second advanced feature. No category is double-counted in
+the 85-point potential assessment.
+
 | Rubric feature                | Possible points | Implementation location                            | Tested live?                 | Evidence                                                                                                                                         | Reproduction steps                                                                                           | Status                                  | Known limitations                                                  |
 | ----------------------------- | --------------- | -------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------- | ------------------------------------------------------------------ |
 | Meaningful open-weight model  | 20              | `src/lib/otari.ts`, `/api/execute` case action     | **Yes**                      | `verification.json`, evaluator request `2070b955-78a2-4a8a-a02d-d72df5e5f1f9`; real Qwen invoice output and exact scoring                        | Select Qwen, run versioned cases, inspect actual output                                                      | **Verified live**                       | Tiny synthetic samples, no general model rank                      |
@@ -37,20 +41,22 @@ five project/demo points.
 
 ### 2026-11-06 fallback and guardrail readiness refresh
 
-The operator reports that the deliberately invalid DeepInfra credential is
-enabled in the isolated `ModelSwitch Fallback Test` workspace, with Bedrock
-available there; it remains disabled in Default. Otari documentation says
-provider-key selection has a separate **Always use this key** preference,
-that API keys are bound to one workspace, and routing policies are
-workspace-scoped. The local environment contains no key for the test workspace
-and cannot prove the provider preference. No fallback request was sent. The
-production `modelswitch-fallback` policy and Default workspace were not
-changed. Readiness record: [`fallback-test-readiness.json`](../evidence/fallback-test-readiness.json).
+The dedicated fallback key is now present locally and authenticated `GET
+/models` returned HTTP 200 with the `modelswitch-fallback-proof` policy alias
+and both model IDs. `GET /routing/policies` returned 401 `Invalid master key`,
+so the inference key cannot confirm the policy's target configuration. The
+operator reports the intentionally invalid provider key enabled only in the
+test workspace, but its **Always use this key** preference and backup funding
+remain unverified. No inference request was sent. See
+[`fallback-test-readiness.json`](../evidence/fallback-test-readiness.json).
 
-A read-only guardrail profile query returned HTTP 200 but `available=false`
-with no profiles for the current inference context. No mandate was changed and
-no guardrail request was sent. The current evidence does not establish whether
-the owner dashboard can scope a mandate to the test workspace. See
+The fallback workspace's `GET /tools` returned HTTP 200 with web fetch and
+search `workspace_disabled`; code execution was available. Guardrail profile
+discovery returned HTTP 200, `available=false`, no profiles. A separate
+read-only guardrail catalog lists supported integrations, but it proves no
+credentials, configured service, mandate, or verdict. Otari documents
+workspace-scoped organization mandates (`workspace_ids`), which require owner
+or admin authority. No mandate or inference was attempted. See
 [`guardrail-profile-check.json`](../evidence/guardrail-profile-check.json).
 
 Live comparison under the balance objective:

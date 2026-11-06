@@ -232,32 +232,54 @@ Redacted record: [`budget-enforcement-test.json`](../evidence/budget-enforcement
 
 ## Fallback and guardrail readiness — 2026-11-06
 
-No fallback request was sent. Operator observations show the intentionally
-invalid DeepInfra credential `fallback-test` enabled in the isolated `ModelSwitch
-Fallback Test` workspace and disabled in Default. That does not establish that
-the workspace preference is **Always use this key**. The local environment
-does not contain an inference key bound to the test workspace. Otari's access
-control docs state an API key binds to one workspace and the caller cannot
-switch workspaces by request header. Routing policies are also workspace
-scoped. See [fallback-test-readiness.json](../evidence/fallback-test-readiness.json).
+No fallback request was sent. The local `OTARI_FALLBACK_TEST_KEY` variable is
+present (secret not recorded). Authenticated `GET /api/v1/models` returned
+HTTP 200 and included `modelswitch-fallback-proof`, Qwen3.8, and Llama 3.3, so
+the key can address the alias and both model IDs. Otari's catalog response did
+not include a workspace ID or policy body. `GET /api/v1/routing/policies`
+returned HTTP 401 `Invalid master key`, as expected for an inference key; it
+cannot confirm the policy targets. The operator reports the intentionally
+invalid DeepInfra `fallback-test` credential enabled in this test workspace
+and disabled in Default. Its explicit **Always use this key** preference is
+not verified, and backup funding is not verified. Readiness receipt:
+[fallback-test-readiness.json](../evidence/fallback-test-readiness.json).
 
-To make exactly one safe test possible, the operator must create a restricted
-API key from inside `ModelSwitch Fallback Test`, set its local secret as
-`OTARI_FALLBACK_TEST_KEY`, explicitly pin `fallback-test` using **Always use
-this key**, and create/confirm an isolated policy there with Qwen/DeepInfra as
-primary and the eligible Llama/Bedrock route as backup. Confirm the backup is
-funded and eligible. Then a single tiny request can be made. Restore the test
-workspace preference to **Follow the organization** afterwards. Do not enable
-the invalid credential in Default or change the production policy.
+The exact remaining operator check is in the `ModelSwitch Fallback Test`
+workspace's provider selection: explicitly choose DeepInfra credential
+`fallback-test` as **Always use this key**, not simply enabled. Confirm the
+test policy uses Qwen/DeepInfra primary and Llama/Bedrock backup, and confirm
+available backup spend. Then one tiny call can be sent through that policy.
+Afterward restore that workspace to **Follow the organization**. Do not enable
+the invalid credential in Default or alter production routing. Otari documents
+that provider-key preference is distinct from enabled provider access and that
+a routing policy moves to its next candidate when the first credential is
+rejected. [Dashboard docs](https://github.com/mozilla-ai/otari/blob/main/docs/dashboard.md),
+[routing docs](https://github.com/mozilla-ai/otari/blob/main/docs/routing.md).
 
-The read-only `GET /api/v1/tool-settings/guardrails/profiles` returned HTTP 200
-with `available=false`, no profiles, and the explanation that no guardrails
-service is configured for the checked inference context. No inference or
-organization mandate was changed. An owner may check Organization → Guardrails
-→ Configure guardrail and scope a real mandate only to the test workspace; do
-not enable an organization-wide mandate for this experiment. Record both a
-harmless adversarial fixture and a legitimate control only after the gateway
-returns real decisions. Receipt: [guardrail-profile-check.json](../evidence/guardrail-profile-check.json).
+Using the fallback key, `GET /api/v1/tools` returned HTTP 200 with web fetch
+and search `workspace_disabled`; code execution was available. The profile
+endpoint returned HTTP 200, `available=false`, with no configured guardrail
+service. The read-only guardrail catalog listed integrations including Azure
+Prompt Shields, Bedrock Guardrails, OpenAI Moderation, Lakera, and others. This
+catalog is not evidence those services or credentials are configured. The
+organization guardrail mandate API requires a master key and owner/admin, and
+supports a `workspace_ids` scope. No mandate or inference was attempted.
+Receipt: [guardrail-profile-check.json](../evidence/guardrail-profile-check.json).
+
+### Per-user budget alternative — not configured
+
+Otari's current configuration documentation describes an owner-configured
+service API key with `is_service_key: true`, an `end_user_budget_ids`
+allowlist, and an optional default `end_user_budget_id`; a key can also cap
+the number of end users. Each user budget is an Otari budget, not an app-side
+identity or Redis counter. This checkout has no separate service key or
+authorized owner-management credential, and the existing fallback inference
+key is not established as a service key. No end-user budget was created and
+no inference request was sent. The minimum operator setup is a dedicated
+service key restricted to a synthetic test identity/budget, followed by one
+admitted request and (only if safe and configured) one expected gateway
+refusal. See [Otari configuration](https://github.com/mozilla-ai/otari/blob/main/docs/configuration.md)
+and [budget documentation](https://github.com/mozilla-ai/otari/blob/main/docs/budgets.md).
 
 ## Historical tool availability
 

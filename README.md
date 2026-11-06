@@ -8,6 +8,8 @@
 
 **Production check (Nov 5, 2026):** The landing and Model Switch pages now load on the official site. A live browser check verified catalog discovery, manual model selection without inference, desktop/mobile layout, and zero axe violations. The exact Vercel source SHA remains unavailable; see the [redacted production check](evidence/production-deployment-check.json).
 
+**Deployment note (Nov 6, 2026):** Production `/api/catalog` is live with inference enabled, but the latest source's budget-evidence endpoint still returns 404. The Vercel source SHA is not exposed here; verify or redeploy the synchronized `main` commit in the existing `modelswitch-lab` Vercel project before relying on the updated capability evidence screen.
+
 ![ModelSwitch Lab landing page](docs/screenshots/production-landing-desktop.png)
 
 [Model Switch desktop](docs/screenshots/production-model-switch-desktop.png) · [Model Switch mobile](docs/screenshots/production-model-switch-mobile.png)

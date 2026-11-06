@@ -73,6 +73,7 @@ export interface Capability {
   status: CapabilityStatus;
   detail: string;
   file: string;
+  relatedFiles?: { label: string; file: string }[];
 }
 export function capabilities(
   tools: Tool[] = [],
@@ -104,11 +105,12 @@ export function capabilities(
       points: 10,
       status: routingVerified ? 'Verified live' : 'Implemented, unverified',
       detail: routingVerified
-        ? `Otari routed ${routingProof.gateway.requestedPolicy} to ${routingProof.gateway.effectiveModel} through ${routingProof.gateway.provider}; attempt ${routingProof.gateway.attempts}, fallback ${routingProof.gateway.fallback}. The test-workspace fallback attempt is not ready: its own API key and explicit provider pin are not verified.`
+        ? `Otari routed ${routingProof.gateway.requestedPolicy} to ${routingProof.gateway.effectiveModel} through ${routingProof.gateway.provider}; attempt ${routingProof.gateway.attempts}, fallback ${routingProof.gateway.fallback}. The isolated test key now authenticates and can address modelswitch-fallback-proof, but the provider pin and backup funding are not verified, so no fallback request was sent.`
         : fallbackVerified
           ? 'Actual gateway fallback recorded in serving headers.'
           : 'The routing policy has not been verified with a live request and effective model/provider metadata.',
       file: routingVerified ? 'routing-production.json' : 'verification.json',
+      relatedFiles: [{ label: 'Fallback readiness', file: 'fallback-test-readiness.json' }],
     },
     {
       id: 'mcp',
@@ -177,7 +179,7 @@ export function capabilities(
       points: 10,
       status: 'Implemented, unverified',
       detail:
-        'The latest read-only profile check returned available=false because no guardrails service is configured for this inference context. An organization owner may still configure a workspace-scoped mandate; no verdict was tested.',
+        'The Otari build lists guardrail integrations, but profile discovery returned available=false and no profiles. An organization owner must configure a real guardrail and scope its mandate to the test workspace; no verdict was tested.',
       file: 'guardrail-profile-check.json',
     },
     {

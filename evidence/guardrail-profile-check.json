@@ -1,14 +1,50 @@
 {
-  "recordVersion": 1,
-  "checkedAt": "2026-11-06T09:12:22Z",
-  "endpoint": "GET /api/v1/tool-settings/guardrails/profiles",
-  "credentialScope": "existing server-side OTARI_API_KEY; secret not recorded",
-  "httpStatus": 200,
-  "available": false,
-  "reason": "No guardrails service is configured, so its profiles cannot be listed.",
-  "profiles": [],
+  "recordVersion": 2,
+  "checkedAt": "2026-11-06T10:22:00Z",
+  "checks": [
+    {
+      "credentialScope": "existing server-side OTARI_API_KEY; secret not recorded",
+      "endpoint": "GET /api/v1/tool-settings/guardrails/profiles",
+      "httpStatus": 200,
+      "available": false,
+      "reason": "No guardrails service is configured, so its profiles cannot be listed.",
+      "profiles": []
+    },
+    {
+      "credentialScope": "dedicated OTARI_FALLBACK_TEST_KEY; secret not recorded",
+      "workspace": "ModelSwitch Fallback Test (operator-supplied identity; response has no workspace ID)",
+      "endpoint": "GET /api/v1/tool-settings/guardrails/profiles",
+      "httpStatus": 200,
+      "available": false,
+      "reason": "No guardrails service is configured, so its profiles cannot be listed.",
+      "profiles": []
+    },
+    {
+      "credentialScope": "dedicated OTARI_FALLBACK_TEST_KEY; secret not recorded",
+      "endpoint": "GET /api/v1/tool-settings/guardrails/catalog",
+      "httpStatus": 200,
+      "catalogEntries": [
+        "alinia",
+        "any_llm",
+        "azure_content_safety",
+        "azure_prompt_shields",
+        "bedrock_guardrails",
+        "lakera_guard",
+        "openai_moderation",
+        "patronus",
+        "watsonx_guardian"
+      ],
+      "meaning": "The Otari build lists guardrail integrations it can construct; this catalog does not prove vendor credentials, a configured profile, an organization mandate, or a live verdict."
+    }
+  ],
+  "organizationMandates": {
+    "read": false,
+    "reason": "The authorized owner/admin management credential is not available in this environment.",
+    "workspaceScopingSupportedByDocs": true,
+    "workspaceScopeField": "workspace_ids",
+    "organizationWideMandateChanged": false
+  },
   "inferenceRequestsSent": 0,
-  "organizationMandateChanged": false,
-  "status": "no_active_profile_for_current_inference_workspace",
-  "limitation": "This read-only deployment profile response does not determine whether an organization owner can mandate a workspace-scoped organization guardrail. No request-level guardrail test was attempted without an active profile."
+  "status": "catalog_available_but_no_configured_guardrail_service_or_profile",
+  "limitation": "An owner/admin must configure an available real guardrail definition or service and mandate it only to the test workspace. No guardrail verdict is claimed."
 }

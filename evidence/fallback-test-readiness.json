@@ -1,42 +1,71 @@
 {
-  "recordVersion": 1,
-  "checkedAt": "2026-11-06T09:12:22Z",
+  "recordVersion": 2,
+  "checkedAt": "2026-11-06T10:22:00Z",
   "status": "not_ready_for_live_test",
   "operatorReported": {
     "workspace": "ModelSwitch Fallback Test",
-    "provider": "DeepInfra",
-    "credentialName": "fallback-test",
+    "policy": "modelswitch-fallback-proof",
+    "primary": "alibaba/qwen3.8-27b / DeepInfra",
+    "backup": "meta/llama-3.3-70b-instruct / Amazon Bedrock",
+    "providerCredential": "fallback-test",
     "credentialContainsDeliberatelyInvalidValue": true,
     "credentialEnabledInTestWorkspace": true,
-    "bedrockEnabledInTestWorkspace": true,
-    "hostedDeepInfraEnabledInTestWorkspace": true,
-    "invalidCredentialDisabledInDefaultWorkspace": true
+    "credentialDisabledInDefaultWorkspace": true
   },
-  "verifiedFromOfficialDocumentation": {
-    "apiKeyBindsToSingleWorkspace": true,
-    "callerCanSelectWorkspaceWithHeader": false,
-    "workspaceProviderPreferenceIsSeparateFromCredentialEnabledState": true,
-    "routingPolicyIsWorkspaceScoped": true
+  "localCredentialCheck": {
+    "environmentVariable": "OTARI_FALLBACK_TEST_KEY",
+    "present": true,
+    "secretRecorded": false,
+    "baseRegion": "US"
   },
-  "localEnvironment": {
-    "fallbackTestWorkspaceApiKeyPresent": false,
-    "existingBudgetTestKeyPresent": true,
-    "existingBudgetTestKeyWorkspaceVerified": false,
-    "existingBudgetTestKeyRequestLimitAlreadyReached": true,
-    "productionKeyUsedForTest": false
+  "authenticatedReadOnlyChecks": {
+    "modelCatalog": {
+      "endpoint": "GET /api/v1/models",
+      "httpStatus": 200,
+      "requestId": null,
+      "accessibleModelIds": [
+        "alibaba/qwen3.8-27b",
+        "meta/llama-3.3-70b-instruct",
+        "modelswitch-fallback-proof"
+      ],
+      "meaning": "The supplied key is valid and can address the configured policy alias and both model IDs. Otari's catalog response does not expose a workspace ID or policy target configuration."
+    },
+    "policyManagement": {
+      "endpoint": "GET /api/v1/routing/policies",
+      "httpStatus": 401,
+      "error": "Invalid master key",
+      "requestId": null,
+      "meaning": "The inference key cannot inspect policy configuration."
+    },
+    "tools": {
+      "endpoint": "GET /api/v1/tools",
+      "httpStatus": 200,
+      "otari_web_fetch": { "available": false, "reason": "workspace_disabled" },
+      "otari_web_search": { "available": false, "reason": "workspace_disabled" },
+      "otari_code_execution": { "available": true }
+    },
+    "providerPreference": {
+      "verified": false,
+      "requiredSetting": "Always use this key",
+      "credentialEnabledAloneIsInsufficient": true
+    },
+    "backup": {
+      "modelListedInCatalog": true,
+      "providerKeyEnabledPerOperatorReport": true,
+      "fundingVerified": false
+    }
   },
-  "requiredBeforeOneRequest": [
-    "Create a restricted inference API key from inside ModelSwitch Fallback Test; the key is bound to that workspace.",
-    "Confirm the workspace's DeepInfra provider preference explicitly says Always use this key for fallback-test, not merely that the key is enabled.",
-    "Create or confirm a fallback policy in ModelSwitch Fallback Test with Qwen/DeepInfra as primary and the eligible Llama/Bedrock route as backup.",
-    "Confirm the test key is permitted to invoke that policy and that the Bedrock backup is enabled and has available account budget."
-  ],
   "inferenceRequestsSent": 0,
   "productionPolicyModified": false,
   "defaultWorkspaceModified": false,
+  "requiredBeforeOneRequest": [
+    "In ModelSwitch Fallback Test, explicitly select the invalid DeepInfra fallback-test credential as Always use this key; verify the selected preference, not just the enabled switch.",
+    "Have an authorized owner verify the modelswitch-fallback-proof policy's exact primary and backup configuration and that the backup route is eligible.",
+    "Confirm the Bedrock backup has available spend."
+  ],
   "limitations": [
-    "No workspace API key for ModelSwitch Fallback Test is present locally; Otari documentation says the existing key cannot select a different workspace.",
-    "The operator's enabled-provider observations do not establish the explicit Always use this key preference.",
-    "No Otari API request was sent, so this is setup readiness evidence and not fallback execution proof."
+    "The dedicated key authenticates and its catalog exposes the test policy alias, but the inference key cannot read policy-management configuration or the provider-key preference.",
+    "The model catalog proves model access, not available account funding.",
+    "No inference request was sent because the provider pin and backup funding were not verified."
   ]
 }

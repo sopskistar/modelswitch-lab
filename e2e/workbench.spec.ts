@@ -283,6 +283,10 @@ test('capabilities expose recorded evidence and keep failed checks unverified', 
   await expect(page.getByText('50 / 60 advanced points verified')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Fetch through Otari' })).toBeDisabled();
   await expect(page.getByRole('link', { name: 'Inspect JSON' })).toHaveCount(8);
+  await expect(page.getByRole('link', { name: 'Fallback readiness' })).toHaveAttribute(
+    'href',
+    '/api/evidence?file=fallback-test-readiness.json',
+  );
   await page.route('**/api/execute', (route) => {
     const action = route.request().postDataJSON().action;
     return action === 'mcp'
