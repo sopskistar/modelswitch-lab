@@ -71,6 +71,6 @@ Redacted check: [`final-live-validation.json`](../evidence/final-live-validation
 - [x] Fallback readiness reviewed against Otari docs. No test inference was sent because this checkout has no API key bound to `ModelSwitch Fallback Test`, and **Always use this key** is not confirmed. See [`fallback-test-readiness.json`](../evidence/fallback-test-readiness.json).
 - [x] Guardrail profiles queried read-only: HTTP 200, `available=false`, no profiles. No guardrail claim is made; see [`guardrail-profile-check.json`](../evidence/guardrail-profile-check.json).
 - [ ] Sixth advanced feature: actual fallback, an Otari guardrail verdict, web tool result, or per-user budget enforcement.
-- [ ] Synchronize and push final release commits to both `main` and `hackathon/mozfest-otari-2026`.
+- [x] Release commit `4fefced70f1e57f2f8a0faaf9dc23da63cd23b1c` is pushed to both `main` and `hackathon/mozfest-otari-2026`; remote refs were verified equal.
 - [ ] Verify the deployed source SHA in the existing `modelswitch-lab` Vercel project. Public endpoints do not reveal the SHA; no Vercel CLI/project access is present here.
 - [ ] Participant personally records and narrates the four-minute demo. No video is claimed.
