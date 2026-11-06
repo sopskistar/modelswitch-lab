@@ -316,4 +316,8 @@ The application route and test now send the hosted-accepted type-only
 declaration and keep the source fixed to the server-side allowlist. This is
 covered by a mocked route contract test, not a public production inference
 test. Deploy this revision before claiming the public Capabilities UI reflects
-the receipt.
+the receipt. Final verification on this commit: typecheck, lint, 119 unit
+tests across six files, repository and documentation Prettier checks,
+production build, and 20 desktop/mobile Playwright tests passed. Axe checks
+passed on both viewports. The production evidence endpoint for the new receipt
+still returns HTTP 404, so this pushed commit is not yet confirmed deployed.
