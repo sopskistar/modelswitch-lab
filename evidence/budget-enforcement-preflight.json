@@ -1,0 +1,63 @@
+{
+  "recordVersion": 1,
+  "checkedAt": "2026-11-06T05:26:08Z",
+  "purpose": "Preflight for the dedicated Otari request-count budget experiment",
+  "credentialHandling": {
+    "testKeyVariablePresent": true,
+    "secretRecorded": false,
+    "productionKeyUsed": false
+  },
+  "operatorReportedConfiguration": {
+    "testBudget": "modelswitch-budget-proof (API key)",
+    "maxBudgetUsd": 5,
+    "requestLimit": 1,
+    "attachedSpendingCeilings": 1,
+    "managementUpdateStatus": 200,
+    "readBackConfirmed": true,
+    "productionBudgetModifiedByThisExperiment": false
+  },
+  "readOnlyChecks": [
+    {
+      "path": "/models",
+      "httpStatus": 200,
+      "qwenModelAvailable": "alibaba/qwen3.8-27b"
+    },
+    {
+      "path": "/organizations/me/usage",
+      "httpStatus": 401,
+      "requestId": null,
+      "errorCode": null
+    },
+    {
+      "path": "/organizations/me/usage/count",
+      "httpStatus": 401,
+      "requestId": null,
+      "errorCode": null
+    },
+    {
+      "path": "/organizations/me/usage/summary",
+      "httpStatus": 401,
+      "requestId": null,
+      "errorCode": null
+    },
+    {
+      "path": "/usage/count",
+      "httpStatus": 401,
+      "requestId": null,
+      "errorCode": null
+    },
+    {
+      "path": "/usage/summary",
+      "httpStatus": 401,
+      "requestId": null,
+      "errorCode": null
+    }
+  ],
+  "activeBudgetPeriodVerified": false,
+  "testKeyRequestsConsumedBeforeTest": null,
+  "inferenceRequestsSent": 0,
+  "inferenceRequestIds": [],
+  "budgetExceededRefusal": null,
+  "status": "blocked_before_inference",
+  "reason": "The dedicated inference key can list Qwen models but cannot read usage counts. The active budget window and whether its single request allowance is already consumed could not be verified, so no inference request was sent."
+}

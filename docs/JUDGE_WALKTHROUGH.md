@@ -48,6 +48,8 @@ Start at the selected public demo: [modelswitch-lab.vercel.app](https://modelswi
 
 ## Operator-only items
 
+- The test-key budget is now operator-reported as `$5` with `request_limit: 1` and one attached ceiling. The key can list Qwen, but its usage endpoints return 401, so the active period and remaining request allowance are unknown. No request was sent. Do not demonstrate a refusal until an authorized owner confirms the current period and zero requests consumed; see [`budget-enforcement-preflight.json`](../evidence/budget-enforcement-preflight.json). A budget point is not currently claimed.
+
 - Do not change the production routing policy to force failover. No safe fallback event is recorded.
 - The operator planned to raise the production key cap to $5, but that change and actual spend are unverified. Usage reads returned 401; do not send more paid requests until an owner confirms the active limit and available headroom.
 - Vercel logs are inaccessible from this checkout. The adapter now logs a redacted `[otari_request_failed]` record for a future failure; an authorized operator should inspect one existing request's dashboard activity or provide the next single request's log before a retry.

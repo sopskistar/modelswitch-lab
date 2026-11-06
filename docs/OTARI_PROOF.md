@@ -218,6 +218,47 @@ headers; see their individual evidence records.
 
 ## Spending ceilings — operator-reported, no enforcement proof
 
+### Request-count budget preflight — 2026-11-06
+
+The participant reports that an authorized owner management operation updated
+the dedicated `modelswitch-budget-proof (API key)` budget and read it back as
+`max_budget: $5`, `request_limit: 1`, with one attached spending ceiling. The
+participant also confirms the production `Setup guide` budget was not
+modified. These are operator-reported management results; no management
+credential was used by this experiment.
+
+The local `OTARI_BUDGET_TEST_KEY` variable was present (its value was never
+printed or recorded). Using only that key, `GET /models` returned HTTP 200 and
+included `alibaba/qwen3.8-27b`. The read-only usage endpoints
+`/organizations/me/usage`, `/organizations/me/usage/count`,
+`/organizations/me/usage/summary`, `/usage/count`, and `/usage/summary` each
+returned HTTP 401 without an Otari request ID or error-code header. Therefore
+the active budget period and the test key's current consumed-request count
+could not be established. No inference call was sent and no budget refusal
+was observed. The experiment stopped before consuming the one-request
+allowance, as required by the preflight condition.
+
+This does **not** verify enforcement or earn the budget rubric category. An
+authorized owner must provide a read-only confirmation of the current budget
+period/reset and that the attached test-key budget has zero requests consumed
+in that period (or an authorized usage view scoped to that key). Only then is
+one small Qwen request safe; a second may be attempted only after the first
+settles clearly. The redacted preflight record is
+[`budget-enforcement-preflight.json`](../evidence/budget-enforcement-preflight.json).
+
+Keep these response classes distinct: only HTTP 403 with
+`Otari-Error-Code: budget_exceeded` and the budget-scope metadata proves an
+Otari budget refusal. HTTP 402 is insufficient account funds, HTTP 429 is a
+rate limit, and a ModelSwitch Lab rejection is application-side. The official
+[Otari budget documentation](https://github.com/mozilla-ai/otari/blob/main/docs/budgets.md)
+states that a request is counted when admitted and that request limits apply
+over the configured budget period.
+
+Earlier paragraphs in this section and the 2026-11-05 investigation below are
+historical snapshots. This 2026-11-06 preflight supersedes their report of the
+test budget's configuration, but does not supersede the lack of live
+enforcement evidence.
+
 The participant reports two separate $1 monthly ceilings attached in Otari:
 the `Setup guide` production key and `modelswitch-budget-proof` test key. These
 were not changed. The inference credential cannot read organization spending

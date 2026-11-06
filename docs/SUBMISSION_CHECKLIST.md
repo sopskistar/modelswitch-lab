@@ -23,6 +23,8 @@
 
 ## Evidence and demo
 
+- [ ] Budget-enforcement demonstration remains pending. The test budget is operator-reported as `$5` / one request, but inference-key usage reads returned 401 and the active period/request count could not be confirmed. No request was sent; do not claim this rubric capability yet. See [`budget-enforcement-preflight.json`](../evidence/budget-enforcement-preflight.json).
+
 - [x] Verified Otari capabilities: distinct open-weight roles, code execution, production policy routing (without failover), and one production-managed MCP tool call/result. See [proof](OTARI_PROOF.md) and [rubric matrix](RUBRIC_EVIDENCE.md).
 - [x] Real model IDs, serving providers, request IDs, measured outputs and reported usage recorded in `evidence/`.
 - [x] Existing project pull request #1 was merged into `main`.
