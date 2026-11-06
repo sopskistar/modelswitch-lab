@@ -45,7 +45,7 @@ The analyst interprets deterministic results and cannot change their scores. The
 
 ## Verified evidence
 
-The project evidence assessment is **up to 85/100 potential points**, not an official score. It includes two open-weight model roles, hosted code execution, distinct model roles, policy routing (successful primary; fallback unobserved), a completed Otari-managed MCP call, a working use case, and verified Otari key-scoped request-count enforcement. The isolated budget receipt shows one admitted request followed by an Otari `budget_exceeded` refusal; its first answer content was empty. No actual fallback event or sixth advanced capability is verified; web fetch, guardrails, per-user budgets, and the personal recording remain unverified. Review the [rubric matrix](docs/RUBRIC_EVIDENCE.md), [Otari proof](docs/OTARI_PROOF.md), and [budget receipt](evidence/budget-enforcement-test.json).
+The evidence assessment is **up to 95/100 potential points**, not an official score: 30 open-weight model points, six advanced Otari capabilities (60 points), and 5 for the working use case. The routing category is conditional on judges accepting a successful policy resolution without an observed failover. One native Otari fetch is now verified; guardrails, per-user budgets, and an actual fallback remain unverified. The participant's five demo points require a personally recorded video. See the [rubric matrix](docs/RUBRIC_EVIDENCE.md), [Otari proof](docs/OTARI_PROOF.md), and redacted [web-fetch receipt](evidence/web-fetch-live.json).
 
 ## Architecture and local setup
 

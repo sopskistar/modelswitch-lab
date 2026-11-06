@@ -22,7 +22,7 @@ export interface OtariFailureDiagnostic {
   retryable: string | null;
   detail: string | null;
 }
-function safeFailureDetail(body: unknown): string | null {
+function safeFailureDetail(body: unknown, secret?: string): string | null {
   if (!body || typeof body !== 'object') return null;
   const record = body as JsonRecord;
   const nested =
@@ -31,9 +31,10 @@ function safeFailureDetail(body: unknown): string | null {
     (entry) => typeof entry === 'string',
   );
   if (typeof value !== 'string') return null;
-  return value
+  const redacted = secret ? value.split(secret).join('[redacted]') : value;
+  return redacted
     .replace(/\bBearer\s+\S+/gi, 'Bearer [redacted]')
-    .replace(/\b(?:sk|otari)_[A-Za-z0-9_-]{8,}\b/gi, '[redacted]')
+    .replace(/\b(?:sk|otari)_[A-Za-z0-9_-]{24,}\b/gi, '[redacted]')
     .replace(/\b(api[_-]?key|token|authorization|secret)\s*[:=]\s*[^,\s"'}]+/gi, '$1=[redacted]')
     .replace(/https?:\/\/[^\s"'<>]+/gi, '[url]')
     .slice(0, 400);
@@ -43,6 +44,7 @@ function logOtariFailure(
   status: number,
   headers: Headers,
   body: unknown,
+  secret?: string,
 ): OtariFailureDiagnostic {
   const diagnostic: OtariFailureDiagnostic = {
     endpoint,
@@ -53,7 +55,7 @@ function logOtariFailure(
     providerStatus: headers.get('otari-error-status'),
     providerTag: headers.get('otari-error-tag'),
     retryable: headers.get('otari-error-retryable'),
-    detail: safeFailureDetail(body),
+    detail: safeFailureDetail(body, secret),
   };
   console.error('[otari_request_failed]', JSON.stringify(diagnostic));
   return diagnostic;
@@ -298,7 +300,13 @@ export class OtariClient {
           });
       }
       if (!response.ok) {
-        const diagnostic = logOtariFailure(path, response.status, response.headers, parsed);
+        const diagnostic = logOtariFailure(
+          path,
+          response.status,
+          response.headers,
+          parsed,
+          this.key,
+        );
         throw new OtariError(
           normalizeError(response.status, response.headers, parsed),
           metadataFrom(

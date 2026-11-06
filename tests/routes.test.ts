@@ -209,7 +209,7 @@ describe('bounded execution route', () => {
     expect((await response.json()).error.code).toBe('tool_unavailable');
     expect(mocks.complete).not.toHaveBeenCalled();
   });
-  it('declares one allowlisted Otari fetch and verifies only a gateway tool result', async () => {
+  it('declares the hosted Otari fetch type and verifies only a gateway tool result', async () => {
     mocks.webAvailable = true;
     mocks.complete.mockResolvedValue({
       content: 'The Mozilla Manifesto describes an open and accessible internet.',
@@ -235,11 +235,12 @@ describe('bounded execution route', () => {
       expect.objectContaining({
         model: 'evaluator',
         max_tool_iterations: 2,
+        tool_choice: 'auto',
+        parallel_tool_calls: false,
+        tools_header: expect.stringContaining('only once'),
         tools: [
           {
             type: 'otari_web_fetch',
-            max_uses: 1,
-            allowed_domains: ['www.mozilla.org'],
           },
         ],
         messages: [expect.objectContaining({ content: expect.stringContaining('exactly once') })],

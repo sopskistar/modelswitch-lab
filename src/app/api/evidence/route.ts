@@ -6,6 +6,7 @@ import mcpStatus from '../../../../evidence/mcp-status.json';
 import budgetReport from '../../../../evidence/budget-operator-report.json';
 import routingProduction from '../../../../evidence/routing-production.json';
 import webFetchDiagnosis from '../../../../evidence/web-fetch-diagnosis.json';
+import webFetchLive from '../../../../evidence/web-fetch-live.json';
 import modelSwitchProduction from '../../../../evidence/model-switch-production.json';
 import qwenTimeoutDiagnosis from '../../../../evidence/qwen-timeout-diagnosis.json';
 import finalLiveValidation from '../../../../evidence/final-live-validation.json';
@@ -27,24 +28,26 @@ export function GET(request: Request) {
             ? NextResponse.json(routingProduction)
             : file === 'web-fetch-diagnosis.json'
               ? NextResponse.json(webFetchDiagnosis)
-              : file === 'model-switch-production.json'
-                ? NextResponse.json(modelSwitchProduction)
-                : file === 'production-deployment-check.json'
-                  ? NextResponse.json(productionDeploymentCheck)
-                  : file === 'qwen-timeout-diagnosis.json'
-                    ? NextResponse.json(qwenTimeoutDiagnosis)
-                    : file === 'final-live-validation.json'
-                      ? NextResponse.json(finalLiveValidation)
-                      : file === 'budget-operator-report.json'
-                        ? NextResponse.json(budgetReport)
-                        : file === 'budget-enforcement-test.json'
-                          ? NextResponse.json(budgetEnforcement)
-                          : file === 'fallback-test-readiness.json'
-                            ? NextResponse.json(fallbackTestReadiness)
-                            : file === 'guardrail-profile-check.json'
-                              ? NextResponse.json(guardrailProfileCheck)
-                              : NextResponse.json(
-                                  { error: 'Unknown evidence file.' },
-                                  { status: 404 },
-                                );
+              : file === 'web-fetch-live.json'
+                ? NextResponse.json(webFetchLive)
+                : file === 'model-switch-production.json'
+                  ? NextResponse.json(modelSwitchProduction)
+                  : file === 'production-deployment-check.json'
+                    ? NextResponse.json(productionDeploymentCheck)
+                    : file === 'qwen-timeout-diagnosis.json'
+                      ? NextResponse.json(qwenTimeoutDiagnosis)
+                      : file === 'final-live-validation.json'
+                        ? NextResponse.json(finalLiveValidation)
+                        : file === 'budget-operator-report.json'
+                          ? NextResponse.json(budgetReport)
+                          : file === 'budget-enforcement-test.json'
+                            ? NextResponse.json(budgetEnforcement)
+                            : file === 'fallback-test-readiness.json'
+                              ? NextResponse.json(fallbackTestReadiness)
+                              : file === 'guardrail-profile-check.json'
+                                ? NextResponse.json(guardrailProfileCheck)
+                                : NextResponse.json(
+                                    { error: 'Unknown evidence file.' },
+                                    { status: 404 },
+                                  );
 }

@@ -280,12 +280,18 @@ test('capabilities expose recorded evidence and keep failed checks unverified', 
   page,
 }) => {
   await page.goto('/app?view=capabilities');
-  await expect(page.getByText('50 / 60 advanced points verified')).toBeVisible();
+  await expect(page.getByText('60 / 60 advanced points verified')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Fetch through Otari' })).toBeDisabled();
   await expect(page.getByRole('link', { name: 'Inspect JSON' })).toHaveCount(8);
   await expect(page.getByRole('link', { name: 'Fallback readiness' })).toHaveAttribute(
     'href',
     '/api/evidence?file=fallback-test-readiness.json',
+  );
+  const webRow = page.getByRole('row').filter({ hasText: 'Web retrieval' });
+  await expect(webRow).toContainText('Verified live');
+  await expect(webRow.getByRole('link', { name: 'Inspect JSON' })).toHaveAttribute(
+    'href',
+    '/api/evidence?file=web-fetch-live.json',
   );
   await page.route('**/api/execute', (route) => {
     const action = route.request().postDataJSON().action;
@@ -311,7 +317,7 @@ test('capabilities expose recorded evidence and keep failed checks unverified', 
   await page.getByRole('button', { name: 'Inspect repository' }).click();
   await expect(page.getByRole('heading', { name: 'Check recorded, unverified' })).toBeVisible();
   await expect(page.getByText(/TEST FIXTURE: no hosted MCP events/)).toBeVisible();
-  await expect(page.getByText('50 / 60 advanced points verified')).toBeVisible();
+  await expect(page.getByText('60 / 60 advanced points verified')).toBeVisible();
   const mcpDownload = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export evidence' }).click();
   expect((await mcpDownload).suggestedFilename()).toBe('otari-mcp.json');

@@ -355,7 +355,7 @@ describe('hosted adapter', () => {
     const fetcher = vi.fn().mockResolvedValue(
       new Response(
         JSON.stringify({
-          detail: 'invalid tool parameter token=secret-value at https://host/path',
+          detail: 'otari_web_fetch declaration rejected token=secret-value at https://host/path',
         }),
         {
           status: 400,
@@ -377,7 +377,7 @@ describe('hosted adapter', () => {
         httpStatus: 400,
         requestId: 'web-400-id',
         errorCode: 'invalid_tool',
-        detail: 'invalid tool parameter token=[redacted] at [url]',
+        detail: 'otari_web_fetch declaration rejected token=[redacted] at [url]',
       },
     });
     expect(logger).toHaveBeenCalledTimes(1);

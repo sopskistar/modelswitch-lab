@@ -49,8 +49,12 @@ scoring independent of model opinion.
 Initially evaluator and analyst requests could not execute because the hosted
 account had no funds. Later calls succeeded. This was an account prerequisite,
 not evidence of a gateway defect.
-Web fetch/search were disabled at first and later became discoverable, but
-bounded web requests returned HTTP 400 without tool results. No guardrails
+Web fetch/search were disabled at first and later became discoverable. The
+hosted validator rejected extra `max_uses` and `allowed_domains` keys inside
+the built-in tool declaration; a type-only declaration succeeded and produced
+a real fetch event. Current documentation describes those declaration limits,
+so this is a concrete hosted schema/documentation mismatch. The final model
+summary was incomplete. No guardrails
 service was configured in the checked inference context. Routing/budget
 management reads were unauthorized with the inference key, which is an
 appropriate separation of authority. A dedicated test-key budget refusal was
@@ -60,9 +64,8 @@ bug.
 ## 6. What was missing
 
 The code endpoint returned no inline cost or pricing source in its successful
-response, so our UI must retain an unknown cost. A real fallback event and a
-sixth advanced feature remain to be demonstrated. The request-count budget
-boundary is now verified.
+response, so our UI must retain an unknown cost. A real fallback event remains
+unverified. Native web fetch and request-count budget enforcement are verified.
 A supported hosted fallback fault-injection/test action and a single hosted
 capability/permissions/funding readiness view would shorten setup.
 

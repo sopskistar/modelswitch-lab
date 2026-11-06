@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { capabilities } from '@/lib/capabilities';
-import { advancedVerifiedPoints, budgetEnforcementVerified } from '@/lib/capabilities';
+import {
+  advancedVerifiedPoints,
+  budgetEnforcementVerified,
+  webFetchVerified,
+} from '@/lib/capabilities';
 
 describe('routing evidence state', () => {
   it('counts an executed Otari policy resolution while explicitly showing no failover', () => {
@@ -8,7 +12,18 @@ describe('routing evidence state', () => {
     expect(route).toMatchObject({ status: 'Verified live', file: 'routing-production.json' });
     expect(route?.detail).toContain('fallback false');
     expect(budgetEnforcementVerified).toBe(true);
-    expect(advancedVerifiedPoints).toBe(50);
+    expect(advancedVerifiedPoints).toBe(60);
+  });
+});
+
+describe('native web retrieval evidence state', () => {
+  it('counts only the completed hosted Otari fetch receipt', () => {
+    expect(webFetchVerified).toBe(true);
+    expect(capabilities().find((cap) => cap.id === 'web')).toMatchObject({
+      status: 'Verified live',
+      file: 'web-fetch-live.json',
+      detail: expect.stringContaining('8058116e-e1b4-4f24-90d7-3b766a4f41e1'),
+    });
   });
 });
 

@@ -1,0 +1,91 @@
+{
+  "recordVersion": 1,
+  "recordedAt": "2026-11-06T10:48:23Z",
+  "status": "verified_live",
+  "hostedService": "Mozilla Otari hosted US API",
+  "credential": {
+    "environmentVariable": "OTARI_API_KEY",
+    "secretRecorded": false,
+    "keyContext": "Default-workspace key as configured by the operator; authenticated model/tool discovery was successful.",
+    "modelsHttpStatus": 200,
+    "toolsHttpStatus": 200,
+    "models": [
+      {
+        "id": "alibaba/qwen3.8-27b",
+        "name": "Qwen3.8 27B",
+        "supportedParameters": ["tools", "tool_choice", "response_format", "reasoning"]
+      },
+      {
+        "id": "meta/llama-3.3-70b-instruct",
+        "name": "Llama 3.3 70B Instruct",
+        "supportedParameters": ["tools", "tool_choice"]
+      }
+    ],
+    "webTools": {
+      "otari_web_fetch": { "available": true },
+      "otari_web_search": { "available": true }
+    },
+    "toolSettingsEndpointHttpStatus": 401,
+    "workspaceIdOrNameIndependentlyReturned": false
+  },
+  "failedSchemaProbe": {
+    "requestId": "ce805efd-5297-40b6-8306-264da4537ae5",
+    "httpStatus": 400,
+    "requestedModel": "alibaba/qwen3.8-27b",
+    "declaration": {
+      "type": "otari_web_fetch",
+      "max_uses": 1,
+      "allowed_domains": ["www.mozilla.org"]
+    },
+    "gatewayDetail": "declarations may contain only the type field",
+    "effectiveModel": null,
+    "provider": null,
+    "toolCalls": [],
+    "cost": "not reported; request was rejected before a model or tool event was returned"
+  },
+  "successfulRequest": {
+    "endpoint": "POST /api/v1/chat/completions",
+    "requestId": "8058116e-e1b4-4f24-90d7-3b766a4f41e1",
+    "httpStatus": 200,
+    "requestedModel": "alibaba/qwen3.8-27b",
+    "effectiveModel": "Qwen/Qwen3.8-27B",
+    "provider": "deepinfra",
+    "attempts": 1,
+    "fallback": false,
+    "gatewayDurationMs": 4142,
+    "measuredLatencyMs": 5168,
+    "toolDeclaration": { "type": "otari_web_fetch" },
+    "toolBounds": {
+      "maxToolIterations": 2,
+      "parallelToolCalls": false,
+      "fixedApplicationSource": "https://www.mozilla.org/en-US/about/manifesto/",
+      "requestPromptRestrictsFetchToExactUrl": true,
+      "allowedDomainsRequestParameter": "Not sent: this hosted gateway rejected it inside the tool declaration. The workspace-level domain allowlist was not readable with this key."
+    },
+    "toolCall": {
+      "id": "otari_wf_66cfd3e1beb54026a97306892102ec57",
+      "type": "web_fetch",
+      "status": "completed",
+      "url": "https://www.mozilla.org/en-US/about/manifesto/"
+    },
+    "assistantContent": "\n\n**Page title:** The Mozilla Manifesto\n\n**Factual point:** The",
+    "assistantContentComplete": false,
+    "usage": {
+      "requestLookupHttpStatus": 200,
+      "settledStatus": "success",
+      "costUsd": "0.010888",
+      "promptTokens": 2042,
+      "completionTokens": 192,
+      "totalTokens": 2234,
+      "rowCount": 1,
+      "pricingSource": "deployment"
+    },
+    "secretOrPersonalDataIncluded": false
+  },
+  "interpretation": {
+    "nativeOtariFetchVerified": true,
+    "previous400RootCause": "A direct reproduction of the application's prior request shape returned the same declaration-validation 400: the hosted gateway rejected max_uses and allowed_domains inside otari_web_fetch. Removing those unsupported declaration properties produced the completed native tool call.",
+    "toolResultEvidence": "Otari returned a completed web_fetch event with its tool ID and exact source URL; the Chat Completions activity event does not include page text. The model's final answer returned the page title but ended mid-sentence, so no complete factual summary is claimed.",
+    "limitation": "This request independently verifies Otari web fetch, but the standalone diagnostic did not separately expose workspace domain policy settings. The application workflow remains restricted to a fixed, server-side source allowlist and a single non-parallel fetch iteration."
+  }
+}

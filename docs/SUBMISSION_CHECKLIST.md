@@ -64,7 +64,7 @@
 
 Redacted check: [`final-live-validation.json`](../evidence/final-live-validation.json).
 
-## Final rubric and readiness refresh — 2026-11-06
+## Earlier rubric and readiness snapshot before web verification — 2026-11-06
 
 - [x] Request-count budget enforcement verified: admitted test-key request followed by gateway HTTP 403 `budget_exceeded`; production budget was not used or changed.
 - [x] Capability matrix and capability page now derive budget status from that redacted receipt; current advanced verified count is five (50/60 potential advanced points).
@@ -74,3 +74,13 @@ Redacted check: [`final-live-validation.json`](../evidence/final-live-validation
 - [x] The prior evidence-refresh commit is synchronized to both branches; this final capability-verification update is pending release.
 - [ ] Verify the deployed source SHA in the existing `modelswitch-lab` Vercel project. Public endpoints do not reveal the SHA; no Vercel CLI/project access is present here.
 - [ ] Participant personally records and narrates the four-minute demo. No video is claimed.
+
+## Native web-tool verification — 2026-11-06
+
+- [x] Authenticated Default-key discovery returned both native web tools as available and confirmed tool support on the selected open-weight models.
+- [x] Reproduced the hosted HTTP 400: extra `max_uses` and `allowed_domains` declaration keys were rejected with `declarations may contain only the type field`.
+- [x] One corrected request completed Otari `web_fetch` for the fixed Mozilla Manifesto URL. Request `8058116e-e1b4-4f24-90d7-3b766a4f41e1`, tool `otari_wf_66cfd3e1beb54026a97306892102ec57`, Qwen/DeepInfra, settled cost `$0.010888`. See [`web-fetch-live.json`](../evidence/web-fetch-live.json).
+- [x] The application now uses the accepted type-only declaration, static URL allowlist, non-parallel calls, and two-round bound; route test asserts the contract.
+- [x] Evidence-backed advanced capability count is six (60/60 potential advanced points); total potential coverage is 95/100 before the participant-recorded demo. Routing remains conditional; actual fallback remains unverified.
+- [ ] Deploy this revision to the existing `modelswitch-lab` Vercel project and verify `/api/evidence?file=web-fetch-live.json` and the Capabilities screen. No Vercel project credential is available in this checkout.
+- [ ] Participant personally records the demo video.

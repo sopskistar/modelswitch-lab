@@ -44,7 +44,9 @@ Start at the selected public demo: [modelswitch-lab.vercel.app](https://modelswi
 
 **Click:** Open **Otari capabilities**, then inspect the **Repository evidence inspector** and **Code execution** evidence.
 
-**Observe:** MCP proof records a completed Otari-managed DeepWiki tool use/result; code proof records a successful hosted sandbox computation. Web discovery now reports tools available and Qwen supports tool calls, but requests `9bd36cf5-6ddf-433a-9d1a-95295a50fae5` and `32697174-cde5-4bbd-9cf3-df3f02f01542` both returned HTTP 400 with no tool event. The request declaration matches the current documented schema, but the raw failure is unavailable. Do not count web retrieval. The [rubric matrix](RUBRIC_EVIDENCE.md) separates verified features from blocked ones.
+**Observe:** MCP proof records a completed Otari-managed DeepWiki tool use/result; code proof records a successful hosted sandbox computation. Native Otari web fetch is now verified by request `8058116e-e1b4-4f24-90d7-3b766a4f41e1`: Qwen/DeepInfra completed tool `otari_wf_66cfd3e1beb54026a97306892102ec57` for the Mozilla Manifesto URL at a settled `$0.010888`. Open the Web retrieval row and inspect [`web-fetch-live.json`](../evidence/web-fetch-live.json). The hosted endpoint rejected the old extra declaration fields; the corrected request used only `type`, one non-parallel fetch iteration, and the fixed allowlisted URL. The model summary ended mid-sentence, so the verified claim is Otari's completed retrieval, not a complete factual answer. Guardrails and per-user budgets remain unverified. See the [rubric matrix](RUBRIC_EVIDENCE.md).
+
+Native retrieval lets a developer distinguish a model's own answer from information the gateway actually fetched, and gives benchmark tasks a reproducible public source.
 
 ## Operator-only items
 

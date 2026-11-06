@@ -35,10 +35,11 @@ request ID and unknown billing state. See the redacted
 [`model-switch-production.json`](../evidence/model-switch-production.json).
 No additional paid request is needed to establish the documented limitation.
 
-Web retrieval had two production HTTP 400 responses with no tool event; the
-cause remains unknown. See
-[`web-fetch-diagnosis.json`](../evidence/web-fetch-diagnosis.json). No repeat
-request was made after the latest failure.
+Historical production requests on Nov 5 returned HTTP 400; their cause was
+unknown at that time. A later hosted schema probe reproduced the rejection
+and a corrected real fetch succeeded; see the latest verification below and
+[`web-fetch-diagnosis.json`](../evidence/web-fetch-diagnosis.json). The
+unchanged failed request was not repeated.
 
 An initial post-push read-only HTTP check found the old workspace and `/app`
 returned 404; this was superseded by a later deployment. At 2026-11-05 17:26
@@ -290,3 +291,29 @@ HTTP 404. The deployed site is therefore behind this source revision at least
 for that route; the exact deployment SHA remains unavailable. Deploy the
 synchronized `main` revision through the existing `modelswitch-lab` Vercel
 project, then verify the budget evidence route.
+
+## Native web-fetch acceptance — 2026-11-06
+
+Read-only Otari discovery with the Default-workspace `OTARI_API_KEY` returned
+HTTP 200 for `/models` and `/tools`; Qwen and Llama advertise tool support,
+and native web search/fetch are available in that key's workspace context.
+The workspace tool-settings read returned 401, so its workspace name and
+domain policy were not independently retrieved.
+
+The prior request shape was sent once as a direct hosted schema diagnostic.
+Otari rejected `max_uses` and `allowed_domains` inside the built-in fetch tool
+declaration with HTTP 400 detail `declarations may contain only the type
+field` (request `ce805efd-5297-40b6-8306-264da4537ae5`). A corrected
+non-streaming request used a type-only declaration, non-parallel calls, and
+the fixed Mozilla Manifesto URL. Otari returned HTTP 200 with request
+`8058116e-e1b4-4f24-90d7-3b766a4f41e1`, Qwen/DeepInfra, and completed tool
+event `otari_wf_66cfd3e1beb54026a97306892102ec57`. The usage lookup confirmed
+`success` and `$0.010888`. The final model answer ended mid-sentence; we claim
+the successful native fetch only. Full proof is in
+[`web-fetch-live.json`](../evidence/web-fetch-live.json).
+
+The application route and test now send the hosted-accepted type-only
+declaration and keep the source fixed to the server-side allowlist. This is
+covered by a mocked route contract test, not a public production inference
+test. Deploy this revision before claiming the public Capabilities UI reflects
+the receipt.

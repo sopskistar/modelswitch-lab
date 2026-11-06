@@ -18,15 +18,16 @@ inference.
 | 1:00–1:50 | Show the completed benchmark/results and deterministic score | Explain the synthetic cases, real model response, cost/latency provenance, and that small samples are not universal rankings. Use saved receipts; only run live inference if spend controls are confirmed. |
 | 1:50–2:30 | Otari policy result and fallback-test readiness          | Policy resolution is real, but the captured production request has `fallback=false`. A genuine fallback test is pending an explicit provider pin and verified backup spend; do not imply it happened. |
 | 2:30–3:10 | MCP and code execution capability receipts               | Show the gateway-owned MCP tool use/result and hosted Python execution evidence. |
-| 3:10–3:40 | Budget evidence and capability matrix                    | Show the admitted request followed by HTTP 403 `budget_exceeded` on the separate test key; distinguish it from the production budget. The sixth advanced capability is not yet verified. |
-| 3:40–4:00 | Trace/evidence links and conclusion                      | Emphasize inspectable request IDs and limitations, then invite judges to follow the walkthrough. |
+| 3:10–3:40 | Budget and native web-fetch receipts                     | Show the separate-key `budget_exceeded` refusal, then the completed Otari `web_fetch` event for the Mozilla Manifesto and its settled cost. |
+| 3:40–4:00 | Evidence links and conclusion                            | Emphasize inspectable request IDs, routing's `fallback=false`, and the limitations, then invite judges to follow the walkthrough. |
 
 If inference is unavailable, do not send repeated requests. Show the saved
-receipts for the real Llama call, policy resolution, MCP, code execution and
-budget refusal. Current evidence supports up to **85/100 potential**, subject
-to rubric interpretation of routing without observed failover; no official
-score is claimed. Web retrieval, guardrails, per-user budgets, actual fallback,
-and the personal video remain unverified.
+receipts for the real Llama call, policy resolution, MCP, code execution,
+budget refusal, and native web fetch. Current evidence supports up to
+**95/100 potential** before the participant-recorded demo, subject to rubric
+interpretation of routing without observed failover; no official score is
+claimed. Guardrails, per-user budgets, actual fallback, and the personal video
+remain unverified.
 
 Before recording: hide `.env.local`, terminal history and dashboard credentials;
 confirm the production SHA in Vercel; verify the Otari spend ceiling and durable

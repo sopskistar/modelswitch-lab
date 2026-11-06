@@ -55,15 +55,15 @@
     "localHttpFetchUsed": false
   },
   "diagnosis": {
-    "rootCause": "Not determined from the response evidence available to the application key.",
+    "rootCause": "The hosted HTTP 400 was reproduced: its validator rejected max_uses and allowed_domains inside the otari_web_fetch declaration. A type-only declaration then succeeded; see latestDiagnosis and web-fetch-live.json.",
     "known": [
       "The workspace tool catalog reports both web tools available after the owner enabled workspace access.",
       "The documented declaration fields and fixed public source are present in the application request.",
       "Both production attempts returned HTTP 400 before any serving model/provider or completed Otari tool call was reported.",
       "The authenticated GET /usage/requests/{request_id} lookup returned HTTP 404 for each request. Otari documents 404 for unsettled, unknown, other-key, or no-usage-row cases, so it does not establish billing status."
     ],
-    "neededFromOtari": "Inspect either request ID in hosted request activity and provide the raw sanitized 400 detail or gateway error code plus the rejected field/tool configuration. Do not retry until the rejection is understood.",
-    "rubricStatus": "Web search/fetch execution is unverified; no tool event or web-fetch rubric points are claimed."
+    "neededFromOtari": "No further diagnostic is required to establish the later successful web fetch; the two older production request IDs were not individually inspected in activity.",
+    "rubricStatus": "This historical snapshot predates the successful native fetch recorded in web-fetch-live.json."
   },
   "latestReadOnlyRecheck": {
     "checkedAt": "2026-11-06T10:22:00Z",
@@ -75,8 +75,44 @@
     "defaultWorkspace": "Earlier selected-production catalog reported both web tools available; no new request was made.",
     "schemaReview": "Current Otari tools documentation supports the application's otari_web_fetch declaration with max_uses and allowed_domains. The model is listed with tool support.",
     "rawFailureDiagnosticsAvailable": false,
-    "cause": "Unknown. The 400 responses have no stored raw Otari detail, error code, provider, or tool event. The inference key cannot inspect protected gateway logs, and this environment has no Vercel log access.",
+    "cause": "At that earlier recheck, the historic 400 detail was unavailable. A later direct request using the same rejected declaration reproduced the schema detail and succeeded after removing the unsupported fields.",
     "newInferenceRequestsSent": 0,
-    "rubricStatus": "Unverified; no retry made because no specific root cause or corrective change was established."
+    "rubricStatus": "Historical state; superseded by the successful native fetch recorded in web-fetch-live.json."
+  },
+  "hostedDefaultWorkspaceVerification": {
+    "checkedOn": "2026-11-06",
+    "credential": "OTARI_API_KEY; secret not recorded",
+    "modelsHttpStatus": 200,
+    "toolsHttpStatus": 200,
+    "qwenModelId": "alibaba/qwen3.8-27b",
+    "qwenSupportedParameters": ["tools", "tool_choice", "response_format", "reasoning"],
+    "otariWebFetch": { "available": true },
+    "otariWebSearch": { "available": true },
+    "toolSettingsHttpStatus": 401,
+    "note": "The key's tool discovery confirms availability in its bound workspace context; this key could not read tool-settings to independently return workspace identity or the workspace domain list."
+  },
+  "liveSchemaDiagnostic": {
+    "requestId": "ce805efd-5297-40b6-8306-264da4537ae5",
+    "httpStatus": 400,
+    "gatewayDetail": "declarations may contain only the type field",
+    "rejectedDeclarationFields": ["max_uses", "allowed_domains"],
+    "requestedModel": "alibaba/qwen3.8-27b",
+    "effectiveModel": null,
+    "provider": null,
+    "toolCalls": [],
+    "costUsd": null,
+    "usageLookupHttpStatus": 404,
+    "usageLookupInterpretation": "No usage row was visible for the rejected request; this does not establish a settled zero charge.",
+    "retryCount": 0,
+    "interpretation": "The hosted deployment rejects the current docs' per-declaration max_uses and allowed_domains fields, even though the latest docs describe them. The request was rejected before a model/tool completion was returned."
+  },
+  "liveSuccessfulFetchReceipt": "../evidence/web-fetch-live.json",
+  "latestDiagnosis": {
+    "checkedOn": "2026-11-06",
+    "rootCause": "The live HTTP 400 was caused by non-type keys in the otari_web_fetch tool declaration. The hosted gateway requires a type-only declaration.",
+    "correctedRequest": "tools=[{type: otari_web_fetch}], parallel_tool_calls=false, max_tool_iterations=2; fixed URL is selected from the application's static allowlist.",
+    "successfulRequestId": "8058116e-e1b4-4f24-90d7-3b766a4f41e1",
+    "toolEvent": "otari_wf_66cfd3e1beb54026a97306892102ec57 completed for https://www.mozilla.org/en-US/about/manifesto/",
+    "rubricStatus": "Native Otari web fetch is verified; see web-fetch-live.json."
   }
 }

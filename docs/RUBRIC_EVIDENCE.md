@@ -1,18 +1,17 @@
 # Rubric evidence
 
 Refreshed 2026-11-06. Target ceiling: 100. Current evidence supports **up to
-85/100 potential points**: 30 for two meaningful open-weight roles, 50 for five
-verified advanced capabilities (policy routing, code execution, distinct
-roles, hosted MCP, and key-scoped request-count budget enforcement), and 5 for
-the working use case. Routing points depend on judges accepting verified
-policy resolution without an observed failover. This is our evidence
-assessment, not an official judge score. The latest production invoice run is
-participant-reported. A genuine fallback and a sixth advanced capability are
-not verified; the personal demo video has not been recorded.
+95/100 potential points**: 30 for meaningful open-weight models, 60 for six
+advanced capabilities, and 5 for the working use case. The six are policy
+routing, code execution, distinct model roles, hosted MCP, key-scoped
+request-count budget enforcement, and native Otari web fetch. Routing points
+remain conditional on judges accepting policy resolution without an observed
+failover. This is an evidence assessment, not an official judge score. The
+personal demo video has not been recorded, so its 5 points are not included.
 
 An actual fallback event would strengthen the existing routing category; it
 does not count as a second advanced feature. No category is double-counted in
-the 85-point potential assessment.
+the 95-point potential assessment.
 
 | Rubric feature                | Possible points | Implementation location                            | Tested live?                 | Evidence                                                                                                                                         | Reproduction steps                                                                                           | Status                                  | Known limitations                                                  |
 | ----------------------------- | --------------- | -------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------- | ------------------------------------------------------------------ |
@@ -20,7 +19,7 @@ the 85-point potential assessment.
 | Second open-weight role       | 10              | `/api/execute` analyst action, signed receipts     | **Yes**                      | `verification.json`, Llama analyst `bd24f101-ff53-452a-97a6-27016e8e8600`; primary license links in integration guide                            | Complete evaluator cases, inspect separate analyst request and serving identity                              | **Verified live**                       | Diagnostic text supports deterministic scores                      |
 | Model routing and fallbacks   | 10              | `/api/execute` routing action                      | **Yes: policy resolution**    | [`routing-production.json`](../evidence/routing-production.json), production Otari request `5f2cc001-a521-435e-8b51-df0f91452dc5`; policy → Qwen/DeepInfra, attempt=1, fallback=false | Open Otari Capabilities and inspect the receipt; **Check routing** sends one fixed synthetic task through the named policy | **Routing verified live; fallback unverified** | No failure was induced and no fallback occurred; `fallback=false` is preserved |
 | MCP integrations              | 10              | `/api/execute` fixed repository MCP action; streamed Otari Messages adapter | **Yes**                        | [`mcp-status.json`](../evidence/mcp-status.json), Otari request `d9283ac4-3aec-4ee3-8151-08937bb08554`; one `read_wiki_structure` use and successful result | Open Otari Capabilities and inspect the committed production proof; for a fresh demonstration, run **Inspect repository** once and inspect returned Otari request/activity | **Verified live** | Gateway result block omits use ID/name; this request exposed exactly one allowlisted tool, and the complete stream contained one successful result after its use; reported cost unavailable |
-| Web search or fetch           | 10              | `/api/execute` web action; exact source allowlist  | Attempted; no tool event       | Catalog reports fetch/search available. One allowlisted fetch returned HTTP 400, Otari request `9bd36cf5-6ddf-433a-9d1a-95295a50fae5`; no completed tool event, raw error code or cost | Authorized operator inspects the request ID in Otari activity; only retry after resolving the 400; require completed `otari_tool_calls` evidence | Available, execution unverified         | App exposes generic gateway_error; tool execution, model/provider and cost unconfirmed |
+| Web search or fetch           | 10              | `/api/execute` web action; fixed public source allowlist; type-only Otari declaration | **Yes: hosted request and tool result** | [`web-fetch-live.json`](../evidence/web-fetch-live.json): Qwen/DeepInfra request `8058116e-e1b4-4f24-90d7-3b766a4f41e1`, completed fetch event `otari_wf_66cfd3e1beb54026a97306892102ec57` for Mozilla Manifesto; settled cost `$0.010888` | Open Otari Capabilities and inspect the receipt; the live execution used the fixed URL, type-only `otari_web_fetch`, one non-parallel iteration | **Verified live** | Current hosted endpoint rejects `max_uses` and `allowed_domains` inside the declaration despite current docs; model's final summary ended mid-sentence; workspace domain list not readable with inference key |
 | Code execution                | 10              | `/api/execute` code action; typed verifier         | **Yes**                      | `verification.json`, `732c1ded-aba4-4210-8cd7-1251027e367c`; exit 0, correct=4, total=5, accuracy=.8                                             | `npm run otari:verify -- --capabilities-only` or Check sandbox                                               | **Verified live**                       | Fixed control vectors; cost unreported                             |
 | Budgets/spending limits       | 10              | Otari key spending ceilings; denial normalization | **Yes: hosted request and refusal** | [`budget-enforcement-test.json`](../evidence/budget-enforcement-test.json): Qwen request `7d25171f-beee-4533-acce-753ad1d78256` admitted at $0.000095; second request `35e28010-c697-43bc-b278-cc039b2279b0` returned 403 `budget_exceeded`, scope `api_token` | Operator sets one-request test-key budget; send one tiny request, then at most one follow-up; inspect response headers and usage records | **Verified live** | First request had empty answer content; production budget untouched; no arbitrary refusal or repeated exhaustion |
 | Multiple distinct model roles | 10              | Evaluator scoring then separate analyst action     | **Yes**                      | Typed verifier and `browser-smoke.json` record distinct role requests and real providers                                                         | Run benchmark, inspect analyst event and request IDs/models                                                  | **Verified live**                       | Comparison calls alone are not the distinct-role proof             |
@@ -29,15 +28,14 @@ the 85-point potential assessment.
 | Working real use case         | 5               | Five views, 15 fixtures, scorer and recommendation | **Yes**                      | `browser-smoke.json`, run `365aae24-b64e-43ec-ba02-3c5e9a7d8739`: 10 cases + analyst, no request failures                                        | Select five classification cases and both models; Run; inspect/export                                        | **Verified live**                       | Qwen 5/5, Llama 4/5 only on these cases                            |
 | Recorded Otari demonstration  | 5               | `docs/DEMO_SCRIPT.md`                              | Not recorded                 | Script only                                                                                                                                      | Participant personally records actual screen and narrates                                                    | Awaiting participant                    | No synthetic narration or fabricated recording                     |
 
-Only six of eight advanced targets can count, capped at 60. Five categories
-are evidenced: policy routing (without an observed failover), distinct model
-roles, code execution, MCP, and key-scoped request-count budget enforcement.
-No sixth advanced feature has been demonstrated. Do not count local
-equivalents. Web retrieval failed without a tool event; guardrails have no
-configured service in the checked inference context; per-user budgets remain
-unavailable. Routing/fallback scoring is conditional on judging
-interpretation. The participant's recording is still required for the final
-five project/demo points.
+Only six of eight advanced targets count, capped at 60. Six categories have
+live evidence: policy routing (without an observed failover), distinct model
+roles, code execution, MCP, key-scoped request-count budget enforcement, and
+native Otari web fetch. Guardrails have no configured service in the checked
+inference context; per-user budgets remain unconfigured. The exact tool-result
+receipt and schema failure/correction are linked above. Routing scoring remains
+conditional on judging interpretation. The participant's personal recording
+is still required for the final five project/demo points.
 
 ### 2026-11-06 fallback and guardrail readiness refresh
 

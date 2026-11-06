@@ -72,7 +72,10 @@ application endpoint HTTP 504 also receive distinct statuses. No timeout was
 increased and no automatic retry was added. This fixes attribution and display;
 it does not establish why the upstream Qwen request exceeded the app deadline.
 
-## Web-fetch diagnostic refresh — 2026-11-05 13:33 UTC
+## Historical web-fetch diagnostic snapshot — 2026-11-05 13:33 UTC
+
+This snapshot is superseded by the verified live fetch receipt near the end of
+this document.
 
 After workspace web access was enabled, authenticated catalog discovery on the
 selected production domain reported `otari_web_fetch` and `otari_web_search`
@@ -610,5 +613,56 @@ The hosted guardrail profile endpoint returned HTTP 200 with
 Reading `/routing/policies` returned HTTP 401 for the inference key; the
 existing production inference receipt continues to verify successful policy
 resolution with `fallback=false`. No fallback event is claimed. Budget
-enforcement, actual fallback, web retrieval, guardrails, and per-user budgets
-remain unverified. These checks add no rubric points.
+enforcement is verified; the native web-fetch result below supersedes the
+earlier web-unverified snapshots. Actual fallback, guardrails, and per-user
+budgets remain unverified.
+
+## Native Otari web fetch — verified live 2026-11-06
+
+Using the existing `OTARI_API_KEY` from `.env.local` (secret never recorded),
+read-only `GET /models` and `GET /tools` both returned HTTP 200. Qwen
+`alibaba/qwen3.8-27b` and Llama
+`meta/llama-3.3-70b-instruct` advertise tool support; both
+`otari_web_fetch` and `otari_web_search` were available in the key's bound
+workspace. The operator identifies this as Default workspace. The key could
+not read `/tool-settings` (HTTP 401), so this check did not independently
+return a workspace name or domain policy.
+
+The previous HTTP 400 was diagnosed by one direct schema probe that reproduced
+the old declaration. Otari returned HTTP 400, request
+`ce805efd-5297-40b6-8306-264da4537ae5`, with detail
+`declarations may contain only the type field`. The rejected declaration
+included `max_uses` and `allowed_domains`; no model, provider, or tool event was
+returned. A usage lookup returned 404, so no settled zero-cost claim is made.
+This is a mismatch between the current docs and the deployed hosted validator.
+
+The corrected, single non-streaming call used
+`POST /api/v1/chat/completions` with `tools: [{"type":"otari_web_fetch"}]`,
+Qwen, `parallel_tool_calls: false`, two bounded tool-loop rounds, and a prompt
+for one exact public URL: `https://www.mozilla.org/en-US/about/manifesto/`.
+The app workflow selects sources from its fixed server-side allowlist. No key,
+budget, routing policy, or Vercel variable was changed.
+
+Otari returned HTTP 200, request
+`8058116e-e1b4-4f24-90d7-3b766a4f41e1`, effective model
+`Qwen/Qwen3.8-27B`, provider `deepinfra`, attempt 1, fallback false, and
+4,142 ms gateway time. The response contained completed native tool event
+`otari_wf_66cfd3e1beb54026a97306892102ec57`, type `web_fetch`, for the exact
+Mozilla URL. A read-only usage lookup confirmed status `success`, one row,
+2,042 prompt tokens, 192 completion tokens, and settled cost `$0.010888`
+(`pricing_source: deployment`).
+
+The Chat Completions web-fetch event carries completed status and the source
+URL; Otari passes extracted page content internally to the model rather than
+including page text in that event. The final assistant output returned the
+title “The Mozilla Manifesto” but ended mid-sentence (`Factual point: The`).
+Thus the verified feature is actual gateway retrieval, not a complete factual
+summary. Receipt: [`web-fetch-live.json`](../evidence/web-fetch-live.json).
+
+For the public app, the old `max_uses` and `allowed_domains` declaration
+properties have been removed to match the hosted validator. The server fixes
+the source to a small allowlist, disables parallel calls, and limits the loop
+to two rounds (the final round has no tools). The inference key could not read
+the workspace domain list. An owner may additionally set the Default
+workspace's allowed domains to `www.mozilla.org` under Tools → Web search. No
+local HTTP fetch is used as proof.

@@ -3,6 +3,7 @@ import verification from '../../evidence/verification.json';
 import mcpProof from '../../evidence/mcp-status.json';
 import routingProof from '../../evidence/routing-production.json';
 import webFetchDiagnosis from '../../evidence/web-fetch-diagnosis.json';
+import webFetchProof from '../../evidence/web-fetch-live.json';
 import budgetEnforcement from '../../evidence/budget-enforcement-test.json';
 interface EvidenceRecord {
   role: string;
@@ -55,11 +56,22 @@ export const budgetEnforcementVerified =
   budgetEnforcement.requests[1]?.httpStatus === 403 &&
   budgetEnforcement.requests[1]?.gatewayErrorCode === 'budget_exceeded' &&
   budgetEnforcement.requests[1]?.budgetScope === 'api_token';
+export const webFetchVerified =
+  webFetchProof.status === 'verified_live' &&
+  webFetchProof.successfulRequest.httpStatus === 200 &&
+  webFetchProof.successfulRequest.toolCall.status === 'completed' &&
+  webFetchProof.successfulRequest.toolCall.type === 'web_fetch' &&
+  Boolean(webFetchProof.successfulRequest.requestId);
 export const advancedVerifiedPoints =
   10 *
-  [codeVerified, rolesVerified, routingVerified, mcpVerified, budgetEnforcementVerified].filter(
-    Boolean,
-  ).length;
+  [
+    codeVerified,
+    rolesVerified,
+    routingVerified,
+    mcpVerified,
+    budgetEnforcementVerified,
+    webFetchVerified,
+  ].filter(Boolean).length;
 export type CapabilityStatus =
   | 'Verified live'
   | 'Verified live this session'
@@ -132,14 +144,22 @@ export function capabilities(
       id: 'web',
       name: 'Web retrieval',
       points: 10,
-      status: web && !web.available ? 'Unavailable on account' : 'Implemented, unverified',
-      detail:
-        web && !web.available
+      status: webFetchVerified
+        ? 'Verified live'
+        : web && !web.available
+          ? 'Unavailable on account'
+          : 'Implemented, unverified',
+      detail: webFetchVerified
+        ? `Otari completed a native fetch of ${webFetchProof.successfulRequest.toolCall.url} with ${webFetchProof.successfulRequest.effectiveModel} through ${webFetchProof.successfulRequest.provider}; request ${webFetchProof.successfulRequest.requestId}, tool ${webFetchProof.successfulRequest.toolCall.id}, cost $${webFetchProof.successfulRequest.usage.costUsd}. The completion named the page but ended mid-sentence, so no full factual summary is claimed.`
+        : web && !web.available
           ? `Hosted tool reports ${web.reason}.`
           : latestWebAttempt
-            ? `Otari discovery reports web fetch available, but the latest allowlisted request returned HTTP ${latestWebAttempt.applicationHttpStatus} without a completed tool event. Request ${latestWebAttempt.otariRequestId}; inspect the redacted diagnostic before retrying.`
+            ? `The earlier request returned HTTP ${latestWebAttempt.applicationHttpStatus} without a completed tool event. Inspect the diagnostic receipt before retrying.`
             : 'Otari web fetch execution has not been verified; inspect the capability evidence before retrying.',
-      file: 'web-fetch-diagnosis.json',
+      file: webFetchVerified ? 'web-fetch-live.json' : 'web-fetch-diagnosis.json',
+      relatedFiles: webFetchVerified
+        ? [{ label: 'HTTP 400 diagnosis', file: 'web-fetch-diagnosis.json' }]
+        : undefined,
     },
     {
       id: 'code',
