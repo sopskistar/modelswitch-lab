@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { chromium } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { navigateView } from '../e2e/navigation';
 
 const base = 'https://modelswitch-lab.vercel.app';
 const screenshotDir = 'docs/screenshots';
@@ -32,7 +33,9 @@ try {
     response.url().endsWith('/api/catalog'),
   );
   await desktop.getByRole('link', { name: 'Launch workspace' }).click();
-  await desktop.waitForURL(/\/app\?view=model-switch/);
+  await desktop.waitForURL(/\/app\?view=workspace/);
+  await desktop.getByRole('heading', { name: 'Put a model to the test.' }).waitFor();
+  await navigateView(desktop, 'Model switch');
   await desktop.getByRole('heading', { name: 'Model switch' }).waitFor();
   const catalogResponse = await catalogResponsePromise;
   const catalog = await catalogResponse.json();

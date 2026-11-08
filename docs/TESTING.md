@@ -1,5 +1,64 @@
 # Testing and reproduction
 
+## Final mobile navigation pass — 2026-11-08
+
+- Typecheck, lint, repository format check and production webpack build: passed.
+- Unit tests: **119 passed in six files**.
+- Final Playwright run against the production build: **41 passed, one skipped**
+  (the mobile-only disclosure test is intentionally skipped on desktop).
+- Axe: no violations across the landing page, all workspace views in both
+  themes, and the open mobile navigation.
+
+The mobile regression suite covers 320, 360, 375, 390, 412 and 430px widths on
+desktop Chromium and mobile Chromium contexts. Each width covers the landing
+page and all six workspace views, both empty and restored populated states,
+expanded JSON and long request IDs. Root clipping is temporarily disabled during
+overflow measurements so a broken component cannot be concealed. Export and
+Model Switch buttons must remain within the viewport.
+
+Navigation checks cover the fully visible landing CTA, launch into scenario
+selection, Home from every view, every mobile destination, active location,
+48px mobile navigation targets, keyboard focus, Escape, outside taps, focus
+departure, breakpoint changes, preserved desktop tabs, legacy redirects, direct
+links, reload, Back/Forward, saved results and active-model persistence. Axe scans
+cover every view in light/dark modes and the open mobile navigation. Every
+Capabilities **Inspect JSON** link is read without executing a model request;
+the fallback receipt retains request `886b6cbc-a0e8-4a27-8ebf-60bbf3fd0f82`,
+`fallback=true` and two attempts.
+
+The first development run needed extra time for initial compilation. An initial
+history assertion targeted the **Active** badge rather than its containing model
+row; the corrected assertion passed in desktop and mobile. No application logic
+was changed for those test issues. The populated layout check did find and fix
+unwrapped request IDs in Request Trace.
+
+The sandboxed production build again failed to parse the TypeScript configuration:
+a `spawnSync` diagnostic returned `EPERM` and zero stdout for `tsc --showConfig`,
+while direct `tsc --showConfig` succeeded. The unchanged Next.js webpack build
+passed with approved process execution. Local server binds and Chromium likewise
+require approved execution in this environment.
+
+```sh
+npm run typecheck
+npm run lint
+npm run format:check
+npm test
+npm run build
+npm start -- --port 3111
+# In another terminal:
+PLAYWRIGHT_BASE_URL=http://localhost:3111 npm run test:browser
+# Read-only deployed UI, screenshots, axe and existing evidence checks:
+node --import tsx scripts/mobile-ui-check.ts
+```
+
+Playwright benchmark responses are intercepted test fixtures, not new hosted
+inference evidence. The separate `mobile-ui-check.ts` checks rendered production
+pages and existing receipts without replacing responses; it blocks execution
+defensively and asserts zero attempted execution requests. No new paid inference
+is needed for this UX pass. The Hallmark rendered audit passed across all seven
+routes with 35 renders and **0 FAIL, 0 REFLEX, 0 WARN**; see
+[`HALLMARK_LINT.md`](HALLMARK_LINT.md).
+
 ## Documentation release validation — 2026-11-06
 
 - `npm run typecheck`: passed.

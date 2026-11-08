@@ -2,25 +2,8 @@ import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { readFile } from 'node:fs/promises';
 import { fixtures } from '../src/lib/fixtures';
-const catalog = {
-  configured: true,
-  demoEnabled: true,
-  region: 'US',
-  roles: {
-    evaluator: 'alibaba/qwen3.8-27b',
-    analyst: 'meta/llama-3.3-70b-instruct',
-    policy: 'modelswitch-fallback',
-  },
-  models: [
-    { id: 'alibaba/qwen3.8-27b', name: 'Qwen3.8 27B' },
-    { id: 'meta/llama-3.3-70b-instruct', name: 'Llama 3.3 70B Instruct' },
-    { id: 'modelswitch-fallback' },
-  ],
-  tools: [
-    { id: 'otari_web_fetch', available: false, reason: 'workspace_disabled' },
-    { id: 'otari_code_execution', available: true },
-  ],
-};
+import { fitsViewport, navigateView, noPageOverflow } from './navigation';
+import { catalog } from './fixtures';
 // Browser fixtures are intercepted only in the test runner, never shipped as live results.
 test.beforeEach(async ({ page }) => {
   await page.route('**/api/catalog', (route) => route.fulfill({ json: catalog }));
@@ -32,11 +15,6 @@ test('landing and legacy workspace links lead into the app', async ({ page }) =>
   ).toBeVisible();
   await page.getByRole('link', { name: 'Launch workspace' }).first().click();
   await expect(page).toHaveURL(/\/app(?:\?|$)/);
-  await expect(page.getByRole('heading', { name: 'Model switch' })).toBeVisible();
-  await page
-    .getByRole('navigation', { name: 'Workbench views' })
-    .getByRole('link', { name: 'Workspace' })
-    .click();
   await expect(page.getByRole('heading', { name: 'Put a model to the test.' })).toBeVisible();
   await page.goto('/?view=results&scenario=classification');
   await expect(page).toHaveURL(/\/app\?view=results&scenario=classification/);
@@ -200,6 +178,7 @@ test('real run UI contract, loading, results, trace, and export', async ({ page 
   await page.goto('/app');
   await page.getByRole('button', { name: 'Run benchmark' }).click();
   await expect(page.getByRole('status')).toContainText(/qwen|Analyst/);
+  await noPageOverflow(page);
   await expect(page.getByText('TEST FIXTURE:', { exact: false })).toBeVisible();
   await expect(page.getByRole('cell', { name: /100%$/ })).toHaveCount(2);
   const download = page.waitForEvent('download');
@@ -214,10 +193,7 @@ test('real run UI contract, loading, results, trace, and export', async ({ page 
     executionStatus: 'complete',
   });
   expect(receipt.cases[0].request.requestId).toMatch(/^fixture-/);
-  await page
-    .getByRole('navigation', { name: 'Workbench views' })
-    .getByRole('link', { name: 'Request trace', exact: true })
-    .click();
+  await navigateView(page, 'Request trace');
   await expect(page.getByText('Deterministic scoring', { exact: true })).toHaveCount(3);
   await expect(page.getByText('Analyst response', { exact: true })).toBeVisible();
   expect(calls).toBe(4);
@@ -276,11 +252,16 @@ test('missing configuration and disabled tools', async ({ page }) => {
   await page.getByRole('button', { name: 'Open setup guide' }).click();
   await expect(page.getByRole('heading', { name: 'Configure the server' })).toBeVisible();
 });
-test('capabilities expose verified fallback and recorded evidence', async ({ page }) => {
+test('capabilities expose verified fallback and recorded evidence', async ({ page, isMobile }) => {
   await page.goto('/app?view=capabilities');
   await expect(page.getByText('60 / 60 advanced points verified')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Fetch through Otari' })).toBeDisabled();
   await expect(page.getByRole('link', { name: 'Inspect JSON' })).toHaveCount(8);
+  for (const link of await page.getByRole('link', { name: 'Inspect JSON' }).all()) {
+    if (isMobile) await fitsViewport(link);
+    const response = await page.request.get((await link.getAttribute('href'))!);
+    expect(response.status()).toBe(200);
+  }
   await expect(page.locator('a[href="/api/evidence?file=fallback-live-proof.json"]')).toBeVisible();
   const fallbackReceipt = await page.request.get('/api/evidence?file=fallback-live-proof.json');
   expect(fallbackReceipt.status()).toBe(200);
@@ -375,10 +356,7 @@ test('network interruption retains partial results and allows navigation', async
   await expect(page.getByRole('main').getByRole('alert')).toContainText(
     'browser connection was interrupted',
   );
-  await page
-    .getByRole('navigation', { name: 'Workbench views' })
-    .getByRole('link', { name: 'Request trace', exact: true })
-    .click();
+  await navigateView(page, 'Request trace');
   await expect(page.getByText('Response interrupted', { exact: true })).toBeVisible();
 });
 test('brand marks, latest-run empty state, and footer navigation', async ({ page }) => {

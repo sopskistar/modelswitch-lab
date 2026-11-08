@@ -40,6 +40,8 @@ To explore quickly:
 3. Open [Model Switch](https://modelswitch-lab.vercel.app/app?view=model-switch). Change the active model from Qwen to Llama and back; changing the selection alone does not submit a request.
 4. Inspect **Results**, **Request Trace** and **Otari capabilities**. For completed historic runs and actual gateway receipts, use the [evidence guide](docs/OTARI_PROOF.md).
 
+On phones, open **Views** below the workspace header to choose any section; the control shows your current view. Desktop keeps the horizontal view tabs. Use **Back to home** in the workspace header to return to the landing page from any view. Recent results and the active model remain saved in this browser.
+
 Running a new benchmark is **optional** and incurs actual hosted inference usage. Public execution may be unavailable or limited by safety and spending controls. If a request times out, do not assume it completed or retry automatically.
 
 ## What's implemented

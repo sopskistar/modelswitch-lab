@@ -1,6 +1,7 @@
 'use client';
 /* eslint-disable react-hooks/set-state-in-effect -- URL and browser storage are external state restored after server rendering. */
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { fixtures, scenarios } from '@/lib/fixtures';
 import { recommendation, summarize, weights } from '@/lib/scoring';
 import { exportCsv, exportJson } from '@/lib/export';
@@ -102,6 +103,9 @@ function download(text: string, name: string, type: string) {
 
 export function Workbench() {
   const [view, setView] = useState<View>('workspace');
+  const [navigationOpen, setNavigationOpen] = useState(false);
+  const navigation = useRef<HTMLElement>(null);
+  const navigationToggle = useRef<HTMLButtonElement>(null);
   const [scenario, setScenario] = useState<ScenarioId>('extraction');
   const [objective, setObjective] = useState<Objective>('balanced');
   const [count, setCount] = useState(3);
@@ -128,11 +132,16 @@ export function Workbench() {
   const resultHeading = useRef<HTMLHeadingElement>(null);
   const navigating = useRef(false);
   function navigate(next: View) {
+    setNavigationOpen(false);
+    if (next === view) {
+      resultHeading.current?.focus();
+      return;
+    }
+    navigating.current = true;
     setView(next);
     const url = new URL(window.location.href);
     url.searchParams.set('view', next);
     history.pushState({}, '', url);
-    navigating.current = true;
   }
   function viewAnchor(next: View, children: React.ReactNode, className?: string, label?: string) {
     return (
@@ -141,6 +150,14 @@ export function Workbench() {
         className={className}
         aria-label={label}
         onClick={(event) => {
+          if (
+            event.button !== 0 ||
+            event.metaKey ||
+            event.ctrlKey ||
+            event.shiftKey ||
+            event.altKey
+          )
+            return;
           event.preventDefault();
           navigate(next);
         }}
@@ -217,10 +234,25 @@ export function Workbench() {
     void loadCatalog();
     const pop = () => {
       const next = new URL(location.href).searchParams.get('view') as View;
+      setNavigationOpen(false);
+      navigating.current = true;
       setView(views.includes(next) ? next : 'workspace');
     };
     window.addEventListener('popstate', pop);
     return () => window.removeEventListener('popstate', pop);
+  }, []);
+  useEffect(() => {
+    const outside = (event: PointerEvent) => {
+      if (!navigation.current?.contains(event.target as Node)) setNavigationOpen(false);
+    };
+    const breakpoint = window.matchMedia('(max-width: 960px)');
+    const close = () => setNavigationOpen(false);
+    document.addEventListener('pointerdown', outside);
+    breakpoint.addEventListener('change', close);
+    return () => {
+      document.removeEventListener('pointerdown', outside);
+      breakpoint.removeEventListener('change', close);
+    };
   }, []);
   useEffect(() => {
     if (storageReady && run) {
@@ -554,6 +586,20 @@ export function Workbench() {
             'ModelSwitch Lab workspace',
           )}
           <div className="top-actions">
+            <Link href="/" className="button quiet home-link" aria-label="Back to home">
+              <svg
+                aria-hidden="true"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
+                <path d="m12 5-7 7 7 7M5 12h14" />
+              </svg>
+              Back to home
+            </Link>
             <a
               href="https://github.com/sopskistar/modelswitch-lab"
               target="_blank"
@@ -599,20 +645,67 @@ export function Workbench() {
         </div>
       </header>
       <div className="nav-wrap">
-        <nav className="shell nav" aria-label="Workbench views">
-          {views.map((v) => (
-            <a
-              href={`?view=${v}`}
-              key={v}
-              aria-current={view === v ? 'page' : undefined}
-              onClick={(e) => {
-                e.preventDefault();
-                navigate(v);
-              }}
+        <nav
+          className="shell workbench-nav"
+          aria-label="Workbench views"
+          ref={navigation}
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) setNavigationOpen(false);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'Escape' && navigationOpen) {
+              event.preventDefault();
+              setNavigationOpen(false);
+              navigationToggle.current?.focus();
+            }
+          }}
+        >
+          <button
+            type="button"
+            className="view-toggle"
+            ref={navigationToggle}
+            aria-expanded={navigationOpen}
+            aria-controls="workbench-view-links"
+            onClick={() => setNavigationOpen((open) => !open)}
+          >
+            <span>
+              <span className="view-toggle-label">Views:</span> {names[view]}
+            </span>
+            <svg
+              aria-hidden="true"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
             >
-              {names[v]}
-            </a>
-          ))}
+              <path d={navigationOpen ? 'm6 15 6-6 6 6' : 'm6 9 6 6 6-6'} />
+            </svg>
+          </button>
+          <div className="nav" id="workbench-view-links" data-open={navigationOpen}>
+            {views.map((v) => (
+              <a
+                href={`?view=${v}`}
+                key={v}
+                aria-current={view === v ? 'page' : undefined}
+                onClick={(event) => {
+                  if (
+                    event.button !== 0 ||
+                    event.metaKey ||
+                    event.ctrlKey ||
+                    event.shiftKey ||
+                    event.altKey
+                  )
+                    return;
+                  event.preventDefault();
+                  navigate(v);
+                }}
+              >
+                {names[v]}
+              </a>
+            ))}
+          </div>
         </nav>
       </div>
       <main id="main" className="shell main">

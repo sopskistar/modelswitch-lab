@@ -76,7 +76,7 @@ export function LandingPage() {
               test model or inspect an Otari routing policy.
             </p>
             <div className="hero-actions">
-              <Link className="button primary" href="/app?view=model-switch">
+              <Link className="button primary" href="/app?view=workspace">
                 Launch workspace
               </Link>
               <a className="button quiet" href="#workflow">

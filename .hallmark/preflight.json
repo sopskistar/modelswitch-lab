@@ -47,5 +47,27 @@
       "real historical product preview and desktop/mobile rendered screenshots"
     ],
     "liveEvidenceBoundary": "One production Llama case completed; paired Qwen case timed out without a gateway request ID. Playwright request assertions are intercepted fixtures, not live inference."
+  },
+  "mobileNavigationReview": {
+    "scanned": "2026-11-08",
+    "baseCommit": "011be47",
+    "preserve": [
+      "Console tokens, typography, logo and desktop horizontal tabs",
+      "benchmark/scoring, security, Otari adapters and all recorded receipts",
+      "native history and browser-scoped results/model selection"
+    ],
+    "introduce": [
+      "mobile header CTA row and explicit Back to home in every workspace view",
+      "responsive Views disclosure with keyboard/dismissal/focus behavior",
+      "long request ID wrapping and mobile evidence/footer touch targets"
+    ],
+    "sources": [
+      "src/components/landing-page.tsx:44",
+      "src/components/workbench.tsx:132",
+      "src/components/workbench.tsx:586",
+      "src/app/globals.css:1336"
+    ],
+    "renderedAudit": "0 FAIL, 0 REFLEX, 0 WARN; 3 files, 7 URLs, 35 captures",
+    "evidenceBoundary": "UI contract tests use intercepted fixtures; read-only production UI check performs no hosted inference."
   }
 }

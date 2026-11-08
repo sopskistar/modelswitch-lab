@@ -1,0 +1,7 @@
+test-results/
+playwright-report/
+coverage/
+.hallmark/
+*.tsbuildinfo
+.env*
+!.env.example

@@ -20,6 +20,8 @@ This route takes about five minutes and has a safe, read-only path. Do not run i
 
 **Observe:** three synthetic scenarios—invoice extraction, support classification, and bounded reasoning—with fixed expected answers. Select a scenario and a small case count. No inference begins until **Run benchmark** is pressed.
 
+**Navigation:** on a phone, open **Views** below the header to choose Workspace, Model switch, Results, Request trace, Otari capabilities or Guide. The control names the current view. Desktop uses horizontal tabs. **Back to home** is available in the header of every view and returns to `/`; recent results and the active model stay in this browser. Browser Back and direct `?view=` links also work.
+
 ### 3. Evaluate a model — 40 seconds
 
 **Safe path:** open **Results** and **Request trace** to inspect saved runs and receipts. The repository includes actual Otari records in [`evidence/verification.json`](../evidence/verification.json) and [`evidence/model-switch-production.json`](../evidence/model-switch-production.json).
