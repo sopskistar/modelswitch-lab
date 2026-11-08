@@ -16,6 +16,10 @@ were visually reviewed. Playwright separately measures all six phone widths
 with the existing root clipping temporarily disabled and expands saved-data
 disclosures to check long IDs and JSON.
 
+A final mobile evidence-link spacing adjustment stacks related links with a
+gap. The affected Capabilities view was rendered again at all five audit sizes:
+**0 FAIL, 0 REFLEX, 0 WARN**. Other views retain the already audited layout.
+
 ```sh
 CHROME_PATH=/home/sopski/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome \
   node /home/sopski/.agents/skills/hallmark/scripts/sloplint.mjs \

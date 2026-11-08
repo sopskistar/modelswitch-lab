@@ -6,6 +6,10 @@
 - Unit tests: **119 passed in six files**.
 - Final Playwright run against the production build: **41 passed, one skipped**
   (the mobile-only disclosure test is intentionally skipped on desktop).
+- After stacking related mobile evidence links, **eight focused desktop/mobile
+  rechecks passed**, covering 320px/430px populated/empty layouts, every view's
+  light/dark axe scan, and all eight evidence links. The final build and
+  Capabilities rendered audit also passed.
 - Axe: no violations across the landing page, all workspace views in both
   themes, and the open mobile navigation.
 
@@ -54,8 +58,14 @@ node --import tsx scripts/mobile-ui-check.ts
 Playwright benchmark responses are intercepted test fixtures, not new hosted
 inference evidence. The separate `mobile-ui-check.ts` checks rendered production
 pages and existing receipts without replacing responses; it blocks execution
-defensively and asserts zero attempted execution requests. No new paid inference
-is needed for this UX pass. The Hallmark rendered audit passed across all seven
+defensively and asserts zero attempted execution requests. Hosted navigation
+assertions allow 15 seconds. A diagnostic confirmed transient Chromium
+`ERR_NETWORK_CHANGED` failures on JavaScript and fonts; the verifier retries a
+viewport at most twice only for that observed transport error, records retries,
+and does not retry UI failures. An `axeViolations: null` entry means that axe was
+not run at that width; hosted axe scans run at 390px and 1440px.
+
+No new paid inference is needed for this UX pass. The Hallmark rendered audit passed across all seven
 routes with 35 renders and **0 FAIL, 0 REFLEX, 0 WARN**; see
 [`HALLMARK_LINT.md`](HALLMARK_LINT.md).
 

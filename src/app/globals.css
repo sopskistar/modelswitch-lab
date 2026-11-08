@@ -1614,6 +1614,10 @@ td {
   }
   .capability-table td:last-child {
     grid-column: 1/-1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
   }
   .capability-table td a,
   .footer-group a,
