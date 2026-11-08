@@ -983,7 +983,7 @@ export function Workbench() {
                 ) : (
                   <p className="subtle">No permitted evaluator model is available yet.</p>
                 )}
-                <div className="model-choice-list" aria-label="Available models">
+                <div className="model-choice-list" role="group" aria-label="Available models">
                   {availableSwitchModels.map((model) => {
                     const last = latestSwitchTestByModel.get(model.id)?.result;
                     return (

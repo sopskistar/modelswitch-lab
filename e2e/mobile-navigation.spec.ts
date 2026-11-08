@@ -256,3 +256,23 @@ test('all views and the open mobile navigation pass axe in both themes', async (
     }
   }
 });
+
+test('Model Switch discovery remains accessible while loading and empty', async ({ page }) => {
+  let finishDiscovery!: () => void;
+  const discovery = new Promise<void>((resolve) => {
+    finishDiscovery = resolve;
+  });
+  await page.route('**/api/catalog', async (route) => {
+    await discovery;
+    await route.fulfill({ json: { ...catalog, configured: false, models: [] } });
+  });
+  await page.goto('/app?view=model-switch');
+  await expect(page.getByRole('heading', { name: 'Model switch', exact: true })).toBeVisible();
+  await expect(page.getByRole('group', { name: 'Available models' })).toHaveCount(1);
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  const response = page.waitForResponse('**/api/catalog');
+  finishDiscovery();
+  await response;
+  await expect(page.locator('.model-choice')).toHaveCount(0);
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+});

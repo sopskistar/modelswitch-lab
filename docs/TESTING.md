@@ -12,6 +12,11 @@
   Capabilities rendered audit also passed.
 - Axe: no violations across the landing page, all workspace views in both
   themes, and the open mobile navigation.
+- The hosted loading-state scan found an invalid label on the empty model
+  container. Giving it `role="group"` fixes the semantics without changing the
+  controls. Six final desktop/mobile checks passed, including delayed/empty
+  discovery axe scans, both themes across every view, and the model-switch
+  request contract; typecheck, lint and format checks passed again.
 
 The mobile regression suite covers 320, 360, 375, 390, 412 and 430px widths on
 desktop Chromium and mobile Chromium contexts. Each width covers the landing
