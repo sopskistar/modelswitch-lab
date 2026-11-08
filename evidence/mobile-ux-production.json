@@ -1,0 +1,418 @@
+{
+  "checkedAt": "2026-11-08T12:21:36.184Z",
+  "baseURL": "https://modelswitch-lab.vercel.app",
+  "scope": "Read-only rendered UI and committed evidence; no new hosted inference",
+  "interceptedExecutionAttempts": 0,
+  "transportRetries": [
+    {
+      "width": 360,
+      "reason": "ERR_NETWORK_CHANGED"
+    },
+    {
+      "width": 360,
+      "reason": "ERR_NETWORK_CHANGED"
+    },
+    {
+      "width": 375,
+      "reason": "ERR_NETWORK_CHANGED"
+    },
+    {
+      "width": 390,
+      "reason": "ERR_NETWORK_CHANGED"
+    },
+    {
+      "width": 430,
+      "reason": "ERR_NETWORK_CHANGED"
+    },
+    {
+      "width": 768,
+      "reason": "ERR_NETWORK_CHANGED"
+    }
+  ],
+  "checks": [
+    {
+      "width": 320,
+      "route": "/",
+      "axeViolations": null
+    },
+    {
+      "width": 320,
+      "route": "/app?view=workspace",
+      "axeViolations": null
+    },
+    {
+      "width": 320,
+      "route": "/app?view=model-switch",
+      "axeViolations": null
+    },
+    {
+      "width": 320,
+      "route": "/app?view=results",
+      "axeViolations": null
+    },
+    {
+      "width": 320,
+      "route": "/app?view=trace",
+      "axeViolations": null
+    },
+    {
+      "width": 320,
+      "route": "/app?view=capabilities",
+      "axeViolations": null
+    },
+    {
+      "width": 320,
+      "route": "/app?view=guide",
+      "axeViolations": null
+    },
+    {
+      "width": 360,
+      "route": "/",
+      "axeViolations": null
+    },
+    {
+      "width": 360,
+      "route": "/app?view=workspace",
+      "axeViolations": null
+    },
+    {
+      "width": 360,
+      "route": "/app?view=model-switch",
+      "axeViolations": null
+    },
+    {
+      "width": 360,
+      "route": "/app?view=results",
+      "axeViolations": null
+    },
+    {
+      "width": 360,
+      "route": "/app?view=trace",
+      "axeViolations": null
+    },
+    {
+      "width": 360,
+      "route": "/app?view=capabilities",
+      "axeViolations": null
+    },
+    {
+      "width": 360,
+      "route": "/app?view=guide",
+      "axeViolations": null
+    },
+    {
+      "width": 375,
+      "route": "/",
+      "axeViolations": null
+    },
+    {
+      "width": 375,
+      "route": "/app?view=workspace",
+      "axeViolations": null
+    },
+    {
+      "width": 375,
+      "route": "/app?view=model-switch",
+      "axeViolations": null
+    },
+    {
+      "width": 375,
+      "route": "/app?view=results",
+      "axeViolations": null
+    },
+    {
+      "width": 375,
+      "route": "/app?view=trace",
+      "axeViolations": null
+    },
+    {
+      "width": 375,
+      "route": "/app?view=capabilities",
+      "axeViolations": null
+    },
+    {
+      "width": 375,
+      "route": "/app?view=guide",
+      "axeViolations": null
+    },
+    {
+      "width": 390,
+      "route": "/",
+      "axeViolations": 0
+    },
+    {
+      "width": 390,
+      "route": "/app?view=workspace",
+      "axeViolations": 0
+    },
+    {
+      "width": 390,
+      "route": "/app?view=model-switch",
+      "axeViolations": 0
+    },
+    {
+      "width": 390,
+      "route": "/app?view=results",
+      "axeViolations": 0
+    },
+    {
+      "width": 390,
+      "route": "/app?view=trace",
+      "axeViolations": 0
+    },
+    {
+      "width": 390,
+      "route": "/app?view=capabilities",
+      "axeViolations": 0
+    },
+    {
+      "width": 390,
+      "route": "/app?view=guide",
+      "axeViolations": 0
+    },
+    {
+      "width": 412,
+      "route": "/",
+      "axeViolations": null
+    },
+    {
+      "width": 412,
+      "route": "/app?view=workspace",
+      "axeViolations": null
+    },
+    {
+      "width": 412,
+      "route": "/app?view=model-switch",
+      "axeViolations": null
+    },
+    {
+      "width": 412,
+      "route": "/app?view=results",
+      "axeViolations": null
+    },
+    {
+      "width": 412,
+      "route": "/app?view=trace",
+      "axeViolations": null
+    },
+    {
+      "width": 412,
+      "route": "/app?view=capabilities",
+      "axeViolations": null
+    },
+    {
+      "width": 412,
+      "route": "/app?view=guide",
+      "axeViolations": null
+    },
+    {
+      "width": 430,
+      "route": "/",
+      "axeViolations": null
+    },
+    {
+      "width": 430,
+      "route": "/app?view=workspace",
+      "axeViolations": null
+    },
+    {
+      "width": 430,
+      "route": "/app?view=model-switch",
+      "axeViolations": null
+    },
+    {
+      "width": 430,
+      "route": "/app?view=results",
+      "axeViolations": null
+    },
+    {
+      "width": 430,
+      "route": "/app?view=trace",
+      "axeViolations": null
+    },
+    {
+      "width": 430,
+      "route": "/app?view=capabilities",
+      "axeViolations": null
+    },
+    {
+      "width": 430,
+      "route": "/app?view=guide",
+      "axeViolations": null
+    },
+    {
+      "width": 768,
+      "route": "/",
+      "axeViolations": null
+    },
+    {
+      "width": 768,
+      "route": "/app?view=workspace",
+      "axeViolations": null
+    },
+    {
+      "width": 768,
+      "route": "/app?view=model-switch",
+      "axeViolations": null
+    },
+    {
+      "width": 768,
+      "route": "/app?view=results",
+      "axeViolations": null
+    },
+    {
+      "width": 768,
+      "route": "/app?view=trace",
+      "axeViolations": null
+    },
+    {
+      "width": 768,
+      "route": "/app?view=capabilities",
+      "axeViolations": null
+    },
+    {
+      "width": 768,
+      "route": "/app?view=guide",
+      "axeViolations": null
+    },
+    {
+      "width": 960,
+      "route": "/",
+      "axeViolations": null
+    },
+    {
+      "width": 960,
+      "route": "/app?view=workspace",
+      "axeViolations": null
+    },
+    {
+      "width": 960,
+      "route": "/app?view=model-switch",
+      "axeViolations": null
+    },
+    {
+      "width": 960,
+      "route": "/app?view=results",
+      "axeViolations": null
+    },
+    {
+      "width": 960,
+      "route": "/app?view=trace",
+      "axeViolations": null
+    },
+    {
+      "width": 960,
+      "route": "/app?view=capabilities",
+      "axeViolations": null
+    },
+    {
+      "width": 960,
+      "route": "/app?view=guide",
+      "axeViolations": null
+    },
+    {
+      "width": 1024,
+      "route": "/",
+      "axeViolations": null
+    },
+    {
+      "width": 1024,
+      "route": "/app?view=workspace",
+      "axeViolations": null
+    },
+    {
+      "width": 1024,
+      "route": "/app?view=model-switch",
+      "axeViolations": null
+    },
+    {
+      "width": 1024,
+      "route": "/app?view=results",
+      "axeViolations": null
+    },
+    {
+      "width": 1024,
+      "route": "/app?view=trace",
+      "axeViolations": null
+    },
+    {
+      "width": 1024,
+      "route": "/app?view=capabilities",
+      "axeViolations": null
+    },
+    {
+      "width": 1024,
+      "route": "/app?view=guide",
+      "axeViolations": null
+    },
+    {
+      "width": 1440,
+      "route": "/",
+      "axeViolations": 0
+    },
+    {
+      "width": 1440,
+      "route": "/app?view=workspace",
+      "axeViolations": 0
+    },
+    {
+      "width": 1440,
+      "route": "/app?view=model-switch",
+      "axeViolations": 0
+    },
+    {
+      "width": 1440,
+      "route": "/app?view=results",
+      "axeViolations": 0
+    },
+    {
+      "width": 1440,
+      "route": "/app?view=trace",
+      "axeViolations": 0
+    },
+    {
+      "width": 1440,
+      "route": "/app?view=capabilities",
+      "axeViolations": 0
+    },
+    {
+      "width": 1440,
+      "route": "/app?view=guide",
+      "axeViolations": 0
+    }
+  ],
+  "evidence": [
+    {
+      "file": "/api/evidence?file=fallback-live-proof.json",
+      "status": 200
+    },
+    {
+      "file": "/api/evidence?file=mcp-status.json",
+      "status": 200
+    },
+    {
+      "file": "/api/evidence?file=web-fetch-live.json",
+      "status": 200
+    },
+    {
+      "file": "/api/evidence?file=verification.json",
+      "status": 200
+    },
+    {
+      "file": "/api/evidence?file=budget-enforcement-test.json",
+      "status": 200
+    },
+    {
+      "file": "/api/evidence?file=verification.json",
+      "status": 200
+    },
+    {
+      "file": "/api/evidence?file=guardrail-profile-check.json",
+      "status": 200
+    },
+    {
+      "file": "/api/evidence?file=discovery.json",
+      "status": 200
+    }
+  ]
+}

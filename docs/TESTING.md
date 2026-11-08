@@ -74,6 +74,24 @@ No new paid inference is needed for this UX pass. The Hallmark rendered audit pa
 routes with 35 renders and **0 FAIL, 0 REFLEX, 0 WARN**; see
 [`HALLMARK_LINT.md`](HALLMARK_LINT.md).
 
+The final read-only production check on application commit `cf07a08` passed
+**70 route/viewport checks** at 320, 360, 375, 390, 412, 430, 768, 960, 1024 and
+1440px, including Home/Back from every workspace view. All **14 hosted axe
+scans** at 390/1440px were clean; all **eight evidence receipts returned HTTP
+200**. The fallback receipt retained its request ID, `true`, two attempts,
+Bedrock provider and `$0.000034` cost. There were **zero execution attempts**.
+Transport-only retries are recorded separately in
+[`mobile-ux-production.json`](../evidence/mobile-ux-production.json).
+
+Sixteen actual production screenshots are saved under
+`docs/screenshots/mobile-ux-*.png`, including the
+[320px landing](screenshots/mobile-ux-320-landing.png),
+[mobile navigation](screenshots/mobile-ux-mobile-navigation.png),
+[mobile Model Switch](screenshots/mobile-ux-mobile-model-switch.png),
+[mobile capabilities](screenshots/mobile-ux-mobile-capabilities.png) and
+[desktop workspace](screenshots/mobile-ux-desktop-workspace.png). These use fresh
+browser state; Results/Trace show their real empty states, not intercepted runs.
+
 ## Documentation release validation — 2026-11-06
 
 - `npm run typecheck`: passed.
