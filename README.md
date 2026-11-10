@@ -12,11 +12,28 @@ ModelSwitch Lab is a developer workbench for evaluating open-weight AI models th
 
 ![ModelSwitch Lab landing page](docs/screenshots/production-landing-desktop.png)
 
+## Proof first
+
+| What to inspect | What has actually been verified |
+| --- | --- |
+| [Recorded model evaluation](evidence/verification.json) | Real Qwen evaluator output was scored against a synthetic known-answer task; a separate Llama analyst interpreted results. |
+| [Model Switch evidence](docs/JUDGE_WALKTHROUGH.md) | Selecting a model is a browser-scoped decision. An actual test request is required before claiming a new model was evaluated. |
+| [Hosted fallback receipt](evidence/fallback-live-proof.json) | An isolated Otari policy attempted Qwen/DeepInfra, then returned Llama/Bedrock with fallback metadata. This did **not** change production policy. |
+| [Tests and limitations](docs/TESTING.md) | UI tests, hosted receipts, and unverified integrations are distinguished rather than combined into one success count. |
+
+A judge can inspect all four without submitting a paid inference request. For the click-by-click route, use the [five-minute walkthrough](docs/JUDGE_WALKTHROUGH.md).
+
 ## The problem
 
 Choosing an AI model by a leaderboard alone doesn't tell a developer whether it will handle *their* task accurately, reliably or affordably. A model may return invalid JSON, miss required fields, take too long or fail entirely. Changing providers without comparable results can replace one problem with another.
 
 **ModelSwitch Lab makes the decision inspectable:** test a fixed task, compare completed runs on the same fixture, investigate errors and costs, and explicitly switch the active test model.
+
+## Why we built it
+
+A model leaderboard answers which system performed well on somebody else's benchmark. It does not tell a developer whether their own invoice extractor, support classifier, or structured-output workflow will pass its required fields or what a failed request costs. We built ModelSwitch Lab to turn that choice into a small, repeatable engineering experiment: **hold the task constant, inspect the evidence, then choose deliberately**.
+
+This is a decision workbench, not a claim that one model is universally best or that switching the workbench's selection automatically changes another application.
 
 ## How it works
 
@@ -58,6 +75,13 @@ Running a new benchmark is **optional** and incurs actual hosted inference usage
 **Verified gateway fallback:** In a separate test workspace, a request to `modelswitch-fallback-proof` attempted the Qwen/DeepInfra primary and was served by Llama on Bedrock. Otari returned HTTP 200, `Otari-Fallback: true`, `Otari-Attempt-Count: 2`, request ID `886b6cbc-a0e8-4a27-8ebf-60bbf3fd0f82`, and reported cost `$0.000034`. The primary attempt's precise failure reason was not exposed. The [redacted fallback receipt](evidence/fallback-live-proof.json) records the observed result; the separate production routing policy was unchanged. Native web fetch also completed successfully, although its model-generated summary was incomplete. Guardrails and per-user budget enforcement are not claimed as verified.
 
 **[Inspect the individual redacted receipts](docs/OTARI_PROOF.md)** · **[Rubric evidence and limitations](docs/RUBRIC_EVIDENCE.md)** · **[Testing methodology](docs/TESTING.md)**
+
+## What makes the workflow different
+
+- **Model choice and infrastructure behavior are separate.** The user explicitly selects a test model; Otari independently records its routing, effective provider, tool use, and any gateway-level fallback.
+- **A failure is information, not a hidden pass.** Timeouts without a receipt remain unknown; incomplete same-fixture comparisons do not become recommendations.
+- **Recommendations have an inspection path.** Deterministic checks, trace details, latency and reported cost are visible alongside the selected model.
+- **Sponsor capabilities are demonstrated rather than assumed.** Hosted code execution, MCP, web fetch, request limits and fallback have separate evidence and limitations in the [rubric matrix](docs/RUBRIC_EVIDENCE.md).
 
 ## Architecture
 
